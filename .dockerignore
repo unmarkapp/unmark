@@ -1,0 +1,7 @@
+Dockerfile
+.next
+node_modules
+.git
+.env*
+README.md
+*.md

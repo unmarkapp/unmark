@@ -1,0 +1,98 @@
+import Link from "next/link";
+
+const steps = [
+  {
+    num: "01",
+    title: "Install",
+    body: "Add Unmark for Gemini from the Chrome Web Store.",
+  },
+  {
+    num: "02",
+    title: "Generate",
+    body: "Open Gemini or Google Flow and create images as usual.",
+  },
+  {
+    num: "03",
+    title: "Clean",
+    body: "Queue prompts or capture the latest image — Unmark removes the sparkle and downloads the clean file.",
+  },
+];
+
+export default function ExtensionInstall() {
+  return (
+    <section
+      id="extension"
+      className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
+    >
+      <div className="mx-auto max-w-2xl text-center">
+        <p className="text-sm font-medium text-brand">Chrome extension</p>
+        <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          Unmark while you generate.
+        </h2>
+        <p className="mt-4 text-base leading-relaxed text-muted">
+          Stay on Gemini or Google Flow. The extension queues prompts, removes
+          the sparkle automatically, and saves cleaned images — no manual
+          upload each time.
+        </p>
+      </div>
+
+      <ol className="mx-auto mt-14 grid max-w-3xl gap-8 sm:grid-cols-3 sm:gap-6">
+        {steps.map((step) => (
+          <li key={step.num} className="text-center sm:text-left">
+            <div className="font-display text-4xl font-semibold text-brand/80">
+              {step.num}
+            </div>
+            <h3 className="mt-3 text-lg font-semibold text-foreground">
+              {step.title}
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
+              {step.body}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      <div className="mt-12 flex flex-col items-center gap-3">
+        <Link
+          href="/extension"
+          className="inline-flex items-center justify-center gap-2.5 bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
+        >
+          <ChromeIcon />
+          Extension details
+          <span aria-hidden className="ml-1">
+            →
+          </span>
+        </Link>
+        <p className="max-w-sm text-center text-xs leading-relaxed text-muted">
+          Chrome Web Store listing is under review. Works with Gemini and Google
+          Flow — sign in on Unmark first so your credits apply.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+function ChromeIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+      <path
+        fill="#EA4335"
+        d="M24 8c6.2 0 11.5 3.5 14.1 8.6L29.5 24H24V8z"
+      />
+      <path
+        fill="#FBBC04"
+        d="M9.9 16.6C12.5 11.5 17.8 8 24 8v16H14.5L9.9 16.6z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 40c-6.2 0-11.5-3.5-14.1-8.6L14.5 24H24v16z"
+      />
+      <path
+        fill="#4285F4"
+        d="M38.1 31.4C35.5 36.5 30.2 40 24 40V24h9.5l4.6 7.4z"
+      />
+      <circle cx="24" cy="24" r="7.5" fill="#fff" />
+      <circle cx="24" cy="24" r="5" fill="#4285F4" />
+    </svg>
+  );
+}

@@ -1,0 +1,36 @@
+import type { Metadata } from "next";
+import { Suspense } from "react";
+
+import AccountView from "@/components/AccountView";
+import SiteFooter from "@/components/SiteFooter";
+import SiteHeader from "@/components/SiteHeader";
+
+export const metadata: Metadata = {
+  title: "Account",
+  description: "Manage your Unmark credits for Gemini watermark removal.",
+  robots: { index: false, follow: false },
+};
+
+export default function AccountPage() {
+  return (
+    <div className="surface-grain min-h-screen text-foreground">
+      <div className="relative mx-auto w-full max-w-5xl px-4 pt-5 sm:px-6">
+        <SiteHeader />
+      </div>
+
+      <div className="relative">
+        <Suspense
+          fallback={
+            <div className="mx-auto max-w-5xl px-4 py-20 text-sm text-muted">
+              Loading account…
+            </div>
+          }
+        >
+          <AccountView />
+        </Suspense>
+      </div>
+
+      <SiteFooter />
+    </div>
+  );
+}

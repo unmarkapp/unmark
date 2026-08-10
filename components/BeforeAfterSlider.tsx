@@ -1,0 +1,241 @@
+"use client";
+
+import {
+  PointerEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+
+import { BRAND, SPARKLE_PATH } from "@/components/brand/logos";
+
+interface BeforeAfterSliderProps {
+  beforeUrl: string;
+  afterUrl: string;
+  /** Fixed box (e.g. "9 / 16") so side-by-side demos share height. */
+  aspectRatio?: string;
+  /** object-fit when aspectRatio is set. Prefer "contain" for demos so watermarks aren't cropped. */
+  objectFit?: "cover" | "contain";
+  /** object-position when the image is cropped or letterboxed. */
+  objectPosition?: string;
+}
+
+function SparkleMark({
+  className = "",
+  fill = BRAND.cream,
+}: {
+  className?: string;
+  fill?: string;
+}) {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="-12 -12 24 24"
+      className={className}
+      aria-hidden
+    >
+      <path d={SPARKLE_PATH} fill={fill} />
+    </svg>
+  );
+}
+
+export default function BeforeAfterSlider({
+  beforeUrl,
+  afterUrl,
+  aspectRatio,
+  objectFit = "cover",
+  objectPosition = "center",
+}: BeforeAfterSliderProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+
+  const [position, setPosition] = useState(50);
+  const [dragging, setDragging] = useState(false);
+  const [afterReady, setAfterReady] = useState(false);
+  const [afterError, setAfterError] = useState(false);
+
+  useEffect(() => {
+    setAfterReady(false);
+    setAfterError(false);
+    setPosition(50);
+  }, [afterUrl]);
+
+  const updatePosition = useCallback((clientX: number) => {
+    const el = containerRef.current;
+
+    if (!el) {
+      return;
+    }
+
+    const rect = el.getBoundingClientRect();
+
+    if (rect.width <= 0) {
+      return;
+    }
+
+    const next = ((clientX - rect.left) / rect.width) * 100;
+
+    setPosition(Math.max(0, Math.min(100, next)));
+  }, []);
+
+  const handlePointerDown = (event: PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setDragging(true);
+    updatePosition(event.clientX);
+  };
+
+  const handlePointerMove = (event: PointerEvent<HTMLDivElement>) => {
+    if (!dragging) {
+      return;
+    }
+
+    updatePosition(event.clientX);
+  };
+
+  const handlePointerUp = (event: PointerEvent<HTMLDivElement>) => {
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    setDragging(false);
+  };
+
+  return (
+    <div className="w-full">
+      <div
+        ref={containerRef}
+        className="relative w-full overflow-hidden bg-ink select-none touch-none"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        style={{
+          cursor: dragging ? "grabbing" : "ew-resize",
+          ...(aspectRatio ? { aspectRatio } : null),
+        }}
+      >
+        {/* Soft brand wash behind images */}
+        <div
+          className="pointer-events-none absolute inset-0 z-0 opacity-40"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 0%, rgba(199,123,54,0.35), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(251,240,230,0.12), transparent 50%)",
+          }}
+        />
+
+        {/* BEFORE drives height unless aspectRatio locks the box */}
+        <img
+          src={beforeUrl}
+          alt="Before Gemini watermark removal"
+          className={
+            aspectRatio
+              ? `relative z-[1] block h-full w-full ${objectFit === "contain" ? "object-contain" : "object-cover"}`
+              : "relative z-[1] block h-auto w-full"
+          }
+          style={aspectRatio ? { objectPosition } : undefined}
+          draggable={false}
+        />
+
+        {/* AFTER on the right side */}
+        {!afterError && (
+          <img
+            src={afterUrl}
+            alt="After Gemini watermark removal"
+            className={`absolute inset-0 z-[2] h-full w-full ${
+              objectFit === "contain" ? "object-contain" : "object-cover"
+            }`}
+            style={{
+              clipPath: `inset(0 0 0 ${position}%)`,
+              opacity: afterReady ? 1 : 0,
+              objectPosition,
+            }}
+            onLoad={() => setAfterReady(true)}
+            onError={() => setAfterError(true)}
+            draggable={false}
+          />
+        )}
+
+        {!afterReady && !afterError && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-ink/55 text-sm text-cream">
+            <span className="inline-flex items-center gap-2">
+              <SparkleMark fill={BRAND.copper} />
+              Loading cleaned image…
+            </span>
+          </div>
+        )}
+
+        {afterError && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-ink/70 px-4 text-center text-sm text-peach">
+            Could not load the result image.
+          </div>
+        )}
+
+        {/* Copper divider + knockout sparkle handle */}
+        <div
+          className="pointer-events-none absolute inset-y-0 z-20"
+          style={{ left: `${position}%` }}
+        >
+          <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand to-transparent" />
+          <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-cream/80 shadow-[0_0_12px_rgba(199,123,54,0.55)]" />
+
+          <div
+            className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition ${
+              aspectRatio ? "h-9 w-9" : "h-12 w-12"
+            } ${dragging ? "scale-105" : ""}`}
+            style={{
+              background: BRAND.copper,
+              boxShadow: "0 8px 24px rgba(26,26,23,0.45)",
+            }}
+          >
+            <svg
+              width={aspectRatio ? 20 : 28}
+              height={aspectRatio ? 20 : 28}
+              viewBox="0 0 28 28"
+              fill="none"
+              aria-hidden
+            >
+              <path
+                d="M10 8L6 14l4 6M18 8l4 6-4 6"
+                stroke={BRAND.cream}
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <g transform="translate(14 14) scale(0.55)">
+                <path d={SPARKLE_PATH} fill={BRAND.cream} />
+              </g>
+            </svg>
+          </div>
+        </div>
+
+        {/* Brand labels */}
+        <div className="pointer-events-none absolute left-3 top-3 z-30 inline-flex items-center gap-1.5 border border-brand/50 bg-ink/80 px-2.5 py-1 backdrop-blur-sm">
+          <SparkleMark fill={BRAND.peach} />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cream">
+            Before
+          </span>
+        </div>
+
+        <div className="pointer-events-none absolute right-3 top-3 z-30 inline-flex items-center gap-1.5 border border-cream/25 bg-brand px-2.5 py-1">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
+            <path
+              d="M2.5 6.2l2.2 2.2 4.8-4.8"
+              stroke={BRAND.cream}
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cream">
+            After
+          </span>
+        </div>
+
+        {/* Corner frame accents */}
+        <div className="pointer-events-none absolute bottom-3 left-3 z-30 h-5 w-5 border-b border-l border-brand/55" />
+        <div className="pointer-events-none absolute bottom-3 right-3 z-30 h-5 w-5 border-b border-r border-brand/55" />
+      </div>
+    </div>
+  );
+}
