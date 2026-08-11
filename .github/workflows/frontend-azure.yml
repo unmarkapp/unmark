@@ -5,7 +5,7 @@
 # Repository secret:
 #   AZURE_CREDENTIALS — JSON from `az ad sp create-for-rbac ... --sdk-auth`
 #
-# Repository variables (Settings → Secrets and variables → Actions → Variables):
+# Repository variables:
 #   AZURE_RESOURCE_GROUP, ACR_NAME, AZURE_CONTAINER_APP_NAME,
 #   AZURE_CONTAINER_APP_ENV, AZURE_LOCATION,
 #   NEXT_PUBLIC_API_URL, NEXT_PUBLIC_AUTH_URL, NEXT_PUBLIC_BILLING_URL
@@ -60,38 +60,38 @@ jobs:
           test -n "${{ vars.ACR_NAME }}" || { echo "Missing variable ACR_NAME"; exit 1; }
           test -n "${{ vars.AZURE_RESOURCE_GROUP }}" || { echo "Missing variable AZURE_RESOURCE_GROUP"; exit 1; }
           test -n "${{ vars.AZURE_CONTAINER_APP_NAME }}" || { echo "Missing variable AZURE_CONTAINER_APP_NAME"; exit 1; }
-          test -n "${{ vars.AZURE_CONTAINER_APP_ENV }}" || { echo "Missing variable AZURE_CONTAINER_APP_ENV"; exit 1; }
-          test -n "${{ vars.AZURE_LOCATION }}" || { echo "Missing variable AZURE_LOCATION"; exit 1; }
 
       - name: Azure login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      - name: Build and deploy Container App
-        uses: azure/container-apps-deploy-action@v2
+      - name: Log in to ACR
+        run: az acr login --name "${{ vars.ACR_NAME }}"
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
         with:
-          acrName: ${{ vars.ACR_NAME }}
-          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
-          containerAppName: ${{ vars.AZURE_CONTAINER_APP_NAME }}
-          containerAppEnvironment: ${{ vars.AZURE_CONTAINER_APP_ENV }}
-          location: ${{ vars.AZURE_LOCATION }}
-          imageToBuild: ${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          dockerfilePath: Dockerfile
-          targetPort: 3000
-          ingress: external
-          buildArguments: |
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+            ${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:latest
+          build-args: |
             NEXT_PUBLIC_API_URL=${{ steps.urls.outputs.api }}
             NEXT_PUBLIC_AUTH_URL=${{ steps.urls.outputs.auth }}
             NEXT_PUBLIC_BILLING_URL=${{ steps.urls.outputs.billing }}
 
-      - name: Tag latest in ACR
+      - name: Deploy to Container App
         run: |
-          az acr import \
-            --name "${{ vars.ACR_NAME }}" \
-            --source "${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}" \
-            --image "${{ env.IMAGE_NAME }}:latest" \
-            --force
+          IMAGE="${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          az containerapp update \
+            --name "${{ vars.AZURE_CONTAINER_APP_NAME }}" \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --image "$IMAGE" \
+            --output none
+          echo "Deployed image: $IMAGE"
 
       - name: Deployment URL
         run: |
