@@ -30,6 +30,12 @@ export default function SiteHeader() {
         <Link href="/#how" className="transition hover:text-foreground">
           How it works
         </Link>
+        <Link href="/#why-unmark" className="transition hover:text-foreground">
+          Why Unmark
+        </Link>
+        <Link href="/tools" className="transition hover:text-foreground">
+          Tools
+        </Link>
         <Link href="/extension" className="transition hover:text-foreground">
           Extension
         </Link>

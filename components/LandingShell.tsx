@@ -6,6 +6,7 @@ import ClosingCta from "@/components/ClosingCta";
 import ExtensionInstall from "@/components/ExtensionInstall";
 import HowItWorks from "@/components/HowItWorks";
 import LandingBeforeAfter from "@/components/LandingBeforeAfter";
+import LandingCompare from "@/components/LandingCompare";
 import LandingFaq from "@/components/LandingFaq";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -44,6 +45,7 @@ export default function LandingShell({
       {showHow ? (
         <>
           <LandingBeforeAfter />
+          <LandingCompare />
           <HowItWorks />
           <ExtensionInstall />
           <LandingFaq />

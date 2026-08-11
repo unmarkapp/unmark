@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import ExtensionLanding from "@/components/ExtensionLanding";
-import { SITE_NAME, SITE_URL } from "@/lib/seo";
+import { CHROME_WEB_STORE_URL, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "Chrome Extension for Gemini Watermark Removal",
@@ -26,6 +26,8 @@ const softwareLd = {
   description:
     "Chrome extension that queues prompts for Gemini or Google Flow, removes the Gemini sparkle watermark with Unmark, and downloads cleaned images.",
   url: `${SITE_URL}/extension`,
+  downloadUrl: CHROME_WEB_STORE_URL,
+  installUrl: CHROME_WEB_STORE_URL,
   publisher: {
     "@type": "Organization",
     name: SITE_NAME,

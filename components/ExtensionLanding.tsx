@@ -3,6 +3,7 @@ import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { CHROME_WEB_STORE_URL } from "@/lib/seo";
 
 const heroBenefits = [
   {
@@ -25,12 +26,12 @@ const heroBenefits = [
 const installSteps = [
   {
     title: "Open the store page",
-    body: "Chrome Web Store listing is under review — use developer install meanwhile.",
+    body: "Visit Unmark for Gemini on the Chrome Web Store.",
     icon: "store" as const,
   },
   {
     title: "Add to Chrome",
-    body: "Load the unpacked extension, or install from the Store once live.",
+    body: "Click Add to Chrome and confirm the install.",
     icon: "chrome" as const,
   },
   {
@@ -100,18 +101,15 @@ export default function ExtensionLanding() {
           </p>
 
           <div className="animate-rise-delay-2 mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <button
-              type="button"
-              disabled
-              aria-disabled="true"
-              className="inline-flex cursor-not-allowed items-center justify-center gap-2.5 bg-ink/55 px-6 py-3.5 text-sm font-semibold text-white"
+            <a
+              href={CHROME_WEB_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2.5 bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
             >
               <ChromeIcon />
               Add to Chrome
-              <span className="ml-1 bg-white/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-white/90">
-                Soon
-              </span>
-            </button>
+            </a>
             <Link
               href="/"
               className="inline-flex items-center justify-center gap-2 border border-border bg-surface/80 px-6 py-3.5 text-sm font-semibold text-foreground transition hover:border-brand-line hover:text-brand"
@@ -121,7 +119,7 @@ export default function ExtensionLanding() {
             </Link>
           </div>
           <p className="mt-4 text-xs leading-relaxed text-muted">
-            Store listing under review. Developer install steps below.
+            Free on the Chrome Web Store. Sign in on Unmark so credits apply.
           </p>
         </section>
 
@@ -184,16 +182,17 @@ export default function ExtensionLanding() {
               <FeatureIcon name="shield" />
             </span>
             <p className="text-sm leading-relaxed text-muted">
-              Store installs get auto-updates. Until the listing is live, load
-              the unpacked{" "}
-              <code className="bg-background/80 px-1.5 py-0.5 text-[13px] text-foreground">
-                chrome-extension
-              </code>{" "}
-              folder from the Unmark repo via{" "}
-              <code className="bg-background/80 px-1.5 py-0.5 text-[13px] text-foreground">
-                chrome://extensions
-              </code>
-              , then sign in on Unmark.
+              Install from the{" "}
+              <a
+                href={CHROME_WEB_STORE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-brand underline-offset-2 hover:underline"
+              >
+                Chrome Web Store
+              </a>{" "}
+              for auto-updates, then sign in on Unmark so extension jobs use
+              your credits and can land in Library.
             </p>
           </div>
         </div>
@@ -248,15 +247,15 @@ export default function ExtensionLanding() {
             no extension required.
           </p>
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row">
-            <Link
-              href="/"
-              className="inline-flex items-center justify-center bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
+            <a
+              href={CHROME_WEB_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
             >
-              Open Unmark
-              <span aria-hidden className="ml-2">
-                →
-              </span>
-            </Link>
+              <ChromeIcon />
+              Add to Chrome
+            </a>
             <Link
               href="/privacy"
               className="text-sm font-medium text-muted transition hover:text-brand"

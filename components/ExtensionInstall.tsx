@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { CHROME_WEB_STORE_URL } from "@/lib/seo";
 
 const steps = [
   {
@@ -53,19 +53,21 @@ export default function ExtensionInstall() {
       </ol>
 
       <div className="mt-12 flex flex-col items-center gap-3">
-        <Link
-          href="/extension"
+        <a
+          href={CHROME_WEB_STORE_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="inline-flex items-center justify-center gap-2.5 bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
         >
           <ChromeIcon />
-          Extension details
+          Add to Chrome
           <span aria-hidden className="ml-1">
             →
           </span>
-        </Link>
+        </a>
         <p className="max-w-sm text-center text-xs leading-relaxed text-muted">
-          Chrome Web Store listing is under review. Works with Gemini and Google
-          Flow — sign in on Unmark first so your credits apply.
+          Free on the Chrome Web Store. Works with Gemini and Google Flow —
+          sign in on Unmark first so your credits apply.
         </p>
       </div>
     </section>

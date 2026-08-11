@@ -41,6 +41,9 @@ export default function SiteFooter() {
             <Link href="/extension" className="transition hover:text-brand">
               Extension
             </Link>
+            <Link href="/tools" className="transition hover:text-brand">
+              Tools
+            </Link>
             <Link href="/library" className="transition hover:text-brand">
               Library
             </Link>

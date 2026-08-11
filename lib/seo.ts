@@ -2,6 +2,10 @@ export const SITE_URL = "https://unmark.ink";
 
 export const SITE_NAME = "Unmark";
 
+/** Chrome Web Store listing for Unmark for Gemini. */
+export const CHROME_WEB_STORE_URL =
+  "https://chrome.google.com/webstore/detail/helligpoigiemhikanpdlnedjehhjhni";
+
 /** Primary SERP title — keyword first for non-branded queries. */
 export const SITE_TITLE_DEFAULT =
   "Gemini Watermark Remover — Unmark (Sparkle Cleanup)";
@@ -51,5 +55,10 @@ export const FAQ_ITEMS = [
     question: "Is there a Chrome extension for Gemini watermark removal?",
     answer:
       "Yes. Unmark for Gemini pairs with Cloud — sign in on Unmark so extension jobs can use your credits and appear in Library. Instant browser mode does not connect to the extension.",
+  },
+  {
+    question: "What happens to my video if I refresh the page?",
+    answer:
+      "With Unmark Cloud, video jobs run on our servers and stay in your Library. You can also get notified when encoding finishes. Tools that only process in the browser often lose the job and burn credits if you refresh or close the tab.",
   },
 ] as const;

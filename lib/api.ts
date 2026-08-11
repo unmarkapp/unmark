@@ -19,6 +19,7 @@ export interface JobResponse {
   quality: Quality;
   input_key: string;
   output_key: string;
+  job_type?: string;
 }
 
 export type MediaType = "image" | "video";
@@ -27,6 +28,7 @@ export interface JobStatus {
   job_id: string;
   status: JobStatusValue;
   media_type?: MediaType;
+  job_type?: string;
   quality?: Quality;
   filename?: string;
   created_at?: string;
