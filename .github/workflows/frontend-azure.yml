@@ -1,0 +1,104 @@
+# Deploy Next.js frontend (standalone Docker) to Azure Container Apps.
+#
+# Setup (from this repo root): ./infra/azure/provision.sh
+#
+# Repository secret:
+#   AZURE_CREDENTIALS — JSON from `az ad sp create-for-rbac ... --sdk-auth`
+#
+# Repository variables (Settings → Secrets and variables → Actions → Variables):
+#   AZURE_RESOURCE_GROUP, ACR_NAME, AZURE_CONTAINER_APP_NAME,
+#   AZURE_CONTAINER_APP_ENV, AZURE_LOCATION,
+#   NEXT_PUBLIC_API_URL, NEXT_PUBLIC_AUTH_URL, NEXT_PUBLIC_BILLING_URL
+name: Deploy frontend to Azure
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "app/**"
+      - "components/**"
+      - "lib/**"
+      - "public/**"
+      - "Dockerfile"
+      - "next.config.ts"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/frontend-azure.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: frontend-azure-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  IMAGE_NAME: unmark-frontend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve build URLs
+        id: urls
+        run: |
+          api="${{ vars.NEXT_PUBLIC_API_URL }}"
+          auth="${{ vars.NEXT_PUBLIC_AUTH_URL }}"
+          billing="${{ vars.NEXT_PUBLIC_BILLING_URL }}"
+          echo "api=${api:-https://api.unmark.ink}" >> "$GITHUB_OUTPUT"
+          echo "auth=${auth:-https://auth.unmark.ink}" >> "$GITHUB_OUTPUT"
+          echo "billing=${billing:-https://billing.unmark.ink}" >> "$GITHUB_OUTPUT"
+
+      - name: Validate configuration
+        run: |
+          test -n "${{ secrets.AZURE_CREDENTIALS }}" || { echo "Missing secret AZURE_CREDENTIALS"; exit 1; }
+          test -n "${{ vars.ACR_NAME }}" || { echo "Missing variable ACR_NAME"; exit 1; }
+          test -n "${{ vars.AZURE_RESOURCE_GROUP }}" || { echo "Missing variable AZURE_RESOURCE_GROUP"; exit 1; }
+          test -n "${{ vars.AZURE_CONTAINER_APP_NAME }}" || { echo "Missing variable AZURE_CONTAINER_APP_NAME"; exit 1; }
+          test -n "${{ vars.AZURE_CONTAINER_APP_ENV }}" || { echo "Missing variable AZURE_CONTAINER_APP_ENV"; exit 1; }
+          test -n "${{ vars.AZURE_LOCATION }}" || { echo "Missing variable AZURE_LOCATION"; exit 1; }
+
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build and deploy Container App
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          acrName: ${{ vars.ACR_NAME }}
+          resourceGroup: ${{ vars.AZURE_RESOURCE_GROUP }}
+          containerAppName: ${{ vars.AZURE_CONTAINER_APP_NAME }}
+          containerAppEnvironment: ${{ vars.AZURE_CONTAINER_APP_ENV }}
+          location: ${{ vars.AZURE_LOCATION }}
+          imageToBuild: ${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          dockerfilePath: Dockerfile
+          targetPort: 3000
+          ingress: external
+          buildArguments: |
+            NEXT_PUBLIC_API_URL=${{ steps.urls.outputs.api }}
+            NEXT_PUBLIC_AUTH_URL=${{ steps.urls.outputs.auth }}
+            NEXT_PUBLIC_BILLING_URL=${{ steps.urls.outputs.billing }}
+
+      - name: Tag latest in ACR
+        run: |
+          az acr import \
+            --name "${{ vars.ACR_NAME }}" \
+            --source "${{ vars.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}" \
+            --image "${{ env.IMAGE_NAME }}:latest" \
+            --force
+
+      - name: Deployment URL
+        run: |
+          FQDN="$(az containerapp show \
+            --name "${{ vars.AZURE_CONTAINER_APP_NAME }}" \
+            --resource-group "${{ vars.AZURE_RESOURCE_GROUP }}" \
+            --query 'properties.configuration.ingress.fqdn' -o tsv)"
+          echo "## Frontend deployed" >> "$GITHUB_STEP_SUMMARY"
+          echo "https://${FQDN}" >> "$GITHUB_STEP_SUMMARY"
+          echo "Frontend live at: https://${FQDN}"

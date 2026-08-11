@@ -65,7 +65,7 @@ Never commit `.env.local` or `.env`. Only `.env.example` is safe.
 
 ## Deploy to Azure (GitHub Actions)
 
-Same model as AWS EKS: **build `frontend/Dockerfile` → push to registry → run container** on port 3000 with the same `NEXT_PUBLIC_*` URLs. On Azure this uses **Container Apps** (managed containers — no Kubernetes cluster to operate; ACR replaces ECR).
+Same model as AWS EKS: **build `Dockerfile` → push to registry → run container** on port 3000 with the same `NEXT_PUBLIC_*` URLs. On Azure this uses **Container Apps** (managed containers — no Kubernetes cluster to operate; ACR replaces ECR).
 
 | AWS (EKS) | Azure |
 |-----------|-------|
@@ -73,15 +73,17 @@ Same model as AWS EKS: **build `frontend/Dockerfile` → push to registry → ru
 | `frontend-deployment.yaml` (3 replicas) | Container App (min 1 / max 3) |
 | ALB ingress | Container Apps HTTPS ingress |
 
-**One-time setup** (run from repo root `watermark-remove/`):
+**One-time Azure setup** (from this repo root):
 
 ```bash
 az login
-./frontend/infra/azure/provision.sh
+./infra/azure/provision.sh
 ```
 
-Add GitHub **secret** `AZURE_CREDENTIALS` (service principal JSON with Contributor on the resource group) and **variables**: `AZURE_RESOURCE_GROUP`, `ACR_NAME`, `AZURE_CONTAINER_APP_NAME`, `AZURE_CONTAINER_APP_ENV`, `AZURE_LOCATION`, plus `NEXT_PUBLIC_*` URLs pointing at your AWS API/auth/billing hosts.
+Add GitHub **secret** `AZURE_CREDENTIALS` and **repository variables** on **this frontend repo**: `AZURE_RESOURCE_GROUP`, `ACR_NAME`, `AZURE_CONTAINER_APP_NAME`, `AZURE_CONTAINER_APP_ENV`, `AZURE_LOCATION`, plus `NEXT_PUBLIC_*` URLs.
 
-**Deploy:** push to `main` under `frontend/`, or run the **Deploy frontend to Azure** workflow manually.
+**Deploy:** push to `main`, or **Actions → Deploy frontend to Azure → Run workflow**.
+
+Workflow: [`.github/workflows/frontend-azure.yml`](.github/workflows/frontend-azure.yml)
 
 Point `unmark.ink` at the Container App FQDN (Azure custom domain + Namecheap DNS). Backend stays on AWS; only the web UI runs on Azure.

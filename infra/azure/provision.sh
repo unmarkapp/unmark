@@ -9,7 +9,7 @@
 #   export AZURE_CONTAINER_APP_NAME=unmark-frontend
 #   export AZURE_CONTAINER_APP_ENV=unmark-cae
 #   export AZURE_LOCATION=centralindia
-#   ./frontend/infra/azure/provision.sh
+#   ./infra/azure/provision.sh
 #
 # Then grant the GitHub Actions service principal:
 #   - Contributor on the resource group
