@@ -1,9 +1,16 @@
 import type { MetadataRoute } from "next";
 
-import { SITE_URL } from "@/lib/seo";
+import { GUIDE_LINKS, SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
+
+  const guideEntries: MetadataRoute.Sitemap = GUIDE_LINKS.map((guide) => ({
+    url: `${SITE_URL}${guide.href}`,
+    lastModified,
+    changeFrequency: "monthly" as const,
+    priority: guide.href === "/guides/mcp-server" ? 0.85 : 0.9,
+  }));
 
   return [
     {
@@ -13,17 +20,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${SITE_URL}/guides/remove-gemini-watermark`,
+      url: `${SITE_URL}/guides`,
       lastModified,
       changeFrequency: "monthly",
-      priority: 0.9,
+      priority: 0.92,
     },
-    {
-      url: `${SITE_URL}/guides/mcp-server`,
-      lastModified,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
+    ...guideEntries,
     {
       url: `${SITE_URL}/extension`,
       lastModified,

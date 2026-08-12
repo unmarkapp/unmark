@@ -8,6 +8,7 @@ import HowItWorks from "@/components/HowItWorks";
 import LandingBeforeAfter from "@/components/LandingBeforeAfter";
 import LandingCompare from "@/components/LandingCompare";
 import LandingFaq from "@/components/LandingFaq";
+import LandingSeoContent from "@/components/LandingSeoContent";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 
@@ -24,16 +25,17 @@ export default function LandingShell({
         <SiteHeader />
 
         <section className="mx-auto mt-12 max-w-3xl text-center sm:mt-16">
-          <h1 className="animate-rise font-display text-5xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl md:leading-[1.05]">
-            Unmark
+          <h1 className="animate-rise font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl md:leading-[1.08]">
+            Gemini Watermark Remover
           </h1>
           <p className="animate-rise-delay mt-3 text-sm font-medium tracking-wide text-brand sm:text-base">
-            Gemini watermark remover
+            Unmark — remove the sparkle from images &amp; video
           </p>
 
-          <p className="animate-rise-delay mx-auto mt-5 max-w-lg text-base leading-relaxed text-muted sm:text-lg">
-            Clean Gemini images instantly in your browser, or use Cloud for
-            Library, bulk processing, and the Chrome extension.
+          <p className="animate-rise-delay mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            Free Instant cleanup in your browser, or Cloud for Gemini &amp; Veo
+            video, Library saves, bulk jobs, Google Flow, and the Chrome
+            extension.
           </p>
         </section>
 
@@ -48,6 +50,7 @@ export default function LandingShell({
           <LandingCompare />
           <HowItWorks />
           <ExtensionInstall />
+          <LandingSeoContent />
           <LandingFaq />
           <ClosingCta />
         </>

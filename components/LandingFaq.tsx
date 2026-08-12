@@ -18,8 +18,8 @@ export default function LandingFaq() {
           Gemini watermark FAQ
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
-          Short answers to how people remove the Gemini sparkle stamp from
-          images.
+          Answers about removing the Gemini sparkle from images and video — Veo,
+          Google Flow, Instant, and Cloud.
         </p>
       </div>
 

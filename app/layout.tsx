@@ -112,11 +112,14 @@ const jsonLd = {
       url: SITE_URL,
       description: SITE_TAGLINE,
       featureList: [
-        "Remove Gemini sparkle watermark",
+        "Remove Gemini sparkle watermark from images",
+        "Gemini and Veo video watermark removal",
+        "Google Flow and Nano Banana exports",
         "Auto and manual detection",
         "16:9 and 9:16 Gemini exports",
         "Original quality download",
         "Chrome extension",
+        "Cloud Library and bulk processing",
       ],
       offers: {
         "@type": "Offer",

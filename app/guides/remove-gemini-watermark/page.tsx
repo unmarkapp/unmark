@@ -6,9 +6,9 @@ import SiteHeader from "@/components/SiteHeader";
 import { FAQ_ITEMS, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "How to Remove a Gemini Watermark",
+  title: "How to Remove a Gemini Watermark from an Image",
   description:
-    "Step-by-step guide to remove the Gemini sparkle watermark from images with Unmark. Works on 16:9 and 9:16 Gemini exports.",
+    "Step-by-step guide to remove the Gemini sparkle watermark from images with Unmark. Free Instant mode or Cloud for Library, bulk, and 16:9 / 9:16 exports.",
   alternates: { canonical: "/guides/remove-gemini-watermark" },
   openGraph: {
     title: "How to Remove a Gemini Watermark · Unmark",
@@ -26,7 +26,7 @@ const steps = [
   },
   {
     title: "Open Unmark",
-    body: "Go to unmark.ink and sign in with Google. New accounts get free credits so you can try Gemini watermark removal right away.",
+    body: "Go to www.unmark.ink and sign in with Google. New accounts get free credits so you can try Gemini watermark removal right away.",
   },
   {
     title: "Upload and detect",

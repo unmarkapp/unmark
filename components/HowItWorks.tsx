@@ -3,7 +3,7 @@ export default function HowItWorks() {
     {
       num: "01",
       title: "Upload",
-      body: "Drop a Gemini PNG, JPG, or WebP — ideally 16:9 or 9:16.",
+      body: "Drop a Gemini PNG, JPG, WebP, or an MP4/MOV/WebM clip from Veo or Google Flow.",
     },
     {
       num: "02",

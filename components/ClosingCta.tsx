@@ -25,8 +25,8 @@ export default function ClosingCta() {
         </p>
 
         <p className="mt-6 max-w-md text-base leading-relaxed text-muted sm:text-lg">
-          Drop a Gemini image, clear the corner mark with Auto, and download a
-          clean file — original quality, ready to post.
+          Drop a Gemini image or Veo video, clear the sparkle with Auto, and
+          download a clean file — original quality, ready to post.
         </p>
 
         <button
