@@ -9,6 +9,7 @@ import {
   listJobs,
   type LibraryJob,
 } from "@/lib/api";
+import { SITE_URL } from "@/lib/seo";
 
 export default function LibraryView() {
   const router = useRouter();
@@ -127,7 +128,7 @@ export default function LibraryView() {
     if (typeof window !== "undefined") {
       return `${window.location.origin}/s/${job.job_id}`;
     }
-    return `https://unmark.ink/s/${job.job_id}`;
+    return `${SITE_URL}/s/${job.job_id}`;
   };
 
   const handleDownload = async (job: LibraryJob) => {

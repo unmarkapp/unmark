@@ -1,4 +1,5 @@
-export const SITE_URL = "https://unmark.ink";
+/** Public site URL (www — apex unmark.ink requires separate DNS). */
+export const SITE_URL = "https://www.unmark.ink";
 
 export const SITE_NAME = "Unmark";
 

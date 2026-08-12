@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 /**
- * Short share link: https://unmark.ink/s/{jobId}
+ * Short share link: https://www.unmark.ink/s/{jobId}
  * Proxies media from the API (which streams from S3) — no S3 redirect.
  */
 export async function GET(

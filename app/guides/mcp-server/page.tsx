@@ -34,9 +34,9 @@ const cursorSteps = [
 ];
 
 const examplePrompts = [
-  "Remove the watermark from https://unmark.ink/s/abc123 using Unmark",
+  "Remove the watermark from https://www.unmark.ink/s/abc123 using Unmark",
   "Remove the background from https://example.com/photo.png using Unmark",
-  "Clean the Gemini sparkle from this share link: https://unmark.ink/s/xyz789",
+  "Clean the Gemini sparkle from this share link: https://www.unmark.ink/s/xyz789",
 ];
 
 const tools = [
@@ -187,7 +187,7 @@ export default function McpServerGuidePage() {
             </li>
             <li>
               <strong className="font-semibold text-foreground">Unmark share links</strong>{" "}
-              — <code className="text-sm">https://unmark.ink/s/&lt;job-id&gt;</code>{" "}
+              — <code className="text-sm">https://www.unmark.ink/s/&lt;job-id&gt;</code>{" "}
               resolves automatically to your Cloud job image.
             </li>
             <li>
