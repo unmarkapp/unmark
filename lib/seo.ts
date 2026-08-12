@@ -6,6 +6,9 @@ export const SITE_NAME = "Unmark";
 export const CHROME_WEB_STORE_URL =
   "https://chrome.google.com/webstore/detail/helligpoigiemhikanpdlnedjehhjhni";
 
+/** Hosted Unmark MCP endpoint for Claude Connectors and other remote MCP clients. */
+export const MCP_SERVER_URL = "https://mcp.unmark.ink/mcp";
+
 /** Primary SERP title — keyword first for non-branded queries. */
 export const SITE_TITLE_DEFAULT =
   "Gemini Watermark Remover — Unmark (Sparkle Cleanup)";
