@@ -19,6 +19,7 @@ import {
 } from "@/lib/billing";
 import NotificationPreferenceToggle from "@/components/NotificationPreferenceToggle";
 import EarnCreditsCard from "@/components/EarnCreditsCard";
+import LibraryStorageSettings from "@/components/LibraryStorageSettings";
 
 type AccountTab = "profile" | "history" | "billing";
 
@@ -516,6 +517,8 @@ export default function AccountView() {
             </div>
 
             <EarnCreditsCard account={account} onRefresh={refreshBilling} />
+
+            <LibraryStorageSettings />
 
             {!paymentsEnabled && (
               <div className="mt-6 border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">

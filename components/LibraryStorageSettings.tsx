@@ -1,0 +1,185 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import {
+  connectGoogleDrive,
+  disconnectGoogleDrive,
+  getStorageStatus,
+  setDefaultStorageProvider,
+  storageProviderLabel,
+  type StorageProvider,
+  type StorageStatus,
+} from "@/lib/storage";
+
+export default function LibraryStorageSettings() {
+  const [status, setStatus] = useState<StorageStatus | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [busy, setBusy] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const refresh = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      setStatus(await getStorageStatus());
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not load storage settings",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
+
+  const handleProviderChange = async (provider: StorageProvider) => {
+    setBusy("provider");
+    setError(null);
+    setMessage(null);
+    try {
+      await setDefaultStorageProvider(provider);
+      await refresh();
+      setMessage(`Library saves will use ${storageProviderLabel(provider)}.`);
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not update storage",
+      );
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const handleConnect = async () => {
+    setBusy("connect");
+    setError(null);
+    try {
+      await connectGoogleDrive();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not connect Google Drive",
+      );
+      setBusy(null);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    setBusy("disconnect");
+    setError(null);
+    setMessage(null);
+    try {
+      await disconnectGoogleDrive();
+      await refresh();
+      setMessage("Google Drive disconnected.");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not disconnect",
+      );
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  const google = status?.providers.google_drive;
+  const current = status?.default_provider ?? "unmark";
+
+  return (
+    <div className="mt-6 border border-border bg-white p-5 sm:p-6">
+      <h2 className="text-base font-semibold text-foreground">
+        Library storage
+      </h2>
+      <p className="mt-2 text-sm text-muted">
+        Your 50 Library slots can save cleanups to Unmark Cloud or your own
+        Google Drive folder.
+      </p>
+
+      {loading ? (
+        <p className="mt-4 text-sm text-muted">Loading storage settings…</p>
+      ) : (
+        <div className="mt-5 space-y-3">
+          <StorageOption
+            name="Unmark Cloud"
+            hint="Stored on Unmark (default)"
+            selected={current === "unmark"}
+            disabled={busy !== null}
+            onSelect={() => void handleProviderChange("unmark")}
+          />
+          <StorageOption
+            name="Google Drive"
+            hint={
+              google?.connected
+                ? `Folder: ${google.folder_name || "Unmark/Cleanups"}`
+                : google?.available
+                  ? "Connect to save cleanups in your Drive"
+                  : "Not configured on this server"
+            }
+            selected={current === "google_drive"}
+            disabled={busy !== null || !google?.available || !google.connected}
+            onSelect={() => void handleProviderChange("google_drive")}
+          />
+
+          {google?.available && (
+            <div className="flex flex-wrap gap-3 pt-2">
+              {google.connected ? (
+                <button
+                  type="button"
+                  disabled={busy !== null}
+                  onClick={() => void handleDisconnect()}
+                  className="text-sm font-medium text-muted hover:text-foreground disabled:opacity-60"
+                >
+                  {busy === "disconnect" ? "Disconnecting…" : "Disconnect Drive"}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  disabled={busy !== null}
+                  onClick={() => void handleConnect()}
+                  className="bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:opacity-60"
+                >
+                  {busy === "connect" ? "Connecting…" : "Connect Google Drive"}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {message && <p className="mt-4 text-sm text-success">{message}</p>}
+      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+    </div>
+  );
+}
+
+function StorageOption({
+  name,
+  hint,
+  selected,
+  disabled,
+  onSelect,
+}: {
+  name: string;
+  hint: string;
+  selected: boolean;
+  disabled: boolean;
+  onSelect: () => void;
+}) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3 border border-border bg-surface px-4 py-4">
+      <input
+        type="radio"
+        name="library-storage"
+        checked={selected}
+        disabled={disabled}
+        onChange={onSelect}
+        className="mt-1"
+      />
+      <span>
+        <span className="block text-sm font-medium text-foreground">{name}</span>
+        <span className="mt-1 block text-xs text-muted">{hint}</span>
+      </span>
+    </label>
+  );
+}
