@@ -26,25 +26,40 @@ export default function AccountView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user, loading, updateEmailNotifications, refresh: refreshAuth } = useAuth();
-  const { refreshCredits } = useCredits();
+  const { fastCredits, refreshCredits } = useCredits();
   const [tab, setTab] = useState<AccountTab>("billing");
   const [account, setAccount] = useState<BillingAccount | null>(null);
   const [packs, setPacks] = useState<CreditPack[]>([]);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
-  const [billingLoading, setBillingLoading] = useState(true);
+  const [billingLoading, setBillingLoading] = useState(false);
   const [billingError, setBillingError] = useState<string | null>(null);
   const [buyingCode, setBuyingCode] = useState<string | null>(null);
   const [purchaseMessage, setPurchaseMessage] = useState<string | null>(null);
   const [prefSaving, setPrefSaving] = useState(false);
   const referralRefreshAttempted = useRef(false);
+  const billingFetchInFlight = useRef(false);
+  const signupCheckedForUser = useRef<string | null>(null);
+  const billingDataLoaded = useRef(false);
+  const refreshCreditsRef = useRef(refreshCredits);
+  refreshCreditsRef.current = refreshCredits;
 
   const refreshBilling = useCallback(async () => {
+    if (billingFetchInFlight.current) {
+      return;
+    }
+    billingFetchInFlight.current = true;
     setBillingLoading(true);
     setBillingError(null);
     try {
       let balance = await getBalance();
-      if (!balance.signup_bonus_at) {
+      const userId = balance.user_id;
+      if (
+        userId &&
+        signupCheckedForUser.current !== userId &&
+        !balance.signup_bonus_at
+      ) {
+        signupCheckedForUser.current = userId;
         await grantSignupCredits().catch(() => undefined);
         balance = await getBalance();
       }
@@ -57,15 +72,16 @@ export default function AccountView() {
       setPacks(packResult.packs);
       setPaymentsEnabled(packResult.paymentsEnabled === true);
       setTransactions(txList);
-      await refreshCredits();
+      void refreshCreditsRef.current();
     } catch (err) {
       setBillingError(
         err instanceof Error ? err.message : "Could not load credits",
       );
     } finally {
       setBillingLoading(false);
+      billingFetchInFlight.current = false;
     }
-  }, [refreshCredits]);
+  }, []);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -74,10 +90,23 @@ export default function AccountView() {
   }, [loading, user, router]);
 
   useEffect(() => {
-    if (user?.id) {
-      void refreshBilling();
+    billingDataLoaded.current = false;
+    signupCheckedForUser.current = null;
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!user?.id) {
+      return;
     }
-  }, [user?.id, refreshBilling]);
+    if (tab !== "billing" && tab !== "history") {
+      return;
+    }
+    if (billingDataLoaded.current) {
+      return;
+    }
+    billingDataLoaded.current = true;
+    void refreshBilling();
+  }, [user?.id, tab, refreshBilling]);
 
   useEffect(() => {
     if (!user?.id || user.referral_code || referralRefreshAttempted.current) {
@@ -162,8 +191,8 @@ export default function AccountView() {
   const displayName = user.name || "Unmark user";
   const email = user.email;
   const initials = (displayName[0] || email[0] || "U").toUpperCase();
-  const fastCredits = account?.fast_credits ?? 0;
-  const totalCredits = fastCredits;
+  const resolvedFastCredits = account?.fast_credits ?? fastCredits ?? 0;
+  const totalCredits = resolvedFastCredits;
   const dailyFreeCredits = account?.daily_free_credits ?? 5;
   const libraryLimit = account?.library_limit ?? 50;
   const extraLibrarySlots = account?.extra_library_slots ?? 0;
@@ -290,7 +319,7 @@ export default function AccountView() {
               {displayName}
             </div>
             <div className="mt-0.5 text-sm text-muted">{email}</div>
-            {!billingLoading && account && (
+            {fastCredits !== null && (
               <div className="mt-1 text-sm font-medium text-brand">
                 {totalCredits} credit{totalCredits === 1 ? "" : "s"} available
               </div>
@@ -334,7 +363,9 @@ export default function AccountView() {
               <div>
                 <dt className="text-muted">Credits</dt>
                 <dd className="mt-1 font-medium text-foreground">
-                  {billingLoading ? "Loading…" : `${fastCredits} fast credits`}
+                  {fastCredits === null
+                    ? "Loading…"
+                    : `${resolvedFastCredits} fast credits`}
                 </dd>
               </div>
               <div className="border-t border-border pt-4">
@@ -464,7 +495,7 @@ export default function AccountView() {
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <CreditStat
                     label="Fast credits"
-                    value={fastCredits}
+                    value={resolvedFastCredits}
                     hint={
                       paymentsEnabled
                         ? "Used for each Gemini watermark removal"

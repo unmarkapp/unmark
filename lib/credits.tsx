@@ -30,15 +30,16 @@ export function CreditsProvider({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<BillingAccount | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const userId = user?.id;
+
   const refreshCredits = useCallback(async () => {
-    if (!user) {
+    if (!userId) {
       setAccount(null);
       return;
     }
 
     setLoading(true);
     try {
-      // Small delay so billing spend from the worker can commit first
       const balance = await getBalance();
       setAccount(balance);
     } catch {
@@ -46,15 +47,15 @@ export function CreditsProvider({ children }: { children: ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [userId]);
 
   useEffect(() => {
-    if (!user) {
+    if (!userId) {
       setAccount(null);
       return;
     }
     void refreshCredits();
-  }, [user, refreshCredits]);
+  }, [userId, refreshCredits]);
 
   const value = useMemo(
     () => ({
