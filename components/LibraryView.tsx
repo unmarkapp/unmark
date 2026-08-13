@@ -127,9 +127,34 @@ export default function LibraryView() {
   }, [toast]);
 
   const libraryFull = libraryUsed >= libraryLimit;
-  const pendingCount = jobs.filter(
+  const pendingJobs = jobs.filter(
     (job) => job.status === "queued" || job.status === "processing",
+  );
+  const pendingCount = pendingJobs.length;
+  const pendingVideoCount = pendingJobs.filter(
+    (job) => job.media_type === "video",
   ).length;
+  const pendingBgCount = pendingJobs.filter(
+    (job) => job.job_type === "bg_remove",
+  ).length;
+  const pendingImageCount = pendingJobs.filter(
+    (job) =>
+      job.media_type !== "video" &&
+      job.job_type !== "bg_remove",
+  ).length;
+
+  const pendingBannerMessage = () => {
+    if (pendingVideoCount > 0 && pendingBgCount === 0 && pendingImageCount === 0) {
+      return "Cleaning in the background. We’ll email you when your video is ready — this page also updates automatically.";
+    }
+    if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0) {
+      return "Removing backgrounds in the background. This page updates automatically when each cutout is ready.";
+    }
+    if (pendingVideoCount > 0 && (pendingBgCount > 0 || pendingImageCount > 0)) {
+      return "Jobs are processing in the background. We’ll email you when videos are ready — this page updates automatically for images.";
+    }
+    return "Cleaning in the background. This page updates automatically when your files are ready.";
+  };
 
   const fileLabel = (job: LibraryJob) => {
     const base =
@@ -290,8 +315,7 @@ export default function LibraryView() {
 
         {pendingCount > 0 && (
           <div className="mt-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground">
-            Cleaning in the background. We’ll email you when a video is ready —
-            this page also updates automatically.
+            {pendingBannerMessage()}
           </div>
         )}
 
@@ -346,6 +370,7 @@ export default function LibraryView() {
                   ? job.poster_url || job.result_url
                   : job.result_url;
               const isVideo = job.media_type === "video";
+              const isBgRemove = job.job_type === "bg_remove";
               const isPending =
                 job.status === "queued" || job.status === "processing";
               const isFailed = job.status === "failed";
@@ -382,7 +407,9 @@ export default function LibraryView() {
                       <p className="text-xs font-semibold uppercase tracking-wide text-muted">
                         {isPending
                           ? job.status === "processing"
-                            ? "Cleaning…"
+                            ? isBgRemove
+                              ? "Removing BG…"
+                              : "Cleaning…"
                             : "Queued"
                           : isFailed
                             ? "Failed"
@@ -391,6 +418,11 @@ export default function LibraryView() {
                       <p className="line-clamp-2 text-sm text-foreground">
                         {label}
                       </p>
+                      {isBgRemove && !isVideo && (
+                        <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
+                          Background removal
+                        </span>
+                      )}
                       {isVideo && (
                         <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
                           Video
