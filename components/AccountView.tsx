@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
@@ -37,14 +37,19 @@ export default function AccountView() {
   const [buyingCode, setBuyingCode] = useState<string | null>(null);
   const [purchaseMessage, setPurchaseMessage] = useState<string | null>(null);
   const [prefSaving, setPrefSaving] = useState(false);
+  const referralRefreshAttempted = useRef(false);
 
   const refreshBilling = useCallback(async () => {
     setBillingLoading(true);
     setBillingError(null);
     try {
-      await grantSignupCredits().catch(() => undefined);
-      const [balance, packResult, txList] = await Promise.all([
-        getBalance(),
+      let balance = await getBalance();
+      if (!balance.signup_bonus_at) {
+        await grantSignupCredits().catch(() => undefined);
+        balance = await getBalance();
+      }
+
+      const [packResult, txList] = await Promise.all([
         listPacks(),
         listTransactions(),
       ]);
@@ -52,7 +57,7 @@ export default function AccountView() {
       setPacks(packResult.packs);
       setPaymentsEnabled(packResult.paymentsEnabled === true);
       setTransactions(txList);
-      await Promise.all([refreshCredits(), refreshAuth()]);
+      await refreshCredits();
     } catch (err) {
       setBillingError(
         err instanceof Error ? err.message : "Could not load credits",
@@ -60,7 +65,7 @@ export default function AccountView() {
     } finally {
       setBillingLoading(false);
     }
-  }, [refreshCredits, refreshAuth]);
+  }, [refreshCredits]);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -69,10 +74,18 @@ export default function AccountView() {
   }, [loading, user, router]);
 
   useEffect(() => {
-    if (user) {
+    if (user?.id) {
       void refreshBilling();
     }
-  }, [user, refreshBilling]);
+  }, [user?.id, refreshBilling]);
+
+  useEffect(() => {
+    if (!user?.id || user.referral_code || referralRefreshAttempted.current) {
+      return;
+    }
+    referralRefreshAttempted.current = true;
+    void refreshAuth();
+  }, [user?.id, user?.referral_code, refreshAuth]);
 
   useEffect(() => {
     const checkout = searchParams.get("checkout");

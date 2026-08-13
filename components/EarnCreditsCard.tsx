@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
 import {
@@ -49,12 +49,6 @@ export default function EarnCreditsCard({
   const refreshAll = async () => {
     await Promise.all([refreshAuth(), refreshCredits(), onRefresh()]);
   };
-
-  useEffect(() => {
-    if (user && !user.referral_code) {
-      void refreshAuth();
-    }
-  }, [user, refreshAuth]);
 
   const copyInviteLink = async () => {
     if (!inviteLink) return;
@@ -184,8 +178,17 @@ export default function EarnCreditsCard({
           <p className="mt-2 break-all text-xs text-muted">{inviteLink}</p>
         </div>
       ) : codeLoading ? (
-        <div className="mt-6 border border-border bg-surface px-4 py-4 text-sm text-muted">
-          Generating your invite code…
+        <div className="mt-6 border border-border bg-surface px-4 py-4">
+          <p className="text-sm text-muted">
+            Generating your invite code…
+          </p>
+          <button
+            type="button"
+            onClick={() => void refreshAuth()}
+            className="mt-2 text-sm font-medium text-brand hover:underline"
+          >
+            Retry
+          </button>
         </div>
       ) : (
         <div className="mt-6 border border-border bg-surface px-4 py-4">

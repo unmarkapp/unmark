@@ -111,7 +111,7 @@ export async function grantSignupCredits(): Promise<void> {
     method: "POST",
     credentials: "include",
   });
-  if (response.ok || response.status === 409) return;
+  if (response.ok) return;
   throw new Error("Failed to grant signup credits");
 }
 
