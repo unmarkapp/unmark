@@ -24,6 +24,15 @@ export interface JobResponse {
 
 export type MediaType = "image" | "video";
 
+export type StorageProvider = "unmark" | "google_drive";
+
+export type StorageStatus =
+  | "ready"
+  | "pending"
+  | "uploading"
+  | "failed"
+  | "provider_disconnected";
+
 export interface JobStatus {
   job_id: string;
   status: JobStatusValue;
@@ -34,8 +43,14 @@ export interface JobStatus {
   created_at?: string;
   completed_at?: string;
   result_url?: string;
+  preview_url?: string;
   share_url?: string;
   poster_url?: string;
+  external_web_url?: string;
+  storage_provider?: StorageProvider;
+  storage_status?: StorageStatus;
+  storage_error?: string;
+  s3_offloaded?: boolean;
   duration_sec?: number;
   credits_charged?: number;
   error?: string;

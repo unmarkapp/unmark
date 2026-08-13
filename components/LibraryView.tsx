@@ -10,7 +10,6 @@ import NotificationPreferenceToggle from "@/components/NotificationPreferenceTog
 import { useAuth } from "@/lib/auth";
 import {
   openInCanva,
-  shareUrlForJob,
 } from "@/lib/canva";
 import {
   deleteJob,
@@ -20,7 +19,37 @@ import {
   removeBackgroundFromJob,
   type LibraryJob,
 } from "@/lib/api";
+import { storageProviderLabel } from "@/lib/storage";
 import { SITE_URL } from "@/lib/seo";
+
+function jobThumbnailUrl(job: LibraryJob): string | undefined {
+  if (job.media_type === "video") {
+    return job.poster_url || job.preview_url || job.result_url;
+  }
+  return job.preview_url || job.result_url;
+}
+
+function jobModalMediaUrl(job: LibraryJob): string | undefined {
+  if (job.media_type === "video") {
+    return job.result_url || job.external_web_url;
+  }
+  return job.preview_url || job.result_url || job.external_web_url;
+}
+
+function isDriveJob(job: LibraryJob): boolean {
+  return job.storage_provider === "google_drive";
+}
+
+function isDriveSyncing(job: LibraryJob): boolean {
+  return (
+    isDriveJob(job) &&
+    (job.storage_status === "pending" || job.storage_status === "uploading")
+  );
+}
+
+function isDriveOpenUrl(url: string): boolean {
+  return /drive\.google\.com/i.test(url);
+}
 
 export default function LibraryView() {
   const router = useRouter();
@@ -201,10 +230,22 @@ export default function LibraryView() {
   };
 
   const handleDownload = async (job: LibraryJob) => {
-    if (!job.result_url) return;
+    const driveUrl = job.external_web_url || job.result_url;
+    if (job.s3_offloaded && driveUrl && isDriveOpenUrl(driveUrl)) {
+      window.open(driveUrl, "_blank", "noopener,noreferrer");
+      setToast("Opened in Google Drive");
+      return;
+    }
+    const downloadUrl = job.result_url || job.preview_url;
+    if (!downloadUrl) return;
+    if (isDriveOpenUrl(downloadUrl)) {
+      window.open(downloadUrl, "_blank", "noopener,noreferrer");
+      setToast("Opened in Google Drive");
+      return;
+    }
     setDownloadingId(job.job_id);
     try {
-      await downloadProcessedImage(job.result_url, fileLabel(job));
+      await downloadProcessedImage(downloadUrl, fileLabel(job));
       setToast("Download started");
       if (shouldShowCanvaPromo()) {
         setCanvaPromoContext({
@@ -398,18 +439,20 @@ export default function LibraryView() {
         ) : (
           <ul className="library-masonry mt-8">
             {jobs.map((job) => {
+              const thumb = jobThumbnailUrl(job);
               const canOpen =
-                job.status === "completed" && Boolean(job.result_url);
+                job.status === "completed" && Boolean(thumb || jobModalMediaUrl(job));
               const label = job.filename || `Job ${job.job_id.slice(0, 8)}`;
-              const thumb =
-                job.media_type === "video"
-                  ? job.poster_url || job.result_url
-                  : job.result_url;
               const isVideo = job.media_type === "video";
               const isBgRemove = job.job_type === "bg_remove";
               const isPending =
                 job.status === "queued" || job.status === "processing";
               const isFailed = job.status === "failed";
+              const driveSyncing = isDriveSyncing(job);
+              const driveReady =
+                isDriveJob(job) &&
+                job.storage_status === "ready" &&
+                !driveSyncing;
 
               return (
                 <li key={job.job_id} className="library-masonry-item">
@@ -427,6 +470,30 @@ export default function LibraryView() {
                         loading="lazy"
                         className="block h-auto w-full object-cover transition duration-500 group-hover:scale-[1.015]"
                       />
+                      {driveReady && (
+                        <span className="pointer-events-none absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] items-center gap-1 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold text-white">
+                          <svg
+                            width="12"
+                            height="12"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            aria-hidden
+                          >
+                            <path
+                              d="M7 4h10l3 7-9 9-9-9 3-7z"
+                              stroke="currentColor"
+                              strokeWidth="1.8"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          {storageProviderLabel("google_drive")}
+                        </span>
+                      )}
+                      {driveSyncing && (
+                        <span className="pointer-events-none absolute left-3 top-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold text-white">
+                          Syncing to Drive…
+                        </span>
+                      )}
                       {isVideo && (
                         <span className="pointer-events-none absolute bottom-3 left-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
                           Video
@@ -449,7 +516,11 @@ export default function LibraryView() {
                             : "Queued"
                           : isFailed
                             ? "Failed"
-                            : job.status || "…"}
+                            : driveSyncing
+                              ? "Syncing to Drive…"
+                              : isDriveJob(job)
+                                ? storageProviderLabel("google_drive")
+                                : job.status || "…"}
                       </p>
                       <p className="line-clamp-2 text-sm text-foreground">
                         {label}
@@ -497,7 +568,7 @@ export default function LibraryView() {
         </div>
       )}
 
-      {selected?.result_url && (
+      {selected && jobModalMediaUrl(selected) && (
         <div
           className="fixed inset-0 z-50 flex h-dvh max-h-dvh flex-col overflow-hidden bg-[#1c1c1e]/[0.94]"
           role="dialog"
@@ -532,8 +603,8 @@ export default function LibraryView() {
             {selected.media_type === "video" ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption
               <video
-                src={selected.result_url}
-                poster={selected.poster_url}
+                src={selected.result_url || selected.external_web_url}
+                poster={selected.poster_url || selected.preview_url}
                 controls
                 playsInline
                 className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
@@ -542,7 +613,7 @@ export default function LibraryView() {
             ) : (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
-                src={selected.result_url}
+                src={jobModalMediaUrl(selected)!}
                 alt={selected.filename || "Processed image"}
                 className="max-h-full max-w-full rounded-lg object-contain shadow-2xl"
                 onClick={(event) => event.stopPropagation()}
