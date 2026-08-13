@@ -31,7 +31,13 @@ function jobThumbnailUrl(job: LibraryJob): string | undefined {
     // Never use the mp4 result as an <img> src.
     return job.poster_url || undefined;
   }
-  return job.preview_url || job.result_url;
+  if (job.preview_url) return job.preview_url;
+  // After Drive offload, result_url is a Drive HTML page — not an image.
+  const result = job.result_url || "";
+  if (/drive\.google\.com|docs\.google\.com/i.test(result)) {
+    return undefined;
+  }
+  return job.result_url || undefined;
 }
 
 function jobModalMediaUrl(job: LibraryJob): string | undefined {
