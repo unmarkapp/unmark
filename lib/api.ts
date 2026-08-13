@@ -64,6 +64,37 @@ export interface VideoJobResponse {
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "/backend";
 
+export function isWatermarkRemovalJob(job: LibraryJob): boolean {
+  return (
+    job.status === "completed" &&
+    job.media_type !== "video" &&
+    job.job_type !== "bg_remove"
+  );
+}
+
+export async function removeBackgroundFromJob(
+  jobId: string,
+): Promise<JobResponse> {
+  const res = await fetch(
+    `${API_BASE_URL}/v1/jobs/${encodeURIComponent(jobId)}/remove-background`,
+    {
+      method: "POST",
+      credentials: "include",
+    },
+  );
+
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({}));
+    const detail =
+      typeof body.detail === "string"
+        ? body.detail
+        : `Background removal failed (${res.status})`;
+    throw new Error(detail);
+  }
+
+  return res.json();
+}
+
 export async function removeWatermark(
   file: File,
   selection: Selection | null,

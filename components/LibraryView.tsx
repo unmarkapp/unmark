@@ -14,7 +14,9 @@ import {
 import {
   deleteJob,
   downloadProcessedImage,
+  isWatermarkRemovalJob,
   listJobs,
+  removeBackgroundFromJob,
   type LibraryJob,
 } from "@/lib/api";
 import { SITE_URL } from "@/lib/seo";
@@ -36,6 +38,7 @@ export default function LibraryView() {
     {},
   );
   const [canvaLoading, setCanvaLoading] = useState(false);
+  const [bgRemovingId, setBgRemovingId] = useState<string | null>(null);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
   const refresh = useCallback(async (opts?: { quiet?: boolean }) => {
@@ -180,6 +183,24 @@ export default function LibraryView() {
       setError(err instanceof Error ? err.message : "Could not open Canva");
     } finally {
       setCanvaLoading(false);
+    }
+  };
+
+  const handleRemoveBackground = async (job: LibraryJob) => {
+    if (!isWatermarkRemovalJob(job)) return;
+    setBgRemovingId(job.job_id);
+    setError(null);
+    try {
+      await removeBackgroundFromJob(job.job_id);
+      setToast("Background removal queued");
+      setSelected(null);
+      await refresh({ quiet: true });
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Could not queue background removal",
+      );
+    } finally {
+      setBgRemovingId(null);
     }
   };
 
@@ -515,6 +536,25 @@ export default function LibraryView() {
                   strokeLinejoin="round"
                 />
               </ToolbarButton>
+              {isWatermarkRemovalJob(selected) ? (
+                <ToolbarButton
+                  label={
+                    bgRemovingId === selected.job_id
+                      ? "Removing BG…"
+                      : "Remove background"
+                  }
+                  onClick={() => void handleRemoveBackground(selected)}
+                  disabled={bgRemovingId === selected.job_id || libraryFull}
+                >
+                  <path
+                    d="M4 7h16M7 7V5.5A1.5 1.5 0 018.5 4h7A1.5 1.5 0 0117 5.5V7M9 11h6M6 20h12a1.5 1.5 0 001.5-1.5V9H4.5v9.5A1.5 1.5 0 006 20z"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </ToolbarButton>
+              ) : null}
               {selected.media_type !== "video" ? (
                 <ToolbarButton
                   label={canvaLoading ? "Opening Canva…" : "Edit in Canva"}
