@@ -1,5 +1,7 @@
 "use client";
 
+import { useCredits } from "@/lib/credits";
+
 export type BulkItemStatus =
   | "ready"
   | "processing"
@@ -95,6 +97,7 @@ export default function BulkQueueCard({
   onDownloadZip,
   onReset,
 }: BulkQueueCardProps) {
+  const { dailyFreeCredits, paymentsEnabled } = useCredits();
   const count = items.length;
   const completed = items.filter((item) => item.status === "completed").length;
   const failed = items.filter((item) => item.status === "failed").length;
@@ -267,11 +270,21 @@ export default function BulkQueueCard({
         </p>
       ) : !started && !hasCredits ? (
         <p className="mt-3 text-sm text-brand-hover">
-          You’re out of credits.{" "}
-          <a href="/account" className="font-semibold underline">
-            Buy more
-          </a>{" "}
-          to continue.
+          {paymentsEnabled ? (
+            <>
+              You’re out of credits.{" "}
+              <a href="/account" className="font-semibold underline">
+                Buy more
+              </a>{" "}
+              to continue.
+            </>
+          ) : (
+            <>
+              You’re out of credits for today. You get{" "}
+              {dailyFreeCredits ?? 5} free Cloud credits each day — check back
+              after midnight UTC, or use Instant for one image in-browser.
+            </>
+          )}
         </p>
       ) : null}
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import ImageEditor from "@/components/ImageEditor";
+import { useCredits } from "@/lib/credits";
 
 interface Selection {
   x: number;
@@ -106,6 +107,7 @@ export default function ReadyToCleanCard({
   onReset,
   onDownloadComplete,
 }: ReadyToCleanCardProps) {
+  const { dailyFreeCredits, paymentsEnabled } = useCredits();
   const canSubmit = detectMode === "auto" || hasSelection;
   const needsAuth = engine === "cloud";
   const blockedByAuth = needsAuth && !isAuthenticated;
@@ -375,14 +377,24 @@ export default function ReadyToCleanCard({
 
         {!resultUrl && canSubmit && blockedByCredits && (
           <p className="mt-2 text-xs text-muted">
-            No credits left.{" "}
-            <a
-              href="/account"
-              className="font-medium text-brand hover:underline"
-            >
-              Buy more credits
-            </a>{" "}
-            or use Instant for a quick local cleanup.
+            {paymentsEnabled ? (
+              <>
+                No credits left.{" "}
+                <a
+                  href="/account"
+                  className="font-medium text-brand hover:underline"
+                >
+                  Buy more credits
+                </a>{" "}
+                or use Instant for a quick local cleanup.
+              </>
+            ) : (
+              <>
+                Out of credits for today. You get {dailyFreeCredits ?? 5} free
+                Cloud credits daily (midnight UTC), or use Instant in-browser
+                now.
+              </>
+            )}
           </p>
         )}
 

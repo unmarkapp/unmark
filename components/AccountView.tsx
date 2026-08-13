@@ -29,6 +29,7 @@ export default function AccountView() {
   const [tab, setTab] = useState<AccountTab>("billing");
   const [account, setAccount] = useState<BillingAccount | null>(null);
   const [packs, setPacks] = useState<CreditPack[]>([]);
+  const [paymentsEnabled, setPaymentsEnabled] = useState(false);
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [billingLoading, setBillingLoading] = useState(true);
   const [billingError, setBillingError] = useState<string | null>(null);
@@ -41,13 +42,16 @@ export default function AccountView() {
     setBillingError(null);
     try {
       await grantSignupCredits().catch(() => undefined);
-      const [balance, packList, txList] = await Promise.all([
+      const [balance, packResult, txList] = await Promise.all([
         getBalance(),
         listPacks(),
         listTransactions(),
       ]);
       setAccount(balance);
-      setPacks(packList);
+      setPacks(packResult.packs);
+      setPaymentsEnabled(
+        packResult.paymentsEnabled || balance.payments_enabled === true,
+      );
       setTransactions(txList);
       await refreshCredits();
     } catch (err) {
@@ -148,6 +152,7 @@ export default function AccountView() {
   const initials = (displayName[0] || email[0] || "U").toUpperCase();
   const fastCredits = account?.fast_credits ?? 0;
   const totalCredits = fastCredits;
+  const dailyFreeCredits = account?.daily_free_credits ?? 5;
   const libraryLimit = account?.library_limit ?? 50;
   const extraLibrarySlots = account?.extra_library_slots ?? 0;
   const creditPacks = packs.filter((pack) => (pack.library_slots || 0) === 0);
@@ -427,7 +432,9 @@ export default function AccountView() {
                     Your credits
                   </h2>
                   <p className="mt-1 text-sm text-muted">
-                    Credits are used each time you remove a Gemini watermark.
+                    {paymentsEnabled
+                      ? "Credits are used each time you remove a Gemini watermark."
+                      : `Free plan: ${dailyFreeCredits} Cloud credits added every day at midnight UTC.`}
                   </p>
                 </div>
                 <button
@@ -446,7 +453,11 @@ export default function AccountView() {
                   <CreditStat
                     label="Fast credits"
                     value={fastCredits}
-                    hint="Used for each Gemini watermark removal"
+                    hint={
+                      paymentsEnabled
+                        ? "Used for each Gemini watermark removal"
+                        : `${dailyFreeCredits} free credits refresh daily (UTC)`
+                    }
                   />
                   <CreditStat
                     label="Library slots"
@@ -461,6 +472,20 @@ export default function AccountView() {
               )}
             </div>
 
+            {!paymentsEnabled && (
+              <div className="mt-6 border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">
+                <p className="font-medium">Unmark is free while we launch</p>
+                <p className="mt-1 text-muted">
+                  You get {dailyFreeCredits} Cloud credits per day — enough for
+                  images, short videos, and Library saves. Instant mode in your
+                  browser stays free with no account. Paid credit packs will
+                  return once payments are live.
+                </p>
+              </div>
+            )}
+
+            {paymentsEnabled && (
+              <>
             <div className="mt-6 border border-border bg-white p-5  sm:p-6">
               <h2 className="text-base font-semibold text-foreground">
                 Buy more credits
@@ -515,6 +540,8 @@ export default function AccountView() {
                 )}
               </div>
             </div>
+              </>
+            )}
           </>
         )}
       </div>
@@ -539,6 +566,8 @@ function TypeBadge({ type }: { type: CreditTransaction["type"] }) {
   const styles =
     type === "signup_bonus"
       ? "bg-cream text-brand"
+      : type === "daily_grant"
+        ? "bg-cream text-success"
       : type === "purchase"
         ? "bg-cream text-success"
         : type === "spend"

@@ -82,8 +82,23 @@ function probeVideoMeta(
 export default function Home() {
   const router = useRouter();
   const { user, loading: authLoading, loginWithGoogle } = useAuth();
-  const { refreshCredits, fastCredits } = useCredits();
+  const { refreshCredits, fastCredits, dailyFreeCredits, paymentsEnabled } =
+    useCredits();
   const { toast } = useToast();
+
+  const outOfCreditsMessage = (needed?: number) => {
+    if (paymentsEnabled) {
+      if (needed && needed > 0) {
+        return `You need ${needed} credit${needed === 1 ? "" : "s"}. Buy more from Account.`;
+      }
+      return "You’re out of credits. Buy more from Account to continue.";
+    }
+    const daily = dailyFreeCredits ?? 5;
+    if (needed && needed > 0) {
+      return `You need ${needed} credit${needed === 1 ? "" : "s"}. You get ${daily} free Cloud credits each day — check back after midnight UTC.`;
+    }
+    return `You’re out of credits for today. You get ${daily} free Cloud credits each day — check back after midnight UTC.`;
+  };
 
   const [bulkItems, setBulkItems] = useState<BulkQueueItem[]>([]);
   const [bulkProcessing, setBulkProcessing] = useState(false);
@@ -461,7 +476,7 @@ export default function Home() {
     const needed = bulkItems.length;
     if ((fastCredits ?? 0) < needed) {
       setBulkError(
-        `You need ${needed} credit${needed === 1 ? "" : "s"} for bulk cloud cleanup. Buy more from Account.`,
+        outOfCreditsMessage(needed),
       );
       return;
     }
@@ -687,7 +702,7 @@ export default function Home() {
     const needed = videoCreditsForDuration(videoDuration ?? 0);
     if ((fastCredits ?? 0) < needed) {
       setError(
-        `You need ${needed} credit${needed === 1 ? "" : "s"} for this video. Buy more from Account.`,
+        outOfCreditsMessage(needed),
       );
       return;
     }
@@ -774,7 +789,7 @@ export default function Home() {
       }
 
       if ((fastCredits ?? 0) < 1) {
-        setError("You’re out of credits. Buy more from Account to continue.");
+        setError(outOfCreditsMessage());
         return;
       }
     }
@@ -852,7 +867,7 @@ export default function Home() {
       }
 
       if (/insufficient|402|out of credits/i.test(message)) {
-        setError("You’re out of credits. Buy more from Account to continue.");
+        setError(outOfCreditsMessage());
         void refreshCredits();
         return;
       }

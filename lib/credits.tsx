@@ -15,6 +15,8 @@ import { getBalance, type BillingAccount } from "@/lib/billing";
 interface CreditsContextValue {
   account: BillingAccount | null;
   fastCredits: number | null;
+  dailyFreeCredits: number | null;
+  paymentsEnabled: boolean;
   libraryLimit: number | null;
   extraLibrarySlots: number | null;
   loading: boolean;
@@ -58,6 +60,8 @@ export function CreditsProvider({ children }: { children: ReactNode }) {
     () => ({
       account,
       fastCredits: account ? account.fast_credits : null,
+      dailyFreeCredits: account?.daily_free_credits ?? null,
+      paymentsEnabled: account?.payments_enabled === true,
       libraryLimit: account ? (account.library_limit ?? 50) : null,
       extraLibrarySlots: account
         ? (account.extra_library_slots ?? 0)

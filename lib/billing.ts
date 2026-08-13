@@ -10,6 +10,9 @@ export interface BillingAccount {
   high_credits: number;
   subscription_status: string;
   signup_bonus_at?: string;
+  last_daily_grant_date?: string;
+  daily_free_credits?: number;
+  payments_enabled?: boolean;
   library_limit?: number;
   extra_library_slots?: number;
 }
@@ -26,6 +29,7 @@ export interface CreditPack {
 
 export type CreditTransactionType =
   | "signup_bonus"
+  | "daily_grant"
   | "purchase"
   | "spend"
   | "refund"
@@ -74,9 +78,18 @@ export async function getBalance(): Promise<BillingAccount> {
   return billingFetch<BillingAccount>("/v1/balance");
 }
 
-export async function listPacks(): Promise<CreditPack[]> {
-  const data = await billingFetch<{ packs: CreditPack[] }>("/v1/packs");
-  return data.packs || [];
+export async function listPacks(): Promise<{
+  packs: CreditPack[];
+  paymentsEnabled: boolean;
+}> {
+  const data = await billingFetch<{
+    packs: CreditPack[];
+    payments_enabled?: boolean;
+  }>("/v1/packs");
+  return {
+    packs: data.packs || [],
+    paymentsEnabled: data.payments_enabled === true,
+  };
 }
 
 export async function listTransactions(): Promise<CreditTransaction[]> {
@@ -131,6 +144,8 @@ export function formatTransactionType(type: CreditTransactionType): string {
   switch (type) {
     case "signup_bonus":
       return "Signup bonus";
+    case "daily_grant":
+      return "Daily credits";
     case "purchase":
       return "Purchase";
     case "spend":
