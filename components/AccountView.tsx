@@ -18,6 +18,7 @@ import {
   type CreditTransaction,
 } from "@/lib/billing";
 import NotificationPreferenceToggle from "@/components/NotificationPreferenceToggle";
+import EarnCreditsCard from "@/components/EarnCreditsCard";
 
 type AccountTab = "profile" | "history" | "billing";
 
@@ -472,6 +473,8 @@ export default function AccountView() {
               )}
             </div>
 
+            <EarnCreditsCard account={account} onRefresh={refreshBilling} />
+
             {!paymentsEnabled && (
               <div className="mt-6 border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">
                 <p className="font-medium">Unmark is free while we launch</p>
@@ -567,6 +570,8 @@ function TypeBadge({ type }: { type: CreditTransaction["type"] }) {
     type === "signup_bonus"
       ? "bg-cream text-brand"
       : type === "daily_grant"
+        ? "bg-cream text-success"
+      : type === "referral_reward" || type === "share_reward"
         ? "bg-cream text-success"
       : type === "purchase"
         ? "bg-cream text-success"

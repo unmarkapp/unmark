@@ -9,6 +9,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
+import {
+  clearStoredReferralCode,
+  getStoredReferralCode,
+} from "@/lib/referral";
+
+const AUTH_BASE =
+  process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:8080";
 
 export interface AuthUser {
   id: string;
@@ -16,6 +23,8 @@ export interface AuthUser {
   name: string;
   picture: string;
   email_notifications?: boolean;
+  referral_code?: string;
+  referred_by_applied?: boolean;
 }
 
 interface AuthContextValue {
@@ -28,9 +37,6 @@ interface AuthContextValue {
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-const AUTH_BASE =
-  process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:8080";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -64,7 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [refresh]);
 
   const loginWithGoogle = useCallback(() => {
-    window.location.href = `${AUTH_BASE}/auth/google/login`;
+    const ref = getStoredReferralCode();
+    const url = new URL(`${AUTH_BASE}/auth/google/login`);
+    if (ref) {
+      url.searchParams.set("ref", ref);
+    }
+    window.location.href = url.toString();
   }, []);
 
   const logout = useCallback(async () => {
@@ -73,6 +84,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       credentials: "include",
     });
     setUser(null);
+    clearStoredReferralCode();
   }, []);
 
   const updateEmailNotifications = useCallback(async (enabled: boolean) => {

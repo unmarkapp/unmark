@@ -12,6 +12,7 @@ import {
 } from "@/lib/seo";
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { ToastProvider } from "@/components/Toast";
+import ReferralCapture from "@/components/ReferralCapture";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -161,6 +162,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <ThemeProvider>
           <AuthProvider>
             <CreditsProvider>
+              <ReferralCapture />
               <ToastProvider>{children}</ToastProvider>
             </CreditsProvider>
           </AuthProvider>

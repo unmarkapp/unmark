@@ -11,7 +11,12 @@ export interface BillingAccount {
   subscription_status: string;
   signup_bonus_at?: string;
   last_daily_grant_date?: string;
+  last_share_bonus_date?: string;
+  referrals_count?: number;
   daily_free_credits?: number;
+  share_bonus_credits?: number;
+  referral_referrer_credits?: number;
+  share_bonus_claimed_today?: boolean;
   payments_enabled?: boolean;
   library_limit?: number;
   extra_library_slots?: number;
@@ -30,6 +35,8 @@ export interface CreditPack {
 export type CreditTransactionType =
   | "signup_bonus"
   | "daily_grant"
+  | "referral_reward"
+  | "share_reward"
   | "purchase"
   | "spend"
   | "refund"
@@ -104,9 +111,37 @@ export async function grantSignupCredits(): Promise<void> {
     method: "POST",
     credentials: "include",
   });
-  // 409 = already granted — treat as success
   if (response.ok || response.status === 409) return;
   throw new Error("Failed to grant signup credits");
+}
+
+export async function claimShareBonus(): Promise<BillingAccount> {
+  const data = await billingFetch<{ account: BillingAccount }>(
+    "/v1/rewards/share",
+    { method: "POST" },
+  );
+  return data.account;
+}
+
+const AUTH_BASE =
+  process.env.NEXT_PUBLIC_AUTH_URL || "http://localhost:8080";
+
+export async function applyReferralCode(code: string): Promise<void> {
+  const response = await fetch(`${AUTH_BASE}/auth/me/referral`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ code: code.trim().toUpperCase() }),
+  });
+
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    const message =
+      typeof body.error === "string"
+        ? body.error
+        : "Could not apply invite code";
+    throw new Error(message);
+  }
 }
 
 export async function startCheckout(productCode: string): Promise<{
@@ -146,6 +181,10 @@ export function formatTransactionType(type: CreditTransactionType): string {
       return "Signup bonus";
     case "daily_grant":
       return "Daily credits";
+    case "referral_reward":
+      return "Invite bonus";
+    case "share_reward":
+      return "Share bonus";
     case "purchase":
       return "Purchase";
     case "spend":
