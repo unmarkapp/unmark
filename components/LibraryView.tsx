@@ -196,9 +196,9 @@ export default function LibraryView() {
       setSelected(null);
       await refresh({ quiet: true });
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Could not queue background removal",
-      );
+      const message =
+        err instanceof Error ? err.message : "Could not queue background removal";
+      setToast(message);
     } finally {
       setBgRemovingId(null);
     }

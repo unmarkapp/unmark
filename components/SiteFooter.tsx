@@ -77,6 +77,9 @@ export default function SiteFooter() {
                 <Link href="/privacy" className="transition hover:text-brand">
                   Privacy
                 </Link>
+                <Link href="/terms" className="transition hover:text-brand">
+                  Terms
+                </Link>
               </nav>
             </div>
           </div>
