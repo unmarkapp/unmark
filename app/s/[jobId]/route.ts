@@ -14,6 +14,8 @@ export async function GET(
   }
 
   const kind = request.nextUrl.searchParams.get("kind") || "result";
+  const exp = request.nextUrl.searchParams.get("exp");
+  const sig = request.nextUrl.searchParams.get("sig");
   const apiBase = (
     process.env.API_UPSTREAM ||
     process.env.NEXT_PUBLIC_API_URL ||
@@ -26,8 +28,12 @@ export async function GET(
     upstreamHeaders.Range = range;
   }
 
+  const qs = new URLSearchParams({ kind });
+  if (exp) qs.set("exp", exp);
+  if (sig) qs.set("sig", sig);
+
   const upstream = await fetch(
-    `${apiBase}/v1/share/${encodeURIComponent(jobId)}?kind=${encodeURIComponent(kind)}`,
+    `${apiBase}/v1/share/${encodeURIComponent(jobId)}?${qs.toString()}`,
     {
       headers: upstreamHeaders,
       cache: "no-store",

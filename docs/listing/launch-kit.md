@@ -18,12 +18,38 @@ Free Instant image cleanup. Cloud for video, Library, background removal, and Ch
 
 ## Product Hunt
 
+**Product page:** https://www.producthunt.com/products/unmark-2  
+
 **Name:** Unmark  
 
-**Tagline (60 chars max):**  
-Clean Gemini watermarks, video sparkles & cutouts  
+**Tagline (shown on embed):**  
+Remove Gemini & Veo watermarks from images and video  
 
 **Topics:** Artificial Intelligence, Design Tools, Chrome Extensions, Photo & Video  
+
+**Featured badge (site footer):**
+
+```html
+<a href="https://www.producthunt.com/products/unmark-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-unmark-2" target="_blank" rel="noopener noreferrer"><img alt="Unmark - Remove Gemini &amp; Veo watermarks from images and video | Product Hunt" width="250" height="54" src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1222339&theme=dark&t=1786642666647"></a>
+```
+
+**Card embed (site / Notion / launch posts):**
+
+```html
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;border:1px solid #e0e0e0;border-radius:12px;padding:20px;max-width:500px;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.05)">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+    <img alt="Unmark" width="64" height="64" style="width:64px;height:64px;border-radius:8px;object-fit:cover;flex-shrink:0" src="https://ph-files.imgix.net/92a31f15-3dad-4d03-a9d7-014a1a83a27e.png?auto=compress,format&codec=mozjpeg&cs=strip&fit=crop&h=80&w=80" />
+    <div style="flex:1;min-width:0">
+      <h3 style="margin:0;font-size:18px;font-weight:600;color:#1a1a1a;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">Unmark</h3>
+      <p style="margin:4px 0 0;font-size:14px;color:#666;line-height:1.4">Remove Gemini &amp; Veo watermarks from images and video</p>
+    </div>
+  </div>
+  <a href="https://www.producthunt.com/products/unmark-2?embed=true&utm_source=embed&utm_medium=post_embed" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:4px;margin-top:12px;padding:8px 16px;background:#ff6154;color:#fff;text-decoration:none;border-radius:8px;font-size:14px;font-weight:600">Check it out on Product Hunt →</a>
+</div>
+```
+
+**Short link for bios / comments:**  
+https://www.producthunt.com/products/unmark-2  
 
 **Gallery / first comment — maker story (short):**
 

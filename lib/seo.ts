@@ -7,6 +7,13 @@ export const SITE_NAME = "Unmark";
 export const CHROME_WEB_STORE_URL =
   "https://chrome.google.com/webstore/detail/helligpoigiemhikanpdlnedjehhjhni";
 
+/** Product Hunt product page + featured badge. */
+export const PRODUCT_HUNT_URL =
+  "https://www.producthunt.com/products/unmark-2?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-unmark-2";
+
+export const PRODUCT_HUNT_BADGE_SRC =
+  "https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1222339&theme=dark&t=1786642666647";
+
 /** Hosted Unmark MCP endpoint for Claude Connectors and other remote MCP clients. */
 export const MCP_SERVER_URL = "https://mcp.unmark.ink/mcp";
 

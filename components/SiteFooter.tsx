@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import BrandLogo from "@/components/BrandLogo";
+import ProductHuntBadge from "@/components/ProductHuntBadge";
 import { GUIDE_LINKS } from "@/lib/seo";
 
 export default function SiteFooter() {
@@ -11,18 +12,21 @@ export default function SiteFooter() {
     <footer className="border-t border-border/80">
       <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
-          <div className="flex max-w-md items-start gap-3">
-            <Link href="/" className="flex shrink-0 items-center gap-2.5">
-              <BrandLogo size={28} />
-              <span className="font-display text-base font-semibold tracking-tight text-foreground">
-                Unmark
-              </span>
-            </Link>
-            <p className="pt-0.5 text-sm leading-relaxed text-muted">
-              Unmark cleans AI media — Gemini watermark removal for images and
-              video, plus background cutouts. Free Instant on the web; Cloud for
-              Library and the Chrome extension.
-            </p>
+          <div className="flex max-w-md flex-col gap-4">
+            <div className="flex items-start gap-3">
+              <Link href="/" className="flex shrink-0 items-center gap-2.5">
+                <BrandLogo size={28} />
+                <span className="font-display text-base font-semibold tracking-tight text-foreground">
+                  Unmark
+                </span>
+              </Link>
+              <p className="pt-0.5 text-sm leading-relaxed text-muted">
+                Unmark cleans AI media — Gemini watermark removal for images and
+                video, plus background cutouts. Free Instant on the web; Cloud for
+                Library and the Chrome extension.
+              </p>
+            </div>
+            <ProductHuntBadge />
           </div>
 
           <div className="grid gap-8 sm:grid-cols-2 lg:gap-12">
