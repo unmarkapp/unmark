@@ -520,13 +520,15 @@ export default function LibraryView() {
                   label={canvaLoading ? "Opening Canva…" : "Edit in Canva"}
                   onClick={() => void handleEditInCanva(selected)}
                   disabled={canvaLoading || selected.status !== "completed"}
+                  rawIcon
                 >
-                  <path
-                    d="M4 6h16v12H4V6zm4 3h8M8 15h5"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/canva/icon.svg"
+                    alt=""
+                    aria-hidden
+                    className="h-5 w-5"
+                    draggable={false}
                   />
                 </ToolbarButton>
               ) : null}
@@ -563,11 +565,13 @@ function ToolbarButton({
   label,
   onClick,
   disabled,
+  rawIcon,
   children,
 }: {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  rawIcon?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -579,9 +583,13 @@ function ToolbarButton({
       disabled={disabled}
       className="flex h-11 w-11 items-center justify-center rounded-xl text-white/90 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
     >
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
-        {children}
-      </svg>
+      {rawIcon ? (
+        children
+      ) : (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+          {children}
+        </svg>
+      )}
     </button>
   );
 }
