@@ -51,13 +51,22 @@ export async function fetchCanvaStatus(): Promise<{
   return response.json();
 }
 
-export function canvaConnectUrl(returnTo: string): string {
+export function canvaConnectUrl(returnTo: string, force = false): string {
   const path =
     typeof window !== "undefined"
       ? returnTo || window.location.pathname
       : returnTo || "/";
   const params = new URLSearchParams({ return_to: path });
+  if (force) {
+    params.set("force", "1");
+  }
   return `${API_BASE_URL}/v1/integrations/canva/connect?${params}`;
+}
+
+function redirectToCanvaConnect(force = false): void {
+  const returnTo =
+    typeof window !== "undefined" ? window.location.pathname : "/";
+  window.location.href = canvaConnectUrl(returnTo, force);
 }
 
 export async function importToCanva(input: {
@@ -83,12 +92,18 @@ export async function importToCanva(input: {
     const err = new Error("canva_not_connected");
     throw err;
   }
+  if (response.status === 401 && body.detail === "canva_reconnect_required") {
+    const err = new Error("canva_reconnect_required");
+    throw err;
+  }
   if (!response.ok) {
-    throw new Error(
-      typeof body.detail === "string"
-        ? body.detail
-        : "Could not open in Canva",
-    );
+    const detail =
+      typeof body.detail === "string" ? body.detail : "Could not open in Canva";
+    if (detail.includes("missing_scope")) {
+      const err = new Error("canva_reconnect_required");
+      throw err;
+    }
+    throw new Error(detail);
   }
   return body;
 }
@@ -111,9 +126,11 @@ export async function openInCanva(ctx: CanvaPromoContext): Promise<void> {
     window.open(result.edit_url, "_blank", "noopener,noreferrer");
   } catch (err) {
     if (err instanceof Error && err.message === "canva_not_connected") {
-      const returnTo =
-        typeof window !== "undefined" ? window.location.pathname : "/";
-      window.location.href = canvaConnectUrl(returnTo);
+      redirectToCanvaConnect(false);
+      return;
+    }
+    if (err instanceof Error && err.message === "canva_reconnect_required") {
+      redirectToCanvaConnect(true);
       return;
     }
     throw err;
