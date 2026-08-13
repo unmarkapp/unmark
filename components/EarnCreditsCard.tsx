@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
 import {
@@ -38,6 +38,7 @@ export default function EarnCreditsCard({
   const inviteLink = referralCode
     ? referralInviteUrl(referralCode, SITE_URL)
     : "";
+  const codeLoading = Boolean(user) && !referralCode;
   const dailyFree = account?.daily_free_credits ?? 5;
   const shareBonus = account?.share_bonus_credits ?? 2;
   const referralBonus = account?.referral_referrer_credits ?? 3;
@@ -48,6 +49,12 @@ export default function EarnCreditsCard({
   const refreshAll = async () => {
     await Promise.all([refreshAuth(), refreshCredits(), onRefresh()]);
   };
+
+  useEffect(() => {
+    if (user && !user.referral_code) {
+      void refreshAuth();
+    }
+  }, [user, refreshAuth]);
 
   const copyInviteLink = async () => {
     if (!inviteLink) return;
@@ -157,7 +164,7 @@ export default function EarnCreditsCard({
         />
       </div>
 
-      {referralCode && (
+      {referralCode ? (
         <div className="mt-6 border border-border bg-surface px-4 py-4">
           <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">
             Your invite code
@@ -175,6 +182,23 @@ export default function EarnCreditsCard({
             </button>
           </div>
           <p className="mt-2 break-all text-xs text-muted">{inviteLink}</p>
+        </div>
+      ) : codeLoading ? (
+        <div className="mt-6 border border-border bg-surface px-4 py-4 text-sm text-muted">
+          Generating your invite code…
+        </div>
+      ) : (
+        <div className="mt-6 border border-border bg-surface px-4 py-4">
+          <p className="text-sm text-muted">
+            Sign in to get your personal invite code.
+          </p>
+          <button
+            type="button"
+            onClick={() => void refreshAuth()}
+            className="mt-2 text-sm font-medium text-brand hover:underline"
+          >
+            Refresh
+          </button>
         </div>
       )}
 

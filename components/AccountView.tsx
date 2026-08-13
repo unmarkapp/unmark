@@ -25,7 +25,7 @@ type AccountTab = "profile" | "history" | "billing";
 export default function AccountView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, loading, updateEmailNotifications } = useAuth();
+  const { user, loading, updateEmailNotifications, refresh: refreshAuth } = useAuth();
   const { refreshCredits } = useCredits();
   const [tab, setTab] = useState<AccountTab>("billing");
   const [account, setAccount] = useState<BillingAccount | null>(null);
@@ -50,11 +50,9 @@ export default function AccountView() {
       ]);
       setAccount(balance);
       setPacks(packResult.packs);
-      setPaymentsEnabled(
-        packResult.paymentsEnabled || balance.payments_enabled === true,
-      );
+      setPaymentsEnabled(packResult.paymentsEnabled === true);
       setTransactions(txList);
-      await refreshCredits();
+      await Promise.all([refreshCredits(), refreshAuth()]);
     } catch (err) {
       setBillingError(
         err instanceof Error ? err.message : "Could not load credits",
@@ -62,7 +60,7 @@ export default function AccountView() {
     } finally {
       setBillingLoading(false);
     }
-  }, [refreshCredits]);
+  }, [refreshCredits, refreshAuth]);
 
   useEffect(() => {
     if (!loading && !user) {
