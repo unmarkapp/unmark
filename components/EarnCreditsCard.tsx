@@ -125,7 +125,7 @@ export default function EarnCreditsCard({
   };
 
   return (
-    <div className="mt-6 border border-border bg-white p-5 sm:p-6">
+    <div className="mt-6 border border-border bg-surface p-5 sm:p-6">
       <h2 className="text-base font-semibold text-foreground">
         Earn free credits
       </h2>
@@ -222,7 +222,7 @@ export default function EarnCreditsCard({
           type="button"
           disabled={!inviteLink || busy !== null}
           onClick={() => void copyInviteLink()}
-          className="border border-border bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-line disabled:cursor-not-allowed disabled:opacity-60"
+          className="border border-border bg-surface px-4 py-2 text-sm font-semibold text-foreground transition hover:border-brand-line disabled:cursor-not-allowed disabled:opacity-60"
         >
           Copy invite link
         </button>
@@ -244,7 +244,7 @@ export default function EarnCreditsCard({
                 setInviteInput(event.target.value.toUpperCase())
               }
               placeholder="INVITE CODE"
-              className="min-w-[10rem] flex-1 border border-border bg-white px-3 py-2 font-mono text-sm uppercase tracking-wider text-foreground"
+              className="min-w-[10rem] flex-1 border border-border bg-surface px-3 py-2 font-mono text-sm uppercase tracking-wider text-foreground"
             />
             <button
               type="button"

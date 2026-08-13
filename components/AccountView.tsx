@@ -348,7 +348,7 @@ export default function AccountView() {
         )}
 
         {tab === "profile" && (
-          <div className="mt-8 border border-border bg-white p-6 ">
+          <div className="mt-8 border border-border bg-surface p-6 ">
             <h2 className="text-lg font-semibold text-foreground">Profile</h2>
             <dl className="mt-5 space-y-4 text-sm">
               <div>
@@ -398,7 +398,7 @@ export default function AccountView() {
         )}
 
         {tab === "history" && (
-          <div className="mt-8 overflow-hidden border border-border bg-white ">
+          <div className="mt-8 overflow-hidden border border-border bg-surface ">
             <div className="border-b border-border px-5 py-4 sm:px-6">
               <h2 className="text-base font-semibold text-foreground">
                 Credit History
@@ -469,7 +469,7 @@ export default function AccountView() {
 
         {tab === "billing" && (
           <>
-            <div className="mt-8 border border-border bg-white p-5  sm:p-6">
+            <div className="mt-8 border border-border bg-surface p-5  sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h2 className="text-base font-semibold text-foreground">
@@ -534,7 +534,7 @@ export default function AccountView() {
 
             {paymentsEnabled && (
               <>
-            <div className="mt-6 border border-border bg-white p-5  sm:p-6">
+            <div className="mt-6 border border-border bg-surface p-5  sm:p-6">
               <h2 className="text-base font-semibold text-foreground">
                 Buy more credits
               </h2>
@@ -560,7 +560,7 @@ export default function AccountView() {
               </div>
             </div>
 
-            <div className="mt-6 border border-border bg-white p-5  sm:p-6">
+            <div className="mt-6 border border-border bg-surface p-5  sm:p-6">
               <h2 className="text-base font-semibold text-foreground">
                 Library storage
               </h2>
@@ -676,7 +676,7 @@ function PackOption({
   if (pack.high_credits > 0) parts.push(`${pack.high_credits} HQ`);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border border-border bg-white p-4">
+    <div className="flex flex-wrap items-center justify-between gap-3 border border-border bg-surface p-4">
       <div>
         <div className="font-semibold text-foreground">{pack.name}</div>
         <div className="mt-0.5 text-sm text-muted">
