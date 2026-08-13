@@ -22,15 +22,23 @@ export default function LandingSeoContent() {
     >
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          Gemini, Veo &amp; Google Flow watermark remover
+          Image, video &amp; background tools
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-          Unmark removes the visible four-point sparkle Google adds to AI
-          images and video. Instant mode is a free{" "}
+          Unmark removes the visible four-point sparkle Google adds to AI images
+          and video, and can cut out subjects for transparent PNGs. Instant mode
+          is a free{" "}
           <strong className="font-semibold text-foreground">
             Gemini watermark remover online
           </strong>{" "}
-          for stills; Cloud handles Veo clips, Library saves, and bulk jobs.
+          for stills; Cloud handles Veo clips, Library saves, bulk jobs, and{" "}
+          <Link
+            href="/tools/background-removal"
+            className="font-medium text-brand underline-offset-2 hover:underline"
+          >
+            background removal
+          </Link>
+          .
         </p>
       </div>
 
@@ -93,7 +101,14 @@ export default function LandingSeoContent() {
           >
             free remover
           </Link>{" "}
-          guides.
+          guides — or open{" "}
+          <Link
+            href="/tools"
+            className="font-medium text-brand underline-offset-2 hover:underline"
+          >
+            Tools
+          </Link>{" "}
+          for cutouts.
         </p>
       </div>
     </section>

@@ -3,17 +3,17 @@ export default function HowItWorks() {
     {
       num: "01",
       title: "Upload",
-      body: "Drop a Gemini PNG, JPG, WebP, or an MP4/MOV/WebM clip from Veo or Google Flow.",
+      body: "Drop a Gemini image, a Veo/Flow video, or open Tools for background cutout.",
     },
     {
       num: "02",
-      title: "Remove",
-      body: "Use Auto for the Gemini sparkle, or Manual if you need to fine-tune the box.",
+      title: "Clean",
+      body: "Remove the Gemini sparkle with Auto, process video on Cloud, or cut out the subject.",
     },
     {
       num: "03",
       title: "Download",
-      body: "Get a clean export at full original quality, ready to share.",
+      body: "Get a clean export at full quality — stills, MP4, or transparent PNG — ready to share.",
     },
   ];
 
@@ -24,11 +24,11 @@ export default function HowItWorks() {
     >
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-          How to remove a Gemini watermark
+          How Unmark works
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
-          Unmark targets the Gemini sparkle in the corner — a focused Gemini
-          watermark remover, not a generic eraser for every logo.
+          Built for Gemini sparkles on images and video — plus background
+          removal when you need a clean cutout.
         </p>
       </div>
 

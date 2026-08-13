@@ -20,6 +20,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
+      url: `${SITE_URL}/product`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.95,
+    },
+    {
+      url: `${SITE_URL}/tools`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/tools/background-removal`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${SITE_URL}/guides`,
       lastModified,
       changeFrequency: "monthly",

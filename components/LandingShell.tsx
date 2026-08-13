@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 
 import ClosingCta from "@/components/ClosingCta";
 import ExtensionInstall from "@/components/ExtensionInstall";
+import GetStartedTools from "@/components/GetStartedTools";
 import HowItWorks from "@/components/HowItWorks";
 import LandingBeforeAfter from "@/components/LandingBeforeAfter";
 import LandingCompare from "@/components/LandingCompare";
@@ -11,6 +12,7 @@ import LandingFaq from "@/components/LandingFaq";
 import LandingSeoContent from "@/components/LandingSeoContent";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { SITE_ONE_LINER } from "@/lib/seo";
 
 export default function LandingShell({
   children,
@@ -26,26 +28,29 @@ export default function LandingShell({
 
         <section className="mx-auto mt-12 max-w-3xl text-center sm:mt-16">
           <h1 className="animate-rise font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl md:leading-[1.08]">
-            Gemini Watermark Remover
+            Unmark
           </h1>
           <p className="animate-rise-delay mt-3 text-sm font-medium tracking-wide text-brand sm:text-base">
-            Unmark — remove the sparkle from images &amp; video
+            Gemini watermark remover · video · background cutout
           </p>
 
           <p className="animate-rise-delay mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-            Free Instant cleanup in your browser, or Cloud for Gemini &amp; Veo
-            video, Library saves, bulk jobs, Google Flow, and the Chrome
-            extension.
+            {SITE_ONE_LINER} Free Instant cleanup in your browser, or Cloud for
+            Library, bulk jobs, and the Chrome extension.
           </p>
         </section>
 
-        <section className="animate-rise-delay-2 mx-auto mt-10 max-w-3xl sm:mt-12">
+        <section
+          id="upload"
+          className="animate-rise-delay-2 mx-auto mt-10 max-w-3xl sm:mt-12"
+        >
           {children}
         </section>
       </div>
 
       {showHow ? (
         <>
+          <GetStartedTools />
           <LandingBeforeAfter />
           <LandingCompare />
           <HowItWorks />

@@ -2,16 +2,7 @@ import Link from "next/link";
 
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-
-const TOOLS = [
-  {
-    href: "/tools/background-removal",
-    title: "Background removal",
-    description:
-      "Automatic cutout with transparent PNG output. Portraits, products, and general photos.",
-    badge: "New",
-  },
-] as const;
+import { CHROME_WEB_STORE_URL, PRODUCT_TOOLS } from "@/lib/seo";
 
 export default function ToolsLanding() {
   return (
@@ -27,37 +18,55 @@ export default function ToolsLanding() {
             Tools
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-            Extra utilities beyond Gemini watermark removal — same quality bar,
-            built for creators.
+            Image watermark removal, video cleanup, and background cutouts —
+            one product for AI media that is ready to publish.
           </p>
         </section>
 
         <ul className="mx-auto mt-12 grid max-w-2xl gap-4">
-          {TOOLS.map((tool) => (
-            <li key={tool.href}>
-              <Link
-                href={tool.href}
-                className="group flex flex-col gap-2 border border-border bg-surface/90 p-5 transition hover:border-brand hover:bg-cream/60 sm:flex-row sm:items-center sm:justify-between"
-              >
+          {PRODUCT_TOOLS.map((tool) => {
+            const isExtension = tool.id === "extension";
+            const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
+            const className =
+              "group flex flex-col gap-2 border border-border bg-surface/90 p-5 transition hover:border-brand hover:bg-cream/60 sm:flex-row sm:items-center sm:justify-between";
+            const inner = (
+              <>
                 <div>
                   <div className="flex items-center gap-2">
                     <h2 className="font-display text-lg font-semibold text-foreground">
                       {tool.title}
                     </h2>
-                    {tool.badge ? (
-                      <span className="bg-brand/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand">
-                        {tool.badge}
-                      </span>
-                    ) : null}
+                    <span className="bg-brand/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand">
+                      {tool.badge}
+                    </span>
                   </div>
                   <p className="mt-1 text-sm text-muted">{tool.description}</p>
                 </div>
                 <span className="text-sm font-semibold text-brand group-hover:text-brand-hover">
-                  Open →
+                  {tool.cta} →
                 </span>
-              </Link>
-            </li>
-          ))}
+              </>
+            );
+
+            return (
+              <li key={tool.id}>
+                {isExtension ? (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={className}
+                  >
+                    {inner}
+                  </a>
+                ) : (
+                  <Link href={href} className={className}>
+                    {inner}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         <SiteFooter />

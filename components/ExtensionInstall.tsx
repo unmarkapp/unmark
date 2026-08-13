@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { CHROME_WEB_STORE_URL } from "@/lib/seo";
 
 const steps = [
@@ -31,8 +33,15 @@ export default function ExtensionInstall() {
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
           Stay on Gemini or Google Flow. The extension queues prompts, removes
-          the sparkle automatically, and saves cleaned images — no manual
-          upload each time.
+          the sparkle automatically, and saves cleaned images — no manual upload
+          each time. For video watermark removal and background cutouts, use{" "}
+          <Link
+            href="/"
+            className="font-medium text-brand underline-offset-2 hover:underline"
+          >
+            unmark.ink
+          </Link>
+          .
         </p>
       </div>
 

@@ -27,11 +27,11 @@ export default function SiteHeader() {
       </Link>
 
       <nav className="hidden items-center gap-6 text-[13px] font-medium text-muted md:flex">
+        <Link href="/#get-started" className="transition hover:text-foreground">
+          Get started
+        </Link>
         <Link href="/#how" className="transition hover:text-foreground">
           How it works
-        </Link>
-        <Link href="/#why-unmark" className="transition hover:text-foreground">
-          Why Unmark
         </Link>
         <Link href="/tools" className="transition hover:text-foreground">
           Tools

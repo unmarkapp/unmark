@@ -19,8 +19,9 @@ export default function SiteFooter() {
               </span>
             </Link>
             <p className="pt-0.5 text-sm leading-relaxed text-muted">
-              Free Gemini watermark remover for images and video. Remove the
-              sparkle from Gemini, Veo, Google Flow, and Nano Banana exports.
+              Unmark cleans AI media — Gemini watermark removal for images and
+              video, plus background cutouts. Free Instant on the web; Cloud for
+              Library and the Chrome extension.
             </p>
           </div>
 
@@ -50,6 +51,12 @@ export default function SiteFooter() {
                 Product
               </p>
               <nav className="mt-3 flex flex-col gap-2 text-sm font-medium text-muted-strong">
+                <Link href="/product" className="transition hover:text-brand">
+                  Product
+                </Link>
+                <Link href="/#get-started" className="transition hover:text-brand">
+                  Get started
+                </Link>
                 <Link href="/#compare" className="transition hover:text-brand">
                   Before / after
                 </Link>
@@ -61,6 +68,9 @@ export default function SiteFooter() {
                 </Link>
                 <Link href="/extension" className="transition hover:text-brand">
                   Chrome extension
+                </Link>
+                <Link href="/tools/background-removal" className="transition hover:text-brand">
+                  Background removal
                 </Link>
                 <Link href="/guides/mcp-server" className="transition hover:text-brand">
                   MCP server

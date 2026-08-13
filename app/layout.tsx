@@ -88,6 +88,7 @@ const jsonLd = {
       alternateName: [
         "Gemini watermark remover",
         "Unmark Gemini watermark remover",
+        "AI background remover",
       ],
       description: SITE_TAGLINE,
       publisher: { "@id": `${SITE_URL}/#organization` },
@@ -115,11 +116,12 @@ const jsonLd = {
       featureList: [
         "Remove Gemini sparkle watermark from images",
         "Gemini and Veo video watermark removal",
+        "Automatic background removal and transparent PNG cutouts",
         "Google Flow and Nano Banana exports",
         "Auto and manual detection",
         "16:9 and 9:16 Gemini exports",
         "Original quality download",
-        "Chrome extension",
+        "Chrome extension for Gemini and Flow",
         "Cloud Library and bulk processing",
       ],
       offers: {
