@@ -108,6 +108,39 @@ export async function importToCanva(input: {
   return body;
 }
 
+function openCanvaEditUrl(editUrl: string, pendingTab: Window | null): void {
+  if (pendingTab && !pendingTab.closed) {
+    try {
+      pendingTab.opener = null;
+      pendingTab.location.href = editUrl;
+      return;
+    } catch {
+      // Fall through to same-tab navigation.
+    }
+  }
+  window.location.assign(editUrl);
+}
+
+function openPendingCanvaTab(): Window | null {
+  const tab = window.open("about:blank", "_blank");
+  if (tab && !tab.closed) {
+    try {
+      tab.document.title = "Opening Canva…";
+      tab.document.body.innerHTML =
+        "<p style=\"font:16px/1.5 system-ui,sans-serif;padding:24px;color:#0D1216\">Opening your design in Canva…</p>";
+    } catch {
+      // Cross-origin restrictions on about:blank are fine to ignore.
+    }
+  }
+  return tab;
+}
+
+function closePendingCanvaTab(tab: Window | null): void {
+  if (tab && !tab.closed) {
+    tab.close();
+  }
+}
+
 export async function openInCanva(ctx: CanvaPromoContext): Promise<void> {
   const jobId = ctx.jobId;
   const shareUrl = ctx.shareUrl || (jobId ? shareUrlForJob(jobId) : undefined);
@@ -117,14 +150,22 @@ export async function openInCanva(ctx: CanvaPromoContext): Promise<void> {
     return;
   }
 
+  // Open the tab synchronously on click — async fetch alone loses the gesture
+  // and popup blockers silently block window.open after await.
+  const pendingTab = openPendingCanvaTab();
+
   try {
     const result = await importToCanva({
       jobId,
       imageUrl: shareUrl,
       title: ctx.title || "Unmark export",
     });
-    window.open(result.edit_url, "_blank", "noopener,noreferrer");
+    if (!result.edit_url) {
+      throw new Error("Canva did not return an edit link");
+    }
+    openCanvaEditUrl(result.edit_url, pendingTab);
   } catch (err) {
+    closePendingCanvaTab(pendingTab);
     if (err instanceof Error && err.message === "canva_not_connected") {
       redirectToCanvaConnect(false);
       return;
