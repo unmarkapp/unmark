@@ -31,6 +31,7 @@ interface ReadyToCleanCardProps {
   onSelectionChange: (selection: Selection | null) => void;
   onRemove: () => void;
   onReset: () => void;
+  onDownloadComplete?: () => void;
 }
 
 function formatBytes(bytes: number): string {
@@ -103,6 +104,7 @@ export default function ReadyToCleanCard({
   onSelectionChange,
   onRemove,
   onReset,
+  onDownloadComplete,
 }: ReadyToCleanCardProps) {
   const canSubmit = detectMode === "auto" || hasSelection;
   const needsAuth = engine === "cloud";
@@ -346,7 +348,11 @@ export default function ReadyToCleanCard({
         ) : (
           <button
             type="button"
-            onClick={() => void downloadImage(resultUrl, `cleaned-${fileName}`)}
+            onClick={() => {
+              void downloadImage(resultUrl, `cleaned-${fileName}`).then(() => {
+                onDownloadComplete?.();
+              });
+            }}
             className="inline-flex w-full items-center justify-center gap-2 bg-brand px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover sm:w-auto"
           >
             Download cleaned image

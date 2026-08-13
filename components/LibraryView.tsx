@@ -2,7 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import CanvaPromoModal, {
+  shouldShowCanvaPromo,
+  type CanvaPromoContext,
+} from "@/components/CanvaPromoModal";
 import { useAuth } from "@/lib/auth";
+import {
+  openInCanva,
+  shareUrlForJob,
+} from "@/lib/canva";
 import {
   deleteJob,
   downloadProcessedImage,
@@ -23,6 +31,11 @@ export default function LibraryView() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [selected, setSelected] = useState<LibraryJob | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [canvaPromoOpen, setCanvaPromoOpen] = useState(false);
+  const [canvaPromoContext, setCanvaPromoContext] = useState<CanvaPromoContext>(
+    {},
+  );
+  const [canvaLoading, setCanvaLoading] = useState(false);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
   const refresh = useCallback(async (opts?: { quiet?: boolean }) => {
@@ -137,10 +150,36 @@ export default function LibraryView() {
     try {
       await downloadProcessedImage(job.result_url, fileLabel(job));
       setToast("Download started");
+      if (shouldShowCanvaPromo()) {
+        setCanvaPromoContext({
+          jobId: job.job_id,
+          shareUrl: shareLink(job),
+          title: fileLabel(job),
+          mediaType: job.media_type === "video" ? "video" : "image",
+        });
+        setCanvaPromoOpen(true);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Download failed");
     } finally {
       setDownloadingId(null);
+    }
+  };
+
+  const handleEditInCanva = async (job: LibraryJob) => {
+    if (job.media_type === "video") return;
+    setCanvaLoading(true);
+    try {
+      await openInCanva({
+        jobId: job.job_id,
+        shareUrl: shareLink(job),
+        title: fileLabel(job),
+        mediaType: "image",
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not open Canva");
+    } finally {
+      setCanvaLoading(false);
     }
   };
 
@@ -201,6 +240,11 @@ export default function LibraryView() {
 
   return (
     <>
+      <CanvaPromoModal
+        open={canvaPromoOpen}
+        onClose={() => setCanvaPromoOpen(false)}
+        context={canvaPromoContext}
+      />
       <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -471,6 +515,21 @@ export default function LibraryView() {
                   strokeLinejoin="round"
                 />
               </ToolbarButton>
+              {selected.media_type !== "video" ? (
+                <ToolbarButton
+                  label={canvaLoading ? "Opening Canva…" : "Edit in Canva"}
+                  onClick={() => void handleEditInCanva(selected)}
+                  disabled={canvaLoading || selected.status !== "completed"}
+                >
+                  <path
+                    d="M4 6h16v12H4V6zm4 3h8M8 15h5"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </ToolbarButton>
+              ) : null}
               <ToolbarButton
                 label={
                   deletingId === selected.job_id ? "Deleting…" : "Delete"
