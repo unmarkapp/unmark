@@ -43,7 +43,13 @@ export default function LibraryStorageSettings() {
     try {
       await setDefaultStorageProvider(provider);
       await refresh();
-      setMessage(`Library saves will use ${storageProviderLabel(provider)}.`);
+      if (provider === "google_drive") {
+        setMessage(
+          "Library saves will use Google Drive. Existing cleanups are syncing — refresh Library in a moment.",
+        );
+      } else {
+        setMessage(`Library saves will use ${storageProviderLabel(provider)}.`);
+      }
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Could not update storage",
@@ -93,7 +99,9 @@ export default function LibraryStorageSettings() {
       </h2>
       <p className="mt-2 text-sm text-muted">
         Your 50 Library slots can save cleanups to Unmark Cloud or your own
-        Google Drive folder.
+        Google Drive folder. Choosing Drive syncs existing Cloud cleanups and
+        sends new ones to{" "}
+        <span className="font-medium text-foreground">Unmark/Cleanups</span>.
       </p>
 
       {loading ? (

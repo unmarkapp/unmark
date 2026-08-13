@@ -22,15 +22,20 @@ import {
 import { storageProviderLabel } from "@/lib/storage";
 import { SITE_URL } from "@/lib/seo";
 
+function isVideoJob(job: LibraryJob): boolean {
+  return job.media_type === "video";
+}
+
 function jobThumbnailUrl(job: LibraryJob): string | undefined {
-  if (job.media_type === "video") {
-    return job.poster_url || job.preview_url || job.result_url;
+  if (isVideoJob(job)) {
+    // Never use the mp4 result as an <img> src.
+    return job.poster_url || undefined;
   }
   return job.preview_url || job.result_url;
 }
 
 function jobModalMediaUrl(job: LibraryJob): string | undefined {
-  if (job.media_type === "video") {
+  if (isVideoJob(job)) {
     return job.result_url || job.external_web_url;
   }
   return job.preview_url || job.result_url || job.external_web_url;
@@ -44,6 +49,14 @@ function isDriveSyncing(job: LibraryJob): boolean {
   return (
     isDriveJob(job) &&
     (job.storage_status === "pending" || job.storage_status === "uploading")
+  );
+}
+
+function isDriveFailed(job: LibraryJob): boolean {
+  return (
+    isDriveJob(job) &&
+    (job.storage_status === "failed" ||
+      job.storage_status === "provider_disconnected")
   );
 }
 
@@ -443,12 +456,13 @@ export default function LibraryView() {
               const canOpen =
                 job.status === "completed" && Boolean(thumb || jobModalMediaUrl(job));
               const label = job.filename || `Job ${job.job_id.slice(0, 8)}`;
-              const isVideo = job.media_type === "video";
+              const isVideo = isVideoJob(job);
               const isBgRemove = job.job_type === "bg_remove";
               const isPending =
                 job.status === "queued" || job.status === "processing";
               const isFailed = job.status === "failed";
               const driveSyncing = isDriveSyncing(job);
+              const driveFailed = isDriveFailed(job);
               const driveReady =
                 isDriveJob(job) &&
                 job.storage_status === "ready" &&
@@ -456,20 +470,33 @@ export default function LibraryView() {
 
               return (
                 <li key={job.job_id} className="library-masonry-item">
-                  {canOpen && thumb ? (
+                  {canOpen && (thumb || isVideo) ? (
                     <button
                       type="button"
                       onClick={() => setSelected(job)}
                       className="group relative block w-full overflow-hidden rounded-2xl bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand/50"
                       aria-label={`Open ${label}`}
                     >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={thumb}
-                        alt={label}
-                        loading="lazy"
-                        className="block h-auto w-full object-cover transition duration-500 group-hover:scale-[1.015]"
-                      />
+                      {thumb ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={thumb}
+                          alt={label}
+                          loading="lazy"
+                          className="block h-auto w-full object-cover transition duration-500 group-hover:scale-[1.015]"
+                        />
+                      ) : (
+                        <div className="flex aspect-[9/16] w-full flex-col items-center justify-center gap-2 bg-ink/5">
+                          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/70 text-white">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M8 5v14l11-7L8 5z" />
+                            </svg>
+                          </span>
+                          <span className="text-xs font-semibold uppercase tracking-wide text-muted">
+                            Video
+                          </span>
+                        </div>
+                      )}
                       {driveReady && (
                         <span className="pointer-events-none absolute left-3 top-3 flex max-w-[calc(100%-1.5rem)] items-center gap-1 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold text-white">
                           <svg
@@ -492,6 +519,20 @@ export default function LibraryView() {
                       {driveSyncing && (
                         <span className="pointer-events-none absolute left-3 top-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold text-white">
                           Syncing to Drive…
+                        </span>
+                      )}
+                      {driveFailed && !driveSyncing && (
+                        <span className="pointer-events-none absolute left-3 top-3 rounded-md bg-red-700/90 px-2 py-1 text-[10px] font-semibold text-white">
+                          Drive sync failed
+                        </span>
+                      )}
+                      {isVideo && thumb && (
+                        <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                          <span className="flex h-11 w-11 items-center justify-center rounded-full bg-black/65 text-white shadow">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                              <path d="M8 5v14l11-7L8 5z" />
+                            </svg>
+                          </span>
                         </span>
                       )}
                       {isVideo && (
@@ -574,7 +615,7 @@ export default function LibraryView() {
           role="dialog"
           aria-modal="true"
           aria-label={
-            selected.media_type === "video" ? "Video preview" : "Image preview"
+            isVideoJob(selected) ? "Video preview" : "Image preview"
           }
         >
           <div className="flex shrink-0 items-center px-3 pb-1 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-4">
@@ -600,7 +641,7 @@ export default function LibraryView() {
             className="flex min-h-0 flex-1 items-center justify-center px-4 sm:px-10"
             onClick={() => setSelected(null)}
           >
-            {selected.media_type === "video" ? (
+            {isVideoJob(selected) ? (
               // eslint-disable-next-line jsx-a11y/media-has-caption
               <video
                 src={selected.result_url || selected.external_web_url}
