@@ -6,6 +6,7 @@ import CanvaPromoModal, {
   shouldShowCanvaPromo,
   type CanvaPromoContext,
 } from "@/components/CanvaPromoModal";
+import NotificationPreferenceToggle from "@/components/NotificationPreferenceToggle";
 import { useAuth } from "@/lib/auth";
 import {
   openInCanva,
@@ -23,7 +24,7 @@ import { SITE_URL } from "@/lib/seo";
 
 export default function LibraryView() {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { user, loading, updateEmailNotifications } = useAuth();
   const [jobs, setJobs] = useState<LibraryJob[]>([]);
   const [libraryUsed, setLibraryUsed] = useState(0);
   const [libraryLimit, setLibraryLimit] = useState(50);
@@ -39,6 +40,7 @@ export default function LibraryView() {
   );
   const [canvaLoading, setCanvaLoading] = useState(false);
   const [bgRemovingId, setBgRemovingId] = useState<string | null>(null);
+  const [prefSaving, setPrefSaving] = useState(false);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
   const refresh = useCallback(async (opts?: { quiet?: boolean }) => {
@@ -143,17 +145,43 @@ export default function LibraryView() {
       job.job_type !== "bg_remove",
   ).length;
 
+  const emailNotifications = user?.email_notifications !== false;
+
   const pendingBannerMessage = () => {
     if (pendingVideoCount > 0 && pendingBgCount === 0 && pendingImageCount === 0) {
-      return "Cleaning in the background. We’ll email you when your video is ready — this page also updates automatically.";
+      return emailNotifications
+        ? "Cleaning in the background. We’ll email you when your video is ready — this page also updates automatically."
+        : "Cleaning in the background. This page updates automatically when your video is ready.";
     }
     if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0) {
       return "Removing backgrounds in the background. This page updates automatically when each cutout is ready.";
     }
     if (pendingVideoCount > 0 && (pendingBgCount > 0 || pendingImageCount > 0)) {
-      return "Jobs are processing in the background. We’ll email you when videos are ready — this page updates automatically for images.";
+      return emailNotifications
+        ? "Jobs are processing in the background. We’ll email you when videos are ready — this page updates automatically for images."
+        : "Jobs are processing in the background. This page updates automatically when they are ready.";
     }
     return "Cleaning in the background. This page updates automatically when your files are ready.";
+  };
+
+  const handleNotificationPreference = async (enabled: boolean) => {
+    setPrefSaving(true);
+    try {
+      await updateEmailNotifications(enabled);
+      setToast(
+        enabled
+          ? "Email notifications enabled"
+          : "Email notifications turned off",
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not update notification preference",
+      );
+    } finally {
+      setPrefSaving(false);
+    }
   };
 
   const fileLabel = (job: LibraryJob) => {
@@ -304,13 +332,21 @@ export default function LibraryView() {
                 : ""}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => void refresh()}
-            className="text-sm font-medium text-muted transition hover:text-foreground"
-          >
-            Refresh
-          </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <NotificationPreferenceToggle
+              enabled={emailNotifications}
+              onChange={(enabled) => void handleNotificationPreference(enabled)}
+              disabled={prefSaving}
+              compact
+            />
+            <button
+              type="button"
+              onClick={() => void refresh()}
+              className="text-sm font-medium text-muted transition hover:text-foreground"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
 
         {pendingCount > 0 && (

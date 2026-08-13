@@ -15,6 +15,7 @@ export interface AuthUser {
   email: string;
   name: string;
   picture: string;
+  email_notifications?: boolean;
 }
 
 interface AuthContextValue {
@@ -23,6 +24,7 @@ interface AuthContextValue {
   refresh: () => Promise<void>;
   loginWithGoogle: () => void;
   logout: () => Promise<void>;
+  updateEmailNotifications: (enabled: boolean) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -46,7 +48,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const data = (await response.json()) as AuthUser;
-      setUser(data);
+      setUser({
+        ...data,
+        email_notifications: data.email_notifications !== false,
+      });
     } catch {
       setUser(null);
     } finally {
@@ -70,6 +75,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const updateEmailNotifications = useCallback(async (enabled: boolean) => {
+    const response = await fetch(`${AUTH_BASE}/auth/me/preferences`, {
+      method: "PATCH",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email_notifications: enabled }),
+    });
+
+    if (!response.ok) {
+      const body = await response.json().catch(() => ({}));
+      const message =
+        typeof body.error === "string"
+          ? body.error
+          : "Could not update notification preference";
+      throw new Error(message);
+    }
+
+    const data = (await response.json()) as AuthUser;
+    setUser({
+      ...data,
+      email_notifications: data.email_notifications !== false,
+    });
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -77,8 +106,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       refresh,
       loginWithGoogle,
       logout,
+      updateEmailNotifications,
     }),
-    [user, loading, refresh, loginWithGoogle, logout],
+    [user, loading, refresh, loginWithGoogle, logout, updateEmailNotifications],
   );
 
   return (

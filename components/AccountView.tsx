@@ -17,13 +17,14 @@ import {
   type CreditPack,
   type CreditTransaction,
 } from "@/lib/billing";
+import NotificationPreferenceToggle from "@/components/NotificationPreferenceToggle";
 
 type AccountTab = "profile" | "history" | "billing";
 
 export default function AccountView() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, loading } = useAuth();
+  const { user, loading, updateEmailNotifications } = useAuth();
   const { refreshCredits } = useCredits();
   const [tab, setTab] = useState<AccountTab>("billing");
   const [account, setAccount] = useState<BillingAccount | null>(null);
@@ -33,6 +34,7 @@ export default function AccountView() {
   const [billingError, setBillingError] = useState<string | null>(null);
   const [buyingCode, setBuyingCode] = useState<string | null>(null);
   const [purchaseMessage, setPurchaseMessage] = useState<string | null>(null);
+  const [prefSaving, setPrefSaving] = useState(false);
 
   const refreshBilling = useCallback(async () => {
     setBillingLoading(true);
@@ -150,6 +152,23 @@ export default function AccountView() {
   const extraLibrarySlots = account?.extra_library_slots ?? 0;
   const creditPacks = packs.filter((pack) => (pack.library_slots || 0) === 0);
   const libraryPacks = packs.filter((pack) => (pack.library_slots || 0) > 0);
+  const emailNotifications = user.email_notifications !== false;
+
+  const handleNotificationPreference = async (enabled: boolean) => {
+    setPrefSaving(true);
+    setBillingError(null);
+    try {
+      await updateEmailNotifications(enabled);
+    } catch (err) {
+      setBillingError(
+        err instanceof Error
+          ? err.message
+          : "Could not update notification preference",
+      );
+    } finally {
+      setPrefSaving(false);
+    }
+  };
 
   return (
     <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-10 sm:px-6 lg:flex-row lg:gap-12">
@@ -299,6 +318,23 @@ export default function AccountView() {
                 <dt className="text-muted">Credits</dt>
                 <dd className="mt-1 font-medium text-foreground">
                   {billingLoading ? "Loading…" : `${fastCredits} fast credits`}
+                </dd>
+              </div>
+              <div className="border-t border-border pt-4">
+                <dt className="text-muted">Notifications</dt>
+                <dd className="mt-3">
+                  <NotificationPreferenceToggle
+                    enabled={emailNotifications}
+                    onChange={(enabled) =>
+                      void handleNotificationPreference(enabled)
+                    }
+                    disabled={prefSaving}
+                  />
+                  <p className="mt-2 text-xs text-muted">
+                    When enabled, we email you when long video jobs finish.
+                    Background removal and image jobs always update here
+                    automatically.
+                  </p>
                 </dd>
               </div>
             </dl>
