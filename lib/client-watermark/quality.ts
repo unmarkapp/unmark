@@ -18,14 +18,13 @@ const TEXTURE_STD = 16;
 const DARK_SURROUND_LUMA = 40;
 /** Flat studio color (blue backdrop, not knit): full reverse-alpha. */
 const FLAT_SURROUND_STD = 14;
-const FLAT_SURROUND_LUMA = 90;
 
 export function surroundAllowsFullReverse(
   loMean: number,
   loStd: number,
 ): boolean {
   if (loMean < DARK_SURROUND_LUMA) return true;
-  return loStd < FLAT_SURROUND_STD && loMean < FLAT_SURROUND_LUMA;
+  return loStd < FLAT_SURROUND_STD;
 }
 
 function lumaAt(data: Uint8ClampedArray, idx: number): number {
@@ -516,6 +515,85 @@ export function isFullReverseSurround(
 ): boolean {
   const s = regionStats(imageData, alphaMap, rect);
   return surroundAllowsFullReverse(s.loMean, s.loStd);
+}
+
+/**
+ * On flat studio color, pull leftover glass-star pixels toward surround.
+ * Peak channel catches blue-on-blue leftovers luma misses.
+ */
+export function flattenLeftoverSparkle(
+  imageData: ImageData,
+  alphaMap: Float32Array,
+  rect: WatermarkRect,
+): void {
+  const { data, width } = imageData;
+  const { x, y, width: rw, height: rh } = rect;
+  const before = regionStats(imageData, alphaMap, rect);
+  if (before.loStd >= TEXTURE_STD) return;
+
+  const loRgb = [0, 0, 0];
+  let loN = 0;
+  let loPeak = 0;
+  for (let row = 0; row < rh; row++) {
+    for (let col = 0; col < rw; col++) {
+      const a = alphaMap[row * rw + col]!;
+      if (a >= 0.02) continue;
+      const idx = ((y + row) * width + (x + col)) * 4;
+      loRgb[0] += data[idx]!;
+      loRgb[1] += data[idx + 1]!;
+      loRgb[2] += data[idx + 2]!;
+      loPeak += Math.max(data[idx]!, data[idx + 1]!, data[idx + 2]!);
+      loN++;
+    }
+  }
+  if (loN < 8) return;
+  loRgb[0] /= loN;
+  loRgb[1] /= loN;
+  loRgb[2] /= loN;
+  loPeak /= loN;
+
+  const t = new Float32Array(rw * rh);
+  let leftoverN = 0;
+  for (let row = 0; row < rh; row++) {
+    for (let col = 0; col < rw; col++) {
+      const a = alphaMap[row * rw + col]!;
+      if (a < 0.08) continue;
+      const idx = ((y + row) * width + (x + col)) * 4;
+      const peak = Math.max(data[idx]!, data[idx + 1]!, data[idx + 2]!);
+      if (peak <= loPeak + 3) continue;
+      t[row * rw + col] = Math.min(1, (peak - loPeak) / 16);
+      leftoverN++;
+    }
+  }
+  if (leftoverN < 3) return;
+
+  const dilated = new Float32Array(rw * rh);
+  for (let row = 0; row < rh; row++) {
+    for (let col = 0; col < rw; col++) {
+      let m = 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        for (let dx = -1; dx <= 1; dx++) {
+          const rr = row + dy;
+          const cc = col + dx;
+          if (rr < 0 || cc < 0 || rr >= rh || cc >= rw) continue;
+          m = Math.max(m, t[rr * rw + cc]!);
+        }
+      }
+      const a = alphaMap[row * rw + col]!;
+      dilated[row * rw + col] = a >= 0.04 ? m : 0;
+    }
+  }
+
+  for (let row = 0; row < rh; row++) {
+    for (let col = 0; col < rw; col++) {
+      const w = dilated[row * rw + col]!;
+      if (w < 0.05) continue;
+      const idx = ((y + row) * width + (x + col)) * 4;
+      data[idx] = Math.round(data[idx]! * (1 - w) + loRgb[0] * w);
+      data[idx + 1] = Math.round(data[idx + 1]! * (1 - w) + loRgb[1] * w);
+      data[idx + 2] = Math.round(data[idx + 2]! * (1 - w) + loRgb[2] * w);
+    }
+  }
 }
 
 export { MIN_DETECT_SCORE, regionStats, TEXTURE_STD };

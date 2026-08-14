@@ -11,6 +11,7 @@ import { inpaintSparkleRegion } from "./inpaint";
 import {
   cloneImageData,
   estimateLogoRgb,
+  flattenLeftoverSparkle,
   isFullReverseSurround,
   MIN_DETECT_SCORE,
   rabResidualScore,
@@ -245,6 +246,7 @@ export class ClientWatermarkEngine {
       }
 
       imageData.data.set(best.probe.data);
+      flattenLeftoverSparkle(imageData, map, best.rect);
       method = "rab";
       usedRect = best.rect;
     }
