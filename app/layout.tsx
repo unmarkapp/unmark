@@ -13,6 +13,7 @@ import {
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { ToastProvider } from "@/components/Toast";
 import ReferralCapture from "@/components/ReferralCapture";
+import { DropToCleanProvider } from "@/lib/dropToClean";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -165,7 +166,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <AuthProvider>
             <CreditsProvider>
               <ReferralCapture />
-              <ToastProvider>{children}</ToastProvider>
+              <ToastProvider>
+                <DropToCleanProvider>{children}</DropToCleanProvider>
+              </ToastProvider>
             </CreditsProvider>
           </AuthProvider>
         </ThemeProvider>

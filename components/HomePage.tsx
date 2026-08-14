@@ -36,6 +36,8 @@ import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
 import { useToast } from "@/components/Toast";
 import { shareUrlForJob } from "@/lib/canva";
+import { useDropToClean } from "@/lib/dropToClean";
+import { isVideoFile } from "@/lib/mediaFiles";
 import type { CleanEngine } from "@/components/ReadyToCleanCard";
 
 interface Selection {
@@ -49,11 +51,6 @@ const MAX_FILES = 10;
 const VIDEO_CREDIT_SECONDS = 5;
 const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
 const MAX_VIDEO_DURATION_SEC = 60;
-
-function isVideoFile(file: File): boolean {
-  if (file.type.startsWith("video/")) return true;
-  return /\.(mp4|mov|webm|m4v)$/i.test(file.name);
-}
 
 function videoCreditsForDuration(durationSec: number): number {
   if (durationSec <= 0) return 1;
@@ -89,6 +86,7 @@ export default function Home() {
   const { refreshCredits, fastCredits, dailyFreeCredits, paymentsEnabled } =
     useCredits();
   const { toast } = useToast();
+  const { pendingId, consumePendingFiles } = useDropToClean();
 
   const outOfCreditsMessage = (needed?: number) => {
     if (paymentsEnabled) {
@@ -351,6 +349,15 @@ export default function Home() {
 
     setBulkItems(items);
   };
+
+  const startWithFilesRef = useRef(startWithFiles);
+  startWithFilesRef.current = startWithFiles;
+
+  useEffect(() => {
+    if (pendingId === 0) return;
+    const files = consumePendingFiles();
+    if (files) startWithFilesRef.current(files);
+  }, [pendingId, consumePendingFiles]);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
@@ -978,7 +985,6 @@ export default function Home() {
     return (
       <LandingUpload
         onFileChange={handleFileChange}
-        onFilesSelected={startWithFiles}
         onTrySample={() => void handleTrySample()}
         sampleBusy={sampleBusy}
       />

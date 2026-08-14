@@ -1,63 +1,27 @@
 "use client";
 
-import {
-  ChangeEvent,
-  DragEvent,
-  useRef,
-  useState,
-} from "react";
+import { ChangeEvent, useRef, useState } from "react";
 
 import CreateGenerateCard from "@/components/CreateGenerateCard";
 import LandingShell from "@/components/LandingShell";
+import { useDropToClean } from "@/lib/dropToClean";
 
 interface LandingUploadProps {
   onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
-  onFilesSelected: (files: File[]) => void;
   onTrySample: () => void;
   sampleBusy?: boolean;
-}
-
-function isImageFile(file: File): boolean {
-  return file.type.startsWith("image/");
-}
-
-function isVideoFile(file: File): boolean {
-  if (file.type.startsWith("video/")) return true;
-  return /\.(mp4|mov|webm|m4v)$/i.test(file.name);
 }
 
 type HomeMode = "clean" | "create";
 
 export default function LandingUpload({
   onFileChange,
-  onFilesSelected,
   onTrySample,
   sampleBusy = false,
 }: LandingUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [dragging, setDragging] = useState(false);
+  const { isDragging } = useDropToClean();
   const [mode, setMode] = useState<HomeMode>("clean");
-
-  const handleDragOver = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(true);
-  };
-
-  const handleDragLeave = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(false);
-  };
-
-  const handleDrop = (event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    setDragging(false);
-
-    const list = Array.from(event.dataTransfer.files || []).filter(
-      (file) => isImageFile(file) || isVideoFile(file),
-    );
-    if (list.length === 0) return;
-    onFilesSelected(list.slice(0, 10));
-  };
 
   return (
     <LandingShell>
@@ -105,18 +69,15 @@ export default function LandingUpload({
                 inputRef.current?.click();
               }
             }}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
             className={`group relative flex min-h-[280px] cursor-pointer flex-col items-center justify-center overflow-hidden border-2 border-dashed px-6 py-14 text-center transition duration-300 ${
-              dragging
+              isDragging
                 ? "border-brand bg-cream"
                 : "border-border bg-surface/80 hover:border-brand hover:bg-cream/70"
             }`}
           >
             <div
               className={`mb-6 flex h-16 w-16 items-center justify-center border border-brand-line bg-cream text-brand transition duration-500 ${
-                dragging ? "animate-soft-pulse" : "group-hover:scale-105"
+                isDragging ? "animate-soft-pulse" : "group-hover:scale-105"
               }`}
             >
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden>
