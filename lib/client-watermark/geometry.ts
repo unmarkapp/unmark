@@ -46,6 +46,8 @@ const GEMINI_SIZES: Array<[number, number, Tier]> = [
   [1376, 768, "1k"],
   [1408, 768, "1k"],
   [1584, 672, "1k"],
+  [1024, 576, "1k"],
+  [576, 1024, "1k"],
   // 2k
   [2048, 2048, "2k"],
   [512, 2048, "2k"],
@@ -64,6 +66,8 @@ const GEMINI_SIZES: Array<[number, number, Tier]> = [
   [1536, 2816, "2k"],
   [2848, 1536, "2k"],
   [3168, 1344, "2k"],
+  [2048, 1152, "2k"],
+  [1152, 2048, "2k"],
   // 0.5k
   [512, 512, "0.5k"],
   [256, 1024, "0.5k"],
@@ -263,8 +267,9 @@ export function officialPlacements(
 }
 
 export function nccRadiusFor(rect: WatermarkRect): number {
-  // Official V2-36 geometry is exact; fabric NCC burns an inverted spark.
-  if (rect.mapKey === "v2-36") return 1;
+  // Official V2-36 geometry is exact on square 1K; landscape 16:9 (1024x571)
+  // is a few pixels off 576, so allow a short refine without a fabric hunt.
+  if (rect.mapKey === "v2-36") return 4;
   if (rect.mapKey.startsWith("v2")) return 8;
   return 12;
 }
@@ -296,8 +301,14 @@ export function pickSparkleWinner<T extends WatermarkRect & { score: number }>(
   const br = list.filter((c) => inBottomRight(c, width, height));
   const pool = br.length > 0 ? br : list;
 
-  // Confident off-corner scan (Erasio portrait) — still must sit in BR.
-  if (pool[0]!.score >= 0.5 && inBottomRight(pool[0]!, width, height)) {
+  // Confident off-corner scan (Erasio 48px) — never a 96px fabric hit.
+  // Landscape 16:9 knit scores ~0.5+ on the classic 96@64 box and would
+  // leave the real ~36px sparkle on the sweater.
+  if (
+    pool[0]!.score >= 0.5 &&
+    pool[0]!.size <= 52 &&
+    inBottomRight(pool[0]!, width, height)
+  ) {
     return pool[0]!;
   }
 
@@ -306,12 +317,16 @@ export function pickSparkleWinner<T extends WatermarkRect & { score: number }>(
     const smalls = pool.filter((c) => c.size <= 52);
     const large = pool.find((c) => c.size >= 90);
     const bestSmall = smalls[0];
-    if (bestSmall && (!large || large.score < bestSmall.score + 0.08)) {
+    if (
+      bestSmall &&
+      bestSmall.score >= minScore &&
+      (!large || large.score < bestSmall.score + 0.18)
+    ) {
       const v2 = v2SmallConfig(width, height);
       const ex = width - v2.margin - v2.logo_size;
       const ey = height - v2.margin - v2.logo_size;
       const nearV2 = smalls.find(
-        (c) => Math.hypot(c.x - ex, c.y - ey) <= 12,
+        (c) => Math.hypot(c.x - ex, c.y - ey) <= 16,
       );
       if (nearV2 && nearV2.score >= bestSmall.score - 0.06) {
         return nearV2;
