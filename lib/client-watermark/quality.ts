@@ -330,12 +330,18 @@ export function rabResidualScore(
   const alphaVals: number[] = [];
   let hiN = 0;
   let clipN = 0;
+  let loSum = 0;
+  let loN = 0;
   for (let row = 0; row < rh; row++) {
     for (let col = 0; col < rw; col++) {
       const a = alphaMap[row * rw + col]!;
       const idx = ((y + row) * before.width + (x + col)) * 4;
       delta.push(lumaAt(before.data, idx) - lumaAt(after.data, idx));
       alphaVals.push(a);
+      if (a < 0.02) {
+        loSum += lumaAt(before.data, idx);
+        loN++;
+      }
       if (a >= 0.08) {
         hiN++;
         const r = after.data[idx]!;
@@ -347,7 +353,10 @@ export function rabResidualScore(
   }
   const corr = ncc(delta, alphaVals);
   const clip = hiN > 0 ? clipN / hiN : 0;
-  return corr - clip * 2;
+  const surroundDark = loN > 0 && loSum / loN < 28;
+  // On black BR, restored logo pixels *should* clip to black. Penalizing
+  // that picked a weak gain and left a glassy star.
+  return corr - (surroundDark ? 0 : clip * 2);
 }
 
 export function rabCost(after: {
@@ -378,6 +387,7 @@ export function pickAlphaGain(
 ): number | null {
   const before = regionStats(imageData, alphaMap, rect);
   const textured = before.loStd >= TEXTURE_STD;
+  const dark = before.loMean < 28;
   const small = rect.size <= 40;
   const minGain = small
     ? MIN_EFFECTIVE_ALPHA_GAIN_SMALL
@@ -389,21 +399,20 @@ export function pickAlphaGain(
 
   for (const gain of ALPHA_GAIN_CANDIDATES) {
     if (gain < minGain) continue;
-    if (small && gain > 0.7) continue;
+    if (small && gain > 0.7 && !dark) continue;
     const probe = cloneImageData(imageData);
     applyPass(probe, alphaMap, rect, gain);
     const after = regionStats(probe, alphaMap, rect);
-    if (after.burn > MAX_HI_ALPHA_NEAR_BLACK) continue;
-    // Inverted diamond: logo darker than fabric. A drop vs the
-    // watermarked image is expected (that's the removal).
-    if (after.hiMean + 2 < after.loMean) continue;
-    if (!textured) {
+    if (after.burn > MAX_HI_ALPHA_NEAR_BLACK && !dark) continue;
+    if (after.hiMean + 2 < after.loMean && !dark) continue;
+    if (!textured && !dark) {
       if (after.ghost > MAX_DARK_GHOST_DELTA * 1.35) continue;
       if (Math.abs(after.bright) > MAX_LOGO_SURROUND_IMBALANCE) continue;
     }
-    if (after.bright > (textured ? 12 : MAX_BRIGHT_SPARKLE_DELTA)) continue;
+    if (!dark && after.bright > (textured ? 12 : MAX_BRIGHT_SPARKLE_DELTA)) continue;
     if (
       !textured &&
+      !dark &&
       before.bright > MAX_BRIGHT_SPARKLE_DELTA &&
       after.bright > before.bright * 0.35
     ) {
@@ -411,12 +420,14 @@ export function pickAlphaGain(
     }
     const overshoot = Math.max(0, after.loMean - after.hiMean);
     const remain = Math.max(0, after.bright);
-    const key: [number, number, number, number] = [
-      after.burn,
-      overshoot,
-      remain,
-      Math.abs(gain - (small ? 0.45 : 1)),
-    ];
+    const key: [number, number, number, number] = dark
+      ? [remain, overshoot, Math.abs(gain - 1), 0]
+      : [
+          after.burn,
+          overshoot,
+          remain,
+          Math.abs(gain - (small ? 0.62 : 1)),
+        ];
     if (
       !bestKey ||
       key[0] < bestKey[0] ||
@@ -439,12 +450,12 @@ export function pickAlphaGain(
   const probe = cloneImageData(imageData);
   applyPass(probe, alphaMap, rect, bestGain);
   const after = regionStats(probe, alphaMap, rect);
-  if (after.burn > MAX_HI_ALPHA_NEAR_BLACK) return null;
-  if (after.hiMean + 2 < after.loMean) return null;
-  if (!textured) {
+  if (after.burn > MAX_HI_ALPHA_NEAR_BLACK && !dark) return null;
+  if (after.hiMean + 2 < after.loMean && !dark) return null;
+  if (!textured && !dark) {
     if (after.bright > MAX_BRIGHT_SPARKLE_DELTA) return null;
     if (Math.abs(after.bright) > MAX_LOGO_SURROUND_IMBALANCE) return null;
-  } else if (after.bright > 14 || after.bright < -2) {
+  } else if (!dark && (after.bright > 14 || after.bright < -2)) {
     return null;
   }
   return bestGain;
