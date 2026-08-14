@@ -5,21 +5,25 @@ export const GENERATE_MODELS = [
     id: "gemini-3.1-flash-image",
     label: "Nano Banana 2",
     subtitle: "Best balance of quality and speed",
+    credits: 4,
   },
   {
     id: "gemini-3.1-flash-lite-image",
     label: "Nano Banana 2 Lite",
     subtitle: "Fastest and cheapest",
+    credits: 2,
   },
   {
     id: "gemini-3-pro-image",
     label: "Nano Banana Pro",
     subtitle: "Highest quality, slower",
+    credits: 8,
   },
   {
     id: "gemini-2.5-flash-image",
     label: "Nano Banana",
     subtitle: "Original model",
+    credits: 2,
   },
 ] as const;
 

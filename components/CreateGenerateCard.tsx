@@ -26,14 +26,25 @@ export default function CreateGenerateCard() {
         <p className="mt-4 text-[13px] font-semibold text-muted-strong">
           Model
         </p>
-        <div className="mt-2 flex items-center justify-between border border-border bg-surface px-3.5 py-3">
-          <div>
-            <p className="text-[15px] font-semibold text-foreground">
-              {defaultModel.label}
-            </p>
-            <p className="text-xs text-muted">{defaultModel.subtitle}</p>
-          </div>
-          <span className="text-xs text-muted">▾</span>
+        <div className="mt-2 border border-border bg-surface">
+          {GENERATE_MODELS.map((option, index) => (
+            <div
+              key={option.id}
+              className={`flex items-center justify-between px-3.5 py-3 ${
+                index === 0 ? "bg-cream/80" : ""
+              } ${index > 0 ? "border-t border-border" : ""}`}
+            >
+              <div>
+                <p className="text-[15px] font-semibold text-foreground">
+                  {option.label}
+                </p>
+                <p className="text-xs text-muted">{option.subtitle}</p>
+              </div>
+              <span className="text-xs font-semibold text-muted-strong">
+                {option.credits} credits
+              </span>
+            </div>
+          ))}
         </div>
 
         <p className="mt-4 text-[13px] font-semibold text-muted-strong">
@@ -58,7 +69,8 @@ export default function CreateGenerateCard() {
           Generate &amp; clean
         </div>
         <p className="mt-2.5 text-center text-xs text-muted">
-          1 credit · Gemini draws the image, Unmark removes the sparkle
+          {defaultModel.credits} credits for {defaultModel.label} · Gemini
+          draws the image, Unmark removes the sparkle
         </p>
       </div>
 
