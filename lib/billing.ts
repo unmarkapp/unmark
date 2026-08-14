@@ -20,6 +20,8 @@ export interface BillingAccount {
   payments_enabled?: boolean;
   library_limit?: number;
   extra_library_slots?: number;
+  paid_fast_credits?: number;
+  create_credits?: number;
 }
 
 export interface CreditPack {

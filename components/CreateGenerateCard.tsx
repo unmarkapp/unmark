@@ -1,6 +1,6 @@
 "use client";
 
-import { GENERATE_ASPECTS, GENERATE_MODELS, GENERATE_WEB_ENABLED } from "@/lib/generate";
+import { GENERATE_ASPECTS, GENERATE_MODELS, GENERATE_WEB_ENABLED, creditPluralSuffix } from "@/lib/generate";
 
 export default function CreateGenerateCard() {
   const defaultModel = GENERATE_MODELS[0];
@@ -66,11 +66,12 @@ export default function CreateGenerateCard() {
         </div>
 
         <div className="mt-5 bg-brand/45 px-4 py-3.5 text-center text-[15px] font-semibold text-white">
-          Generate &amp; clean
+          Generate
         </div>
         <p className="mt-2.5 text-center text-xs text-muted">
-          {defaultModel.credits} credits for {defaultModel.label} · Gemini
-          draws the image, Unmark removes the sparkle
+          {defaultModel.credits} Create credit
+          {creditPluralSuffix(defaultModel.credits)} for {defaultModel.label} · no
+          Gemini Ultra, no app sparkle. Daily free is for Clean.
         </p>
       </div>
 
@@ -84,9 +85,8 @@ export default function CreateGenerateCard() {
               Create on the web
             </p>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Prompt Nano Banana, then Unmark removes the sparkle. This is live
-              in the iOS app — web unlocks as soon as the API finishes rolling
-              out.
+              Prompt Nano Banana without Gemini Ultra. API image, no app
+              sparkle. Live on iOS — web coming soon.
             </p>
           </div>
         </div>

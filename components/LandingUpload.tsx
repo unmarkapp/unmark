@@ -85,7 +85,7 @@ export default function LandingUpload({
       {mode === "create" ? (
         <>
           <p className="mb-4 text-center text-sm text-muted">
-            Prompt Nano Banana, then Unmark the sparkle
+            Prompt Nano Banana — no Gemini app sparkle
           </p>
           <CreateGenerateCard />
         </>

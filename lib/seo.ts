@@ -90,7 +90,7 @@ export const PRODUCT_TOOLS = [
     id: "create",
     title: "Create with Nano Banana",
     description:
-      "Prompt Gemini, then Unmark removes the sparkle. Live on iOS — web coming soon.",
+      "Prompt Gemini in Unmark. API images have no Gemini-app sparkle. Live on iOS — web coming soon.",
     href: "/tools/create",
     cta: "Coming soon",
     badge: "Coming soon",

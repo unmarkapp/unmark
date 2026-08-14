@@ -366,7 +366,11 @@ export default function AccountView() {
                 <dd className="mt-1 font-medium text-foreground">
                   {fastCredits === null
                     ? "Loading…"
-                    : `${resolvedFastCredits} fast credits`}
+                    : `${resolvedFastCredits} Clean · ${
+                        account?.create_credits ??
+                        account?.paid_fast_credits ??
+                        0
+                      } Create`}
                 </dd>
               </div>
               <div className="border-t border-border pt-4">
@@ -477,8 +481,8 @@ export default function AccountView() {
                   </h2>
                   <p className="mt-1 text-sm text-muted">
                     {paymentsEnabled
-                      ? "Credits are used each time you remove a Gemini watermark."
-                      : `Free plan: ${dailyFreeCredits} Cloud credits added every day at midnight UTC.`}
+                      ? "Clean uses daily free or pack credits. Create uses pack credits only — pay-as-you-go, no Gemini Ultra."
+                      : `Free plan: ${dailyFreeCredits} Clean credits added every day at midnight UTC. Create needs a pack.`}
                   </p>
                 </div>
                 <button
@@ -493,15 +497,24 @@ export default function AccountView() {
               {billingLoading ? (
                 <p className="mt-6 text-sm text-muted">Loading balance…</p>
               ) : (
-                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   <CreditStat
-                    label="Fast credits"
+                    label="Clean"
                     value={resolvedFastCredits}
                     hint={
                       paymentsEnabled
-                        ? "Used for each Gemini watermark removal"
+                        ? "Watermark, video, and cutout"
                         : `${dailyFreeCredits} free credits refresh daily (UTC)`
                     }
+                  />
+                  <CreditStat
+                    label="Create"
+                    value={
+                      account?.create_credits ??
+                      account?.paid_fast_credits ??
+                      0
+                    }
+                    hint="Purchased only · no Gemini Ultra"
                   />
                   <CreditStat
                     label="Library slots"
@@ -540,7 +553,9 @@ export default function AccountView() {
               </h2>
               <p className="mt-2 text-sm text-muted">
                 Secure checkout powered by Razorpay. Credits are added after
-                payment succeeds.
+                payment succeeds. One pack funds Clean and Create. Create is
+                pay-as-you-go — cheaper than Gemini Ultra, no app sparkle.
+                Daily free credits are for Clean only.
               </p>
 
               <div className="mt-5 space-y-3">
@@ -672,7 +687,9 @@ function PackOption({
   if ((pack.library_slots || 0) > 0) {
     parts.push(`+${pack.library_slots} Library slots`);
   }
-  if (pack.fast_credits > 0) parts.push(`${pack.fast_credits} fast`);
+  if (pack.fast_credits > 0) {
+    parts.push(`${pack.fast_credits} credits · Clean + Create`);
+  }
   if (pack.high_credits > 0) parts.push(`${pack.high_credits} HQ`);
 
   return (
