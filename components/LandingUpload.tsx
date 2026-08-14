@@ -13,6 +13,8 @@ import LandingShell from "@/components/LandingShell";
 interface LandingUploadProps {
   onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onFilesSelected: (files: File[]) => void;
+  onTrySample: () => void;
+  sampleBusy?: boolean;
 }
 
 function isImageFile(file: File): boolean {
@@ -29,6 +31,8 @@ type HomeMode = "clean" | "create";
 export default function LandingUpload({
   onFileChange,
   onFilesSelected,
+  onTrySample,
+  sampleBusy = false,
 }: LandingUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
@@ -154,6 +158,19 @@ export default function LandingUpload({
               onChange={onFileChange}
             />
           </div>
+
+          <button
+            type="button"
+            onClick={onTrySample}
+            disabled={sampleBusy}
+            className="mt-4 w-full border border-brand-line bg-cream px-4 py-3 text-sm font-semibold text-brand transition hover:bg-cream/80 disabled:opacity-60"
+          >
+            {sampleBusy ? "Loading sample…" : "Try a sample"}
+          </button>
+          <p className="mt-2 text-center text-xs text-muted">
+            Sample Gemini still with a sparkle in the corner — Instant is free,
+            no account.
+          </p>
 
           <p className="mt-4 text-center text-xs text-muted">
             Visible Gemini sparkle only · not SynthID · files stay private

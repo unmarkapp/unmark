@@ -20,6 +20,10 @@ import LandingShell from "@/components/LandingShell";
 import LandingUpload from "@/components/LandingUpload";
 import ReadyToCleanCard from "@/components/ReadyToCleanCard";
 import VideoCleanCard from "@/components/VideoCleanCard";
+import {
+  fetchSampleCleanFile,
+  isSampleCleanFile,
+} from "@/lib/sampleClean";
 
 import {
   getJobStatus,
@@ -113,6 +117,7 @@ export default function Home() {
   const [resultUrl, setResultUrl] = useState<string | null>(null);
 
   const [processing, setProcessing] = useState(false);
+  const [sampleBusy, setSampleBusy] = useState(false);
   const [jobId, setJobId] = useState<string | null>(null);
   const [jobStatus, setJobStatus] =
     useState<JobStatusValue | null>(null);
@@ -352,6 +357,21 @@ export default function Home() {
     event.target.value = "";
     if (files.length === 0) return;
     startWithFiles(files);
+  };
+
+  const handleTrySample = async () => {
+    setSampleBusy(true);
+    try {
+      const sample = await fetchSampleCleanFile();
+      startWithFiles([sample]);
+    } catch (err) {
+      toast(
+        err instanceof Error ? err.message : "Could not load the sample image.",
+        "error",
+      );
+    } finally {
+      setSampleBusy(false);
+    }
   };
 
   useEffect(() => {
@@ -959,6 +979,8 @@ export default function Home() {
       <LandingUpload
         onFileChange={handleFileChange}
         onFilesSelected={startWithFiles}
+        onTrySample={() => void handleTrySample()}
+        sampleBusy={sampleBusy}
       />
     );
   }
@@ -976,6 +998,7 @@ export default function Home() {
         imageHeight={imageDimensions.height}
         fileName={file.name}
         fileSize={file.size}
+        isSample={isSampleCleanFile(file)}
         processing={processing}
         hasSelection={hasSelection}
         detectMode={detectMode}

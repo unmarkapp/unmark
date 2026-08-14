@@ -18,6 +18,7 @@ interface ReadyToCleanCardProps {
   imageHeight: number;
   fileName: string;
   fileSize: number;
+  isSample?: boolean;
   processing: boolean;
   hasSelection: boolean;
   detectMode: "auto" | "manual";
@@ -91,6 +92,7 @@ export default function ReadyToCleanCard({
   imageHeight,
   fileName,
   fileSize,
+  isSample = false,
   processing,
   hasSelection,
   detectMode,
@@ -181,6 +183,11 @@ export default function ReadyToCleanCard({
             {formatBytes(fileSize)}
             {statusLabel ? ` · ${statusLabel}` : null}
           </div>
+          {isSample && !resultUrl ? (
+            <p className="mt-2 text-sm text-muted">
+              Look at the bottom-right sparkle, then tap Remove instantly.
+            </p>
+          ) : null}
         </div>
 
         <button
@@ -361,6 +368,13 @@ export default function ReadyToCleanCard({
             <span aria-hidden>↓</span>
           </button>
         )}
+
+        {resultUrl && isSample ? (
+          <p className="mt-2 text-xs text-muted">
+            Sample sparkle removed. Drop your own Gemini image to clean it the
+            same way.
+          </p>
+        ) : null}
 
         {!resultUrl && detectMode === "manual" && !hasSelection && (
           <p className="mt-2 text-xs text-muted">
