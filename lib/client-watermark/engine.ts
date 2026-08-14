@@ -1,18 +1,23 @@
-import { calculateAlphaMap } from "./alphaMap";
+import { calculateAlphaMap, resizeAlphaMap } from "./alphaMap";
 import { removeWatermark } from "./blend";
 import {
+  nccRadiusFor,
   officialPlacements,
+  pickSparkleWinner,
+  type SparkleMapKey,
   type WatermarkRect,
 } from "./geometry";
 import { inpaintSparkleRegion } from "./inpaint";
 import {
   cloneImageData,
-  isRabResultSafe,
+  estimateLogoRgb,
   MIN_DETECT_SCORE,
-  pickAlphaGain,
+  rabResidualScore,
   refinePlacementNcc,
-  regionStats,
+  scanPlacementNcc,
 } from "./quality";
+
+const APPLY_GAINS = [0.55, 0.62, 0.7, 0.78, 0.85, 0.92, 1] as const;
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -23,92 +28,70 @@ function loadImage(src: string): Promise<HTMLImageElement> {
   });
 }
 
-function surroundMeanLuma(
-  imageData: ImageData,
-  alphaMap: Float32Array,
-  rect: WatermarkRect,
-): number {
-  const { data, width } = imageData;
-  let sum = 0;
-  let n = 0;
-  for (let row = 0; row < rect.height; row++) {
-    for (let col = 0; col < rect.width; col++) {
-      const a = alphaMap[row * rect.width + col]!;
-      if (a >= 0.02) continue;
-      const idx = ((rect.y + row) * width + (rect.x + col)) * 4;
-      const r = data[idx]!;
-      const g = data[idx + 1]!;
-      const b = data[idx + 2]!;
-      sum += 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      n++;
-    }
-  }
-  return n > 0 ? sum / n : 255;
+function nativeSize(key: SparkleMapKey): 36 | 48 | 96 {
+  if (key === "v1-48") return 48;
+  if (key === "v2-36") return 36;
+  return 96;
+}
+
+function mapForRect(
+  native: Float32Array,
+  nativeSide: number,
+  size: number,
+): Float32Array {
+  if (size === nativeSide) return native;
+  return resizeAlphaMap(native, nativeSide, nativeSide, size, size);
 }
 
 /**
- * Remaining bright peak in the processed logo area vs surround.
- * Catches "white sparkle still there + black ghost below".
- */
-function residualBrightPeak(
-  imageData: ImageData,
-  alphaMap: Float32Array,
-  rect: WatermarkRect,
-): number {
-  const { data, width } = imageData;
-  let hiMax = 0;
-  let loSum = 0;
-  let loN = 0;
-  for (let row = 0; row < rect.height; row++) {
-    for (let col = 0; col < rect.width; col++) {
-      const a = alphaMap[row * rect.width + col]!;
-      const idx = ((rect.y + row) * width + (rect.x + col)) * 4;
-      const L = 0.2126 * data[idx]! + 0.7152 * data[idx + 1]! + 0.0722 * data[idx + 2]!;
-      if (a >= 0.08) {
-        hiMax = Math.max(hiMax, L);
-      } else if (a < 0.02) {
-        loSum += L;
-        loN++;
-      }
-    }
-  }
-  const loMean = loN > 0 ? loSum / loN : 0;
-  return hiMax - loMean;
-}
-
-/**
- * Browser-side Gemini sparkle remover via reverse alpha blending,
- * with soft inpaint fallback when RAB would burn or leave the mark.
+ * Browser Gemini sparkle remover: reverse alpha blending with V1 + V2 maps.
+ * Inpaint only if no inverse lands cleanly.
  */
 export class ClientWatermarkEngine {
-  private alphaMaps: Partial<Record<48 | 96, Float32Array>> = {};
+  private alphaMaps: Partial<Record<SparkleMapKey, Float32Array>> = {};
 
   private constructor(
     private readonly bg48: HTMLImageElement,
     private readonly bg96: HTMLImageElement,
+    private readonly bg96v2: HTMLImageElement,
+    private readonly bg36v2: HTMLImageElement,
   ) {}
 
   static async create(): Promise<ClientWatermarkEngine> {
-    const [bg48, bg96] = await Promise.all([
+    const [bg48, bg96, bg96v2, bg36v2] = await Promise.all([
       loadImage("/gemini-alpha/bg_48.png"),
       loadImage("/gemini-alpha/bg_96.png"),
+      loadImage("/gemini-alpha/bg_96_v2.png"),
+      loadImage("/gemini-alpha/bg_36_v2.png"),
     ]);
-    return new ClientWatermarkEngine(bg48, bg96);
+    return new ClientWatermarkEngine(bg48, bg96, bg96v2, bg36v2);
   }
 
-  private async getAlphaMap(size: 48 | 96): Promise<Float32Array> {
-    const cached = this.alphaMaps[size];
-    if (cached) return cached;
-
+  private captureMap(img: HTMLImageElement, size: number): Float32Array {
     const canvas = document.createElement("canvas");
     canvas.width = size;
     canvas.height = size;
     const ctx = canvas.getContext("2d", { willReadFrequently: true });
     if (!ctx) throw new Error("Canvas 2D unavailable");
+    ctx.drawImage(img, 0, 0, size, size);
+    return calculateAlphaMap(ctx.getImageData(0, 0, size, size));
+  }
 
-    ctx.drawImage(size === 48 ? this.bg48 : this.bg96, 0, 0);
-    const map = calculateAlphaMap(ctx.getImageData(0, 0, size, size));
-    this.alphaMaps[size] = map;
+  private getAlphaMap(key: SparkleMapKey): Float32Array {
+    const cached = this.alphaMaps[key];
+    if (cached) return cached;
+
+    let map: Float32Array;
+    if (key === "v1-48") {
+      map = this.captureMap(this.bg48, 48);
+    } else if (key === "v1-96") {
+      map = this.captureMap(this.bg96, 96);
+    } else if (key === "v2-96") {
+      map = this.captureMap(this.bg96v2, 96);
+    } else {
+      map = this.captureMap(this.bg36v2, 36);
+    }
+    this.alphaMaps[key] = map;
     return map;
   }
 
@@ -145,11 +128,10 @@ export class ClientWatermarkEngine {
     const original = ctx.getImageData(0, 0, canvas.width, canvas.height);
     const imageData = cloneImageData(original);
 
-    const candidates = officialPlacements(canvas.width, canvas.height);
     type Ranked = WatermarkRect & { score: number; alphaMap: Float32Array };
     const ranked: Ranked[] = [];
 
-    for (const seed of candidates) {
+    for (const seed of officialPlacements(canvas.width, canvas.height)) {
       if (
         seed.x < 0 ||
         seed.y < 0 ||
@@ -158,76 +140,111 @@ export class ClientWatermarkEngine {
       ) {
         continue;
       }
-      const alphaMap = await this.getAlphaMap(seed.size);
-      // Wider refine — Instant used to burn a black mark below the real sparkle
-      // when the seed was slightly off.
-      const refined = refinePlacementNcc(original, alphaMap, seed, 28);
-      ranked.push({ ...refined, alphaMap });
+      const native = this.getAlphaMap(seed.mapKey);
+      const side = nativeSize(seed.mapKey);
+      const alphaMap = mapForRect(native, side, seed.size);
+      const refined = refinePlacementNcc(
+        original,
+        alphaMap,
+        seed,
+        nccRadiusFor(seed),
+      );
+      ranked.push({
+        ...refined,
+        alphaMap: mapForRect(native, side, refined.width),
+      });
+    }
+
+    // Erasio `method=scan`: 48px "old" logo is often off the official corner.
+    for (const key of ["v1-48", "v2-36"] as const) {
+      const native = this.getAlphaMap(key);
+      const side = nativeSize(key);
+      const scanned = scanPlacementNcc(original, native, side, key);
+      if (!scanned || scanned.score < MIN_DETECT_SCORE) continue;
+      ranked.push({
+        ...scanned,
+        alphaMap: native,
+      });
     }
 
     ranked.sort((a, b) => b.score - a.score);
 
+    const winner = pickSparkleWinner(
+      ranked,
+      canvas.width,
+      canvas.height,
+      MIN_DETECT_SCORE,
+    );
+
     let method: "rab" | "inpaint" = "inpaint";
     let usedRect: WatermarkRect | null = null;
 
-    for (const candidate of ranked) {
-      if (candidate.score < MIN_DETECT_SCORE * 0.75) continue;
-      const rect: WatermarkRect = {
-        size: candidate.size,
-        x: candidate.x,
-        y: candidate.y,
-        width: candidate.width,
-        height: candidate.height,
+    if (winner) {
+      const native = this.getAlphaMap(winner.mapKey);
+      const side = nativeSize(winner.mapKey);
+      const map = mapForRect(native, side, winner.size);
+      const logoRgb = estimateLogoRgb(original, map, winner);
+      const distRight = canvas.width - (winner.x + winner.size);
+      const distBottom = canvas.height - (winner.y + winner.size);
+      const officialCorner = distRight <= 220 && distBottom <= 220;
+      const preferredGain =
+        winner.mapKey === "v1-48" && !officialCorner ? 0.62 : 1;
+      const seeds: WatermarkRect[] = [winner];
+      for (const dy of [-1, 0, 1]) {
+        for (const dx of [-1, 0, 1]) {
+          if (dx === 0 && dy === 0) continue;
+          const shifted: WatermarkRect = {
+            ...winner,
+            x: winner.x + dx,
+            y: winner.y + dy,
+          };
+          if (
+            shifted.x < 0 ||
+            shifted.y < 0 ||
+            shifted.x + shifted.width > canvas.width ||
+            shifted.y + shifted.height > canvas.height
+          ) {
+            continue;
+          }
+          seeds.push(shifted);
+        }
+      }
+
+      const preferred = cloneImageData(original);
+      removeWatermark(preferred, map, winner, {
+        alphaGain: preferredGain,
+        logoRgb,
+      });
+      let best: { rect: WatermarkRect; probe: ImageData; score: number } = {
+        rect: winner,
+        probe: preferred,
+        score: rabResidualScore(original, preferred, map, winner),
       };
-      const { alphaMap } = candidate;
-      const before = regionStats(original, alphaMap, rect);
-
-      // Dark backgrounds: full-strength RAB burns a black sparkle under the
-      // real mark. Prefer inpaint instead of shipping a dual-sparkle artifact.
-      const surround = surroundMeanLuma(original, alphaMap, rect);
-      if (surround < 90 && before.bright > 8) {
-        continue;
+      for (const seed of seeds) {
+        for (const gain of APPLY_GAINS) {
+          if (
+            seed.x === winner.x &&
+            seed.y === winner.y &&
+            gain === preferredGain
+          ) {
+            continue;
+          }
+          const probe = cloneImageData(original);
+          removeWatermark(probe, map, seed, { alphaGain: gain, logoRgb });
+          const score = rabResidualScore(original, probe, map, seed);
+          if (score > best.score + 0.04) {
+            best = { rect: seed, probe, score };
+          }
+        }
       }
 
-      const gain = pickAlphaGain(
-        original,
-        alphaMap,
-        rect,
-        (target, map, position, g) => {
-          removeWatermark(target, map, position, { alphaGain: g });
-        },
-      );
-      if (gain == null) continue;
-
-      const probe = cloneImageData(original);
-      removeWatermark(probe, alphaMap, rect, { alphaGain: gain });
-      if (
-        !isRabResultSafe(
-          probe,
-          alphaMap,
-          rect,
-          before.bright,
-          before.ghost,
-        )
-      ) {
-        continue;
-      }
-
-      // Extra guard: bright peak must not remain above the surround.
-      if (residualBrightPeak(probe, alphaMap, rect) > 18) {
-        continue;
-      }
-
-      imageData.data.set(probe.data);
+      imageData.data.set(best.probe.data);
       method = "rab";
-      usedRect = rect;
-      break;
+      usedRect = best.rect;
     }
 
     if (method === "inpaint") {
-      // Prefer the highest-scoring 96px placement (Gemini 1k/2k), else best overall.
-      const best96 = ranked.find((c) => c.size === 96);
-      const best = best96 ?? ranked[0];
+      const best = winner ?? ranked[0];
       if (!best) {
         throw new Error("Image too small for Gemini watermark region");
       }
@@ -237,25 +254,10 @@ export class ClientWatermarkEngine {
         y: best.y,
         width: best.width,
         height: best.height,
+        mapKey: best.mapKey,
       };
       imageData.data.set(original.data);
       inpaintSparkleRegion(imageData, best.alphaMap, usedRect);
-
-      // If a second strong candidate is offset, clean that too (stacked ghost case).
-      for (const extra of ranked.slice(0, 3)) {
-        if (extra === best) continue;
-        if (extra.score < MIN_DETECT_SCORE) continue;
-        const dx = Math.abs(extra.x - best.x);
-        const dy = Math.abs(extra.y - best.y);
-        if (dx < 8 && dy < 8 && extra.size === best.size) continue;
-        inpaintSparkleRegion(imageData, extra.alphaMap, {
-          size: extra.size,
-          x: extra.x,
-          y: extra.y,
-          width: extra.width,
-          height: extra.height,
-        });
-      }
     }
 
     ctx.putImageData(imageData, 0, 0);

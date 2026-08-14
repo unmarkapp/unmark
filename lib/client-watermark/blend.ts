@@ -3,6 +3,7 @@ import type { WatermarkRect } from "./geometry";
 const ALPHA_THRESHOLD = 0.002;
 const MAX_ALPHA = 0.99;
 const LOGO_VALUE = 255;
+const ALPHA_NOISE_FLOOR = 3 / 255;
 
 /**
  * Reverse alpha blending (white logo):
@@ -13,27 +14,32 @@ export function removeWatermark(
   imageData: ImageData,
   alphaMap: Float32Array,
   position: WatermarkRect,
-  options: { alphaGain?: number } = {},
+  options: { alphaGain?: number; logoRgb?: [number, number, number] } = {},
 ): void {
   const { x, y, width, height } = position;
   const gain =
     Number.isFinite(options.alphaGain) && (options.alphaGain ?? 0) > 0
       ? (options.alphaGain as number)
       : 1;
+  const logoR = options.logoRgb?.[0] ?? LOGO_VALUE;
+  const logoG = options.logoRgb?.[1] ?? LOGO_VALUE;
+  const logoB = options.logoRgb?.[2] ?? LOGO_VALUE;
+  const logo = [logoR, logoG, logoB] as const;
 
   for (let row = 0; row < height; row++) {
     for (let col = 0; col < width; col++) {
       const imgIdx = ((y + row) * imageData.width + (x + col)) * 4;
       const alphaIdx = row * width + col;
 
-      let alpha = alphaMap[alphaIdx]! * gain;
-      if (alpha < ALPHA_THRESHOLD) continue;
-      alpha = Math.min(alpha, MAX_ALPHA);
+      const raw = alphaMap[alphaIdx]!;
+      const signal = Math.max(0, raw - ALPHA_NOISE_FLOOR) * gain;
+      if (signal < ALPHA_THRESHOLD) continue;
+      const alpha = Math.min(raw * gain, MAX_ALPHA);
 
       for (let c = 0; c < 3; c++) {
         const watermarked = imageData.data[imgIdx + c]!;
         const original =
-          (watermarked - alpha * LOGO_VALUE) / (1 - alpha);
+          (watermarked - alpha * logo[c]!) / (1 - alpha);
         imageData.data[imgIdx + c] = Math.max(
           0,
           Math.min(255, Math.round(original)),

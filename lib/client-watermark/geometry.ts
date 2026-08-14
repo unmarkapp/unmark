@@ -1,16 +1,20 @@
 /**
- * Gemini visible-watermark geometry (classic bottom-right sparkle).
+ * Gemini visible-watermark geometry.
  *
- * Exact export sizes match Cloud RAB. Near-miss sizes (re-encode / crop)
- * snap to the closest known Gemini size within a small tolerance.
+ * V1 (pre-Gemini 3.5): 48@32 / 96@64 — classic 1K sparkle at (864,864) on 1024².
+ * V2 (Gemini 3.5+): 96@192 on large canvases; 1024-class uses a scaled ~36px
+ * mark from the 192px canonical margin (Allen Kuo GeminiWatermarkTool, MIT).
  */
 
+export type SparkleMapKey = "v1-48" | "v1-96" | "v2-36" | "v2-96";
+
 export type WatermarkRect = {
-  size: 48 | 96;
+  size: number;
   x: number;
   y: number;
   width: number;
   height: number;
+  mapKey: SparkleMapKey;
 };
 
 type Tier = "0.5k" | "1k" | "2k";
@@ -56,6 +60,9 @@ const GEMINI_SIZES: Array<[number, number, Tier]> = [
   [3072, 384, "2k"],
   [1536, 2752, "2k"],
   [2752, 1536, "2k"],
+  [2816, 1536, "2k"],
+  [1536, 2816, "2k"],
+  [2848, 1536, "2k"],
   [3168, 1344, "2k"],
   // 0.5k
   [512, 512, "0.5k"],
@@ -93,11 +100,70 @@ function configForSize(width: number, height: number) {
   if (width > 1024 && height > 1024) {
     return TIER_CONFIG["2k"];
   }
-  // Landscape / portrait Gemini-like canvases default to 96px mark.
   if (Math.max(width, height) >= 1024 && Math.min(width, height) >= 512) {
     return TIER_CONFIG["1k"];
   }
   return TIER_CONFIG["0.5k"];
+}
+
+function rectAt(
+  width: number,
+  height: number,
+  size: number,
+  margin: number,
+  mapKey: SparkleMapKey,
+): WatermarkRect {
+  return {
+    size,
+    x: width - margin - size,
+    y: height - margin - size,
+    width: size,
+    height: size,
+    mapKey,
+  };
+}
+
+/**
+ * Gemini 3.5 1024-class: infer canonical 2K width, scale 192px margin + 96px logo.
+ * From Allen Kuo GeminiWatermarkTool (MIT).
+ */
+export function v2SmallConfig(width: number, height: number): {
+  logo_size: number;
+  margin: number;
+} {
+  const longSide = Math.max(width, height);
+  const shortSide = Math.min(width, height);
+
+  let sourceLong = 2752;
+  if (longSide > 1100) {
+    const doubled = 2 * longSide;
+    sourceLong = 2752;
+    for (const cand of [2816, 2848]) {
+      if (Math.abs(doubled - cand) < Math.abs(doubled - sourceLong)) {
+        sourceLong = cand;
+      }
+    }
+  } else if (shortSide >= 566) {
+    sourceLong = 2752;
+  } else if (shortSide >= 550) {
+    sourceLong = 2816;
+  } else {
+    sourceLong = 2848;
+  }
+
+  const scale = longSide / sourceLong;
+  const margin = Math.round(192 * scale);
+  const ideal = Math.round(96 * scale);
+  return {
+    margin,
+    logo_size: ideal <= 40 ? 36 : ideal,
+  };
+}
+
+export function v2SmallRect(width: number, height: number): WatermarkRect {
+  const v2s = v2SmallConfig(width, height);
+  const mapKey: SparkleMapKey = v2s.logo_size <= 40 ? "v2-36" : "v2-96";
+  return rectAt(width, height, v2s.logo_size, v2s.margin, mapKey);
 }
 
 export function getWatermarkInfo(
@@ -106,13 +172,13 @@ export function getWatermarkInfo(
 ): WatermarkRect {
   const config = configForSize(width, height);
   const size = config.logo_size;
-  return {
+  return rectAt(
+    width,
+    height,
     size,
-    x: width - config.margin_right - size,
-    y: height - config.margin_bottom - size,
-    width: size,
-    height: size,
-  };
+    config.margin_right,
+    size === 48 ? "v1-48" : "v1-96",
+  );
 }
 
 function pushUnique(out: WatermarkRect[], rect: WatermarkRect) {
@@ -120,7 +186,8 @@ function pushUnique(out: WatermarkRect[], rect: WatermarkRect) {
     rect.x < 0 ||
     rect.y < 0 ||
     rect.width <= 0 ||
-    rect.height <= 0
+    rect.height <= 0 ||
+    rect.x + rect.width > Number.MAX_SAFE_INTEGER
   ) {
     return;
   }
@@ -129,7 +196,8 @@ function pushUnique(out: WatermarkRect[], rect: WatermarkRect) {
       (r) =>
         r.x === rect.x &&
         r.y === rect.y &&
-        r.size === rect.size,
+        r.size === rect.size &&
+        r.mapKey === rect.mapKey,
     )
   ) {
     return;
@@ -137,37 +205,119 @@ function pushUnique(out: WatermarkRect[], rect: WatermarkRect) {
   out.push(rect);
 }
 
-/** Candidate official placements for both 48 and 96 sparkle tiers. */
+function pushIfFits(
+  out: WatermarkRect[],
+  width: number,
+  height: number,
+  rect: WatermarkRect,
+) {
+  if (rect.x + rect.width <= width && rect.y + rect.height <= height) {
+    pushUnique(out, rect);
+  }
+}
+
+/** Candidate official placements: V1 + V2 sparkle profiles. */
 export function officialPlacements(
   width: number,
   height: number,
 ): WatermarkRect[] {
-  const primary = getWatermarkInfo(width, height);
   const out: WatermarkRect[] = [];
-  pushUnique(out, primary);
+  pushIfFits(out, width, height, getWatermarkInfo(width, height));
 
-  for (const size of [96, 48] as const) {
-    const margin = size === 96 ? 64 : 32;
-    pushUnique(out, {
-      size,
-      x: width - margin - size,
-      y: height - margin - size,
-      width: size,
-      height: size,
-    });
-    // Common near-miss margins when exports are slightly cropped.
+  // V1 classic.
+  for (const [size, margin, mapKey] of [
+    [96, 64, "v1-96"],
+    [48, 32, "v1-48"],
+  ] as const) {
+    pushIfFits(out, width, height, rectAt(width, height, size, margin, mapKey));
     for (const m of [48, 56, 72, 80]) {
-      pushUnique(out, {
-        size,
-        x: width - m - size,
-        y: height - m - size,
-        width: size,
-        height: size,
-      });
+      pushIfFits(out, width, height, rectAt(width, height, size, m, mapKey));
     }
   }
 
-  return out.filter(
-    (r) => r.x + r.width <= width && r.y + r.height <= height,
+  // V2 large: 96px logo, 192px margin (Gemini 3.5+ / 2K).
+  pushIfFits(out, width, height, rectAt(width, height, 96, 192, "v2-96"));
+  for (const m of [176, 184, 200, 208, 160, 224]) {
+    pushIfFits(out, width, height, rectAt(width, height, 96, m, "v2-96"));
+  }
+
+  // V2 small: scaled 36–48px from canonical 192 margin.
+  const v2s = v2SmallConfig(width, height);
+  const smallKey: SparkleMapKey = v2s.logo_size <= 40 ? "v2-36" : "v2-96";
+  pushIfFits(
+    out,
+    width,
+    height,
+    rectAt(width, height, v2s.logo_size, v2s.margin, smallKey),
   );
+  for (const dm of [-8, -4, 4, 8]) {
+    pushIfFits(
+      out,
+      width,
+      height,
+      rectAt(width, height, v2s.logo_size, v2s.margin + dm, smallKey),
+    );
+  }
+
+  return out;
+}
+
+export function nccRadiusFor(rect: WatermarkRect): number {
+  // Official V2-36 geometry is exact; fabric NCC burns an inverted spark.
+  if (rect.mapKey === "v2-36") return 1;
+  if (rect.mapKey.startsWith("v2")) return 8;
+  return 12;
+}
+
+function inBottomRight(
+  rect: { x: number; y: number; width?: number; size: number },
+  width: number,
+  height: number,
+): boolean {
+  const rw = rect.width ?? rect.size;
+  const rh = rect.size;
+  return rect.x + rw > width * 0.6 && rect.y + rh > height * 0.52;
+}
+
+/**
+ * One sparkle only. 1024-class Gemini 3.5 is a ~36px mark; applying the
+ * classic 96px map beside it paints a second (wrong) ghost.
+ */
+export function pickSparkleWinner<T extends WatermarkRect & { score: number }>(
+  ranked: T[],
+  width: number,
+  height: number,
+  minScore: number,
+): T | null {
+  const ok = ranked.filter((c) => c.score >= minScore);
+  const list = ok.length > 0 ? ok : ranked;
+  if (list.length === 0) return null;
+
+  const br = list.filter((c) => inBottomRight(c, width, height));
+  const pool = br.length > 0 ? br : list;
+
+  // Confident off-corner scan (Erasio portrait) — still must sit in BR.
+  if (pool[0]!.score >= 0.5 && inBottomRight(pool[0]!, width, height)) {
+    return pool[0]!;
+  }
+
+  const is1024Class = !(width > 1024 && height > 1024);
+  if (is1024Class) {
+    const smalls = pool.filter((c) => c.size <= 52);
+    const large = pool.find((c) => c.size >= 90);
+    const bestSmall = smalls[0];
+    if (bestSmall && (!large || large.score < bestSmall.score + 0.08)) {
+      const v2 = v2SmallConfig(width, height);
+      const ex = width - v2.margin - v2.logo_size;
+      const ey = height - v2.margin - v2.logo_size;
+      const nearV2 = smalls.find(
+        (c) => Math.hypot(c.x - ex, c.y - ey) <= 12,
+      );
+      if (nearV2 && nearV2.score >= bestSmall.score - 0.06) {
+        return nearV2;
+      }
+      return bestSmall;
+    }
+  }
+  return pool[0]!;
 }
