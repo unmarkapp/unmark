@@ -193,6 +193,9 @@ export default function AccountView() {
   const email = user.email;
   const initials = (displayName[0] || email[0] || "U").toUpperCase();
   const resolvedFastCredits = account?.fast_credits ?? fastCredits ?? 0;
+  const paidCredits =
+    account?.create_credits ?? account?.paid_fast_credits ?? 0;
+  const freeRemaining = Math.max(0, resolvedFastCredits - paidCredits);
   const totalCredits = resolvedFastCredits;
   const dailyFreeCredits = account?.daily_free_credits ?? 5;
   const libraryLimit = account?.library_limit ?? 50;
@@ -480,9 +483,9 @@ export default function AccountView() {
                     Your credits
                   </h2>
                   <p className="mt-1 text-sm text-muted">
-                    {paymentsEnabled
-                      ? "Clean uses daily free or pack credits. Create uses pack credits only — pay-as-you-go, no Gemini Ultra."
-                      : `Free plan: ${dailyFreeCredits} Clean credits added every day at midnight UTC. Create needs a pack.`}
+                    Clean and Create are separate. A Cloud clean never spends
+                    Create credits. Create never spends daily free Clean
+                    credits.
                   </p>
                 </div>
                 <button
@@ -502,19 +505,15 @@ export default function AccountView() {
                     label="Clean"
                     value={resolvedFastCredits}
                     hint={
-                      paymentsEnabled
-                        ? "Watermark, video, and cutout"
-                        : `${dailyFreeCredits} free credits refresh daily (UTC)`
+                      freeRemaining > 0
+                        ? `${freeRemaining} free left today · rest from packs`
+                        : `${dailyFreeCredits} free refresh daily (UTC)`
                     }
                   />
                   <CreditStat
                     label="Create"
-                    value={
-                      account?.create_credits ??
-                      account?.paid_fast_credits ??
-                      0
-                    }
-                    hint="Purchased only · no Gemini Ultra"
+                    value={paidCredits}
+                    hint="Generate only · packs add these separately"
                   />
                   <CreditStat
                     label="Library slots"
