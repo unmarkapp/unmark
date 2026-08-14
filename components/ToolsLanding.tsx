@@ -26,9 +26,12 @@ export default function ToolsLanding() {
         <ul className="mx-auto mt-12 grid max-w-2xl gap-4">
           {PRODUCT_TOOLS.map((tool) => {
             const isExtension = tool.id === "extension";
+            const comingSoon = "comingSoon" in tool && tool.comingSoon;
             const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
             const className =
               "group flex flex-col gap-2 border border-border bg-surface/90 p-5 transition hover:border-brand hover:bg-cream/60 sm:flex-row sm:items-center sm:justify-between";
+            const lockedClassName =
+              "flex flex-col gap-2 border border-border bg-surface/90 p-5 sm:flex-row sm:items-center sm:justify-between";
             const inner = (
               <>
                 <div>
@@ -42,8 +45,15 @@ export default function ToolsLanding() {
                   </div>
                   <p className="mt-1 text-sm text-muted">{tool.description}</p>
                 </div>
-                <span className="text-sm font-semibold text-brand group-hover:text-brand-hover">
-                  {tool.cta} →
+                <span
+                  className={`text-sm font-semibold ${
+                    comingSoon
+                      ? "text-muted"
+                      : "text-brand group-hover:text-brand-hover"
+                  }`}
+                >
+                  {tool.cta}
+                  {comingSoon ? "" : " →"}
                 </span>
               </>
             );
@@ -60,7 +70,10 @@ export default function ToolsLanding() {
                     {inner}
                   </a>
                 ) : (
-                  <Link href={href} className={className}>
+                  <Link
+                    href={href}
+                    className={comingSoon ? lockedClassName : className}
+                  >
                     {inner}
                   </Link>
                 )}

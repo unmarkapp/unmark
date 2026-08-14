@@ -87,6 +87,16 @@ export const PRODUCT_TOOLS = [
     badge: "New",
   },
   {
+    id: "create",
+    title: "Create with Nano Banana",
+    description:
+      "Prompt Gemini, then Unmark removes the sparkle. Live on iOS — web coming soon.",
+    href: "/tools/create",
+    cta: "Coming soon",
+    badge: "Coming soon",
+    comingSoon: true,
+  },
+  {
     id: "extension",
     title: "Chrome extension",
     description:

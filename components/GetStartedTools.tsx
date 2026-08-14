@@ -24,10 +24,13 @@ export default function GetStartedTools() {
       <ul className="mx-auto mt-12 grid max-w-4xl gap-4 sm:grid-cols-2">
         {PRODUCT_TOOLS.map((tool) => {
           const isExtension = tool.id === "extension";
+          const comingSoon = "comingSoon" in tool && tool.comingSoon;
           const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
           const external = isExtension;
           const className =
             "group flex h-full flex-col border border-border bg-surface/80 p-5 text-left transition hover:border-brand hover:bg-cream/50";
+          const lockedClassName =
+            "flex h-full flex-col border border-border bg-surface/80 p-5 text-left";
 
           const body = (
             <>
@@ -42,8 +45,15 @@ export default function GetStartedTools() {
               <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">
                 {tool.description}
               </p>
-              <span className="mt-4 text-sm font-semibold text-brand group-hover:text-brand-hover">
-                {tool.cta} →
+              <span
+                className={`mt-4 text-sm font-semibold ${
+                  comingSoon
+                    ? "text-muted"
+                    : "text-brand group-hover:text-brand-hover"
+                }`}
+              >
+                {tool.cta}
+                {comingSoon ? "" : " →"}
               </span>
             </>
           );
@@ -60,7 +70,10 @@ export default function GetStartedTools() {
                   {body}
                 </a>
               ) : (
-                <Link href={href} className={className}>
+                <Link
+                  href={href}
+                  className={comingSoon ? lockedClassName : className}
+                >
                   {body}
                 </Link>
               )}
