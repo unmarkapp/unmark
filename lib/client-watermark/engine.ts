@@ -11,6 +11,7 @@ import { inpaintSparkleRegion } from "./inpaint";
 import {
   cloneImageData,
   estimateLogoRgb,
+  isFullReverseSurround,
   MIN_DETECT_SCORE,
   rabResidualScore,
   refinePlacementNcc,
@@ -187,8 +188,13 @@ export class ClientWatermarkEngine {
       const distRight = canvas.width - (winner.x + winner.size);
       const distBottom = canvas.height - (winner.y + winner.size);
       const officialCorner = distRight <= 220 && distBottom <= 220;
-      const preferredGain =
-        winner.mapKey === "v1-48" && !officialCorner ? 0.62 : 1;
+      const fullReverse = isFullReverseSurround(original, map, winner);
+      const preferredGain = fullReverse
+        ? 1
+        : winner.mapKey === "v1-48" && !officialCorner
+          ? 0.62
+          : 1;
+      const gains = fullReverse ? ([1] as const) : APPLY_GAINS;
       const seeds: WatermarkRect[] = [winner];
       for (const dy of [-1, 0, 1]) {
         for (const dx of [-1, 0, 1]) {
@@ -221,7 +227,7 @@ export class ClientWatermarkEngine {
         score: rabResidualScore(original, preferred, map, winner),
       };
       for (const seed of seeds) {
-        for (const gain of APPLY_GAINS) {
+        for (const gain of gains) {
           if (
             seed.x === winner.x &&
             seed.y === winner.y &&

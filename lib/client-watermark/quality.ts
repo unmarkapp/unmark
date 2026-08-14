@@ -14,6 +14,19 @@ const NCC_REFINE_RADIUS = 16;
 const MIN_DETECT_SCORE = 0.12;
 /** Shirt / paisley / hair: mean luma is a bad ghost detector. */
 const TEXTURE_STD = 16;
+/** Navy / charcoal: restored sparkle pixels should go this dark. */
+const DARK_SURROUND_LUMA = 40;
+/** Flat studio color (blue backdrop, not knit): full reverse-alpha. */
+const FLAT_SURROUND_STD = 14;
+const FLAT_SURROUND_LUMA = 90;
+
+export function surroundAllowsFullReverse(
+  loMean: number,
+  loStd: number,
+): boolean {
+  if (loMean < DARK_SURROUND_LUMA) return true;
+  return loStd < FLAT_SURROUND_STD && loMean < FLAT_SURROUND_LUMA;
+}
 
 function lumaAt(data: Uint8ClampedArray, idx: number): number {
   const r = data[idx]!;
@@ -332,6 +345,7 @@ export function rabResidualScore(
   let clipN = 0;
   let loSum = 0;
   let loN = 0;
+  const loLuma: number[] = [];
   for (let row = 0; row < rh; row++) {
     for (let col = 0; col < rw; col++) {
       const a = alphaMap[row * rw + col]!;
@@ -339,8 +353,10 @@ export function rabResidualScore(
       delta.push(lumaAt(before.data, idx) - lumaAt(after.data, idx));
       alphaVals.push(a);
       if (a < 0.02) {
-        loSum += lumaAt(before.data, idx);
+        const L = lumaAt(before.data, idx);
+        loSum += L;
         loN++;
+        loLuma.push(L);
       }
       if (a >= 0.08) {
         hiN++;
@@ -353,10 +369,11 @@ export function rabResidualScore(
   }
   const corr = ncc(delta, alphaVals);
   const clip = hiN > 0 ? clipN / hiN : 0;
-  const surroundDark = loN > 0 && loSum / loN < 28;
-  // On black BR, restored logo pixels *should* clip to black. Penalizing
-  // that picked a weak gain and left a glassy star.
-  return corr - (surroundDark ? 0 : clip * 2);
+  const loMean = loN > 0 ? loSum / loN : 0;
+  const fullReverse = surroundAllowsFullReverse(loMean, stdev(loLuma));
+  // On black / navy / flat studio color, restored logo pixels may clip.
+  // Penalizing that picked a weak gain and left a glassy star.
+  return corr - (fullReverse ? 0 : clip * 2);
 }
 
 export function rabCost(after: {
@@ -387,7 +404,8 @@ export function pickAlphaGain(
 ): number | null {
   const before = regionStats(imageData, alphaMap, rect);
   const textured = before.loStd >= TEXTURE_STD;
-  const dark = before.loMean < 28;
+  const fullReverse = surroundAllowsFullReverse(before.loMean, before.loStd);
+  const dark = before.loMean < DARK_SURROUND_LUMA;
   const small = rect.size <= 40;
   const minGain = small
     ? MIN_EFFECTIVE_ALPHA_GAIN_SMALL
@@ -399,7 +417,7 @@ export function pickAlphaGain(
 
   for (const gain of ALPHA_GAIN_CANDIDATES) {
     if (gain < minGain) continue;
-    if (small && gain > 0.7 && !dark) continue;
+    if (small && gain > 0.7 && !fullReverse) continue;
     const probe = cloneImageData(imageData);
     applyPass(probe, alphaMap, rect, gain);
     const after = regionStats(probe, alphaMap, rect);
@@ -420,7 +438,7 @@ export function pickAlphaGain(
     }
     const overshoot = Math.max(0, after.loMean - after.hiMean);
     const remain = Math.max(0, after.bright);
-    const key: [number, number, number, number] = dark
+    const key: [number, number, number, number] = fullReverse
       ? [remain, overshoot, Math.abs(gain - 1), 0]
       : [
           after.burn,
@@ -489,6 +507,15 @@ export function isRabResultSafe(
     return false;
   }
   return true;
+}
+
+export function isFullReverseSurround(
+  imageData: ImageData,
+  alphaMap: Float32Array,
+  rect: WatermarkRect,
+): boolean {
+  const s = regionStats(imageData, alphaMap, rect);
+  return surroundAllowsFullReverse(s.loMean, s.loStd);
 }
 
 export { MIN_DETECT_SCORE, regionStats, TEXTURE_STD };
