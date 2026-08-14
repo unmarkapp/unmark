@@ -358,6 +358,47 @@ export async function deleteJob(jobId: string): Promise<void> {
   }
 }
 
+export async function downloadLibraryJob(
+  jobId: string,
+  fileName: string,
+): Promise<void> {
+  const safeName = fileName.replace(/[^\w.\-]+/g, "_") || "cleaned.png";
+  const fallbackExt = /\.mp4$/i.test(safeName) ? ".mp4" : ".png";
+  const downloadName = safeName.includes(".")
+    ? safeName
+    : `${safeName}${fallbackExt}`;
+
+  const response = await fetch(
+    `${API_BASE_URL}/v1/jobs/${encodeURIComponent(jobId)}/file`,
+    {
+      method: "GET",
+      cache: "no-store",
+      credentials: "include",
+    },
+  );
+  if (!response.ok) {
+    let message = "Failed to download file";
+    try {
+      const body = await response.json();
+      if (typeof body.detail === "string") message = body.detail;
+    } catch {
+      // ignore
+    }
+    throw new Error(message);
+  }
+
+  const blob = await response.blob();
+  const objectUrl = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = objectUrl;
+  anchor.download = downloadName;
+  anchor.rel = "noopener";
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(objectUrl);
+}
+
 export async function downloadProcessedImage(
   url: string,
   fileName: string,

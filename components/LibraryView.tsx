@@ -13,7 +13,7 @@ import {
 } from "@/lib/canva";
 import {
   deleteJob,
-  downloadProcessedImage,
+  downloadLibraryJob,
   isWatermarkRemovalJob,
   listJobs,
   removeBackgroundFromJob,
@@ -64,10 +64,6 @@ function isDriveFailed(job: LibraryJob): boolean {
     (job.storage_status === "failed" ||
       job.storage_status === "provider_disconnected")
   );
-}
-
-function isDriveOpenUrl(url: string): boolean {
-  return /drive\.google\.com/i.test(url);
 }
 
 export default function LibraryView() {
@@ -249,22 +245,9 @@ export default function LibraryView() {
   };
 
   const handleDownload = async (job: LibraryJob) => {
-    const driveUrl = job.external_web_url || job.result_url;
-    if (job.s3_offloaded && driveUrl && isDriveOpenUrl(driveUrl)) {
-      window.open(driveUrl, "_blank", "noopener,noreferrer");
-      setToast("Opened in Google Drive");
-      return;
-    }
-    const downloadUrl = job.result_url || job.preview_url;
-    if (!downloadUrl) return;
-    if (isDriveOpenUrl(downloadUrl)) {
-      window.open(downloadUrl, "_blank", "noopener,noreferrer");
-      setToast("Opened in Google Drive");
-      return;
-    }
     setDownloadingId(job.job_id);
     try {
-      await downloadProcessedImage(downloadUrl, fileLabel(job));
+      await downloadLibraryJob(job.job_id, fileLabel(job));
       setToast("Download started");
       if (shouldShowCanvaPromo()) {
         setCanvaPromoContext({
