@@ -7,8 +7,8 @@ import { CHROME_WEB_STORE_URL, PRODUCT_TOOLS } from "@/lib/seo";
 export default function ToolsLanding() {
   return (
     <div className="surface-grain min-h-screen text-foreground">
-      <div className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-5 sm:px-6">
-        <SiteHeader />
+      <SiteHeader />
+      <div className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-8 sm:px-6">
 
         <section className="mx-auto mt-10 max-w-3xl text-center sm:mt-14">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">

@@ -23,8 +23,8 @@ export default function LandingShell({
 }) {
   return (
     <div className="surface-grain min-h-screen text-foreground">
-      <div className="relative mx-auto w-full max-w-5xl px-4 pb-8 pt-5 sm:px-6">
-        <SiteHeader />
+      <SiteHeader />
+      <div className="relative mx-auto w-full max-w-5xl px-4 pb-8 pt-8 sm:px-6">
 
         <section className="mx-auto mt-12 max-w-3xl text-center sm:mt-16">
           <h1 className="animate-rise font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl md:leading-[1.08]">

@@ -33,9 +33,7 @@ const swatches: { hex: string; name: string }[] = [
 export default function BrandPage() {
   return (
     <div className="surface-grain min-h-screen text-[var(--ink)]">
-      <div className="relative mx-auto w-full max-w-5xl px-4 pt-5 sm:px-6">
-        <SiteHeader />
-      </div>
+      <SiteHeader />
 
       <main className="relative mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-[var(--brand)]">Brand system</p>

@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 export default function LibraryPage() {
   return (
     <div className="surface-grain min-h-screen text-foreground">
-      <div className="mx-auto w-full max-w-7xl px-4 pt-5 sm:px-6 lg:px-8">
-        <SiteHeader />
-      </div>
+      <SiteHeader />
 
       <main>
         <LibraryView />

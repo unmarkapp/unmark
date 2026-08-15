@@ -18,40 +18,41 @@ export default function SiteHeader() {
   };
 
   return (
-    <header className="relative z-40 mx-auto flex w-full max-w-5xl items-center justify-between gap-4 border-b border-border/80 pb-4">
-      <Link href="/" className="flex items-center gap-2.5">
-        <BrandLogo size={34} />
-        <span className="font-display text-xl font-semibold tracking-tight text-foreground">
-          Unmark
-        </span>
-      </Link>
+    <header className="sticky top-0 z-40 border-b-2 border-ink bg-background">
+      <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-3 sm:px-6">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5">
+          <BrandLogo size={34} />
+          <span className="font-display text-xl font-semibold tracking-tight text-foreground">
+            Unmark
+          </span>
+        </Link>
 
-      <nav className="hidden items-center gap-6 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted md:flex">
-        <Link href="/#get-started" className="transition hover:text-foreground">
-          Get started
-        </Link>
-        <Link href="/#how" className="transition hover:text-foreground">
-          How it works
-        </Link>
-        <Link href="/tools" className="transition hover:text-foreground">
-          Tools
-        </Link>
-        <Link href="/extension" className="transition hover:text-foreground">
-          Extension
-        </Link>
-        {!loading && user ? (
-          <>
-            <Link href="/library" className="transition hover:text-foreground">
-              Library
-            </Link>
-            <Link href="/account" className="transition hover:text-foreground">
-              Credits
-            </Link>
-          </>
-        ) : null}
-      </nav>
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted lg:flex">
+          <Link href="/#get-started" className="transition hover:text-foreground">
+            Get started
+          </Link>
+          <Link href="/#how" className="transition hover:text-foreground">
+            How it works
+          </Link>
+          <Link href="/tools" className="transition hover:text-foreground">
+            Tools
+          </Link>
+          <Link href="/extension" className="transition hover:text-foreground">
+            Extension
+          </Link>
+          {!loading && user ? (
+            <>
+              <Link href="/library" className="transition hover:text-foreground">
+                Library
+              </Link>
+              <Link href="/account" className="transition hover:text-foreground">
+                Credits
+              </Link>
+            </>
+          ) : null}
+        </nav>
 
-      <div className="flex items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
         <ThemeToggle />
         {!loading && user ? (
           <>
@@ -94,6 +95,7 @@ export default function SiteHeader() {
             Sign in
           </button>
         )}
+      </div>
       </div>
     </header>
   );

@@ -123,8 +123,8 @@ body {
     radial-gradient(circle at 102% -2%, var(--grain-a), transparent 32%),
     radial-gradient(circle at 2% 104%, var(--grain-c), transparent 28%),
     linear-gradient(var(--grain-b), var(--grain-b));
-  background-size: auto, auto, 22vw 12vh;
-  background-position: 0 0, 0 0, -4% 8%;
+  background-size: auto, auto, 18vw 9vh;
+  background-position: 0 0, 0 0, -6% 6.75rem;
   background-repeat: no-repeat;
 }
 
@@ -140,6 +140,10 @@ body {
 .surface-grain > * {
   position: relative;
   z-index: 1;
+}
+
+.surface-grain > header {
+  z-index: 40;
 }
 
 .unmark-glass {
