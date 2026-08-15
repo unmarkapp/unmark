@@ -25,14 +25,14 @@ export default function LandingUpload({
 
   return (
     <LandingShell>
-      <div className="mb-4 grid grid-cols-2 border border-border bg-surface p-1">
+      <div className="unmark-glass mb-4 grid grid-cols-2 p-1">
         <button
           type="button"
           onClick={() => setMode("clean")}
-          className={`px-3 py-2 text-sm font-semibold transition ${
+          className={`px-3 py-3 text-sm font-semibold uppercase tracking-[0.12em] transition ${
             mode === "clean"
-              ? "bg-cream text-foreground"
-              : "text-muted hover:text-foreground"
+              ? "bg-ink text-white"
+              : "text-foreground hover:bg-cream"
           }`}
         >
           Clean
@@ -40,10 +40,10 @@ export default function LandingUpload({
         <button
           type="button"
           onClick={() => setMode("create")}
-          className={`px-3 py-2 text-sm font-semibold transition ${
+          className={`px-3 py-3 text-sm font-semibold uppercase tracking-[0.12em] transition ${
             mode === "create"
-              ? "bg-cream text-foreground"
-              : "text-muted hover:text-foreground"
+              ? "bg-brand text-white"
+              : "text-foreground hover:bg-cream"
           }`}
         >
           Create
@@ -69,14 +69,12 @@ export default function LandingUpload({
                 inputRef.current?.click();
               }
             }}
-            className={`group relative flex min-h-[280px] cursor-pointer flex-col items-center justify-center overflow-hidden border-2 border-dashed px-6 py-14 text-center transition duration-300 ${
-              isDragging
-                ? "border-brand bg-cream"
-                : "border-border bg-surface/80 hover:border-brand hover:bg-cream/70"
+            className={`group relative flex min-h-[280px] cursor-pointer flex-col items-center justify-center overflow-hidden border-2 border-dashed border-ink bg-surface px-6 py-14 text-center transition duration-300 ${
+              isDragging ? "bg-peach/30" : "hover:bg-cream"
             }`}
           >
             <div
-              className={`mb-6 flex h-16 w-16 items-center justify-center border border-brand-line bg-cream text-brand transition duration-500 ${
+              className={`mb-6 flex h-16 w-16 items-center justify-center bg-cobalt text-white transition duration-500 ${
                 isDragging ? "animate-soft-pulse" : "group-hover:scale-105"
               }`}
             >
@@ -124,7 +122,7 @@ export default function LandingUpload({
             type="button"
             onClick={onTrySample}
             disabled={sampleBusy}
-            className="mt-4 w-full border border-brand-line bg-cream px-4 py-3 text-sm font-semibold text-brand transition hover:bg-cream/80 disabled:opacity-60"
+            className="btn-play mt-4 inline-flex w-full items-center justify-center gap-2.5 border-2 border-ink bg-peach px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition hover:brightness-95 disabled:opacity-60"
           >
             {sampleBusy ? "Loading sample…" : "Try a sample"}
           </button>

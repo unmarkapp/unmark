@@ -88,6 +88,9 @@ export default function SiteFooter() {
                 <Link href="/account" className="transition hover:text-brand">
                   Credits
                 </Link>
+                <Link href="/support" className="transition hover:text-brand">
+                  Contact support
+                </Link>
                 <Link href="/privacy" className="transition hover:text-brand">
                   Privacy
                 </Link>

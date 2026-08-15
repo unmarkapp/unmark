@@ -21,12 +21,16 @@ import {
   submitBackgroundRemoval,
 } from "@/lib/bg-remove";
 import { shareUrlForJob } from "@/lib/canva";
+import { useDropToClean } from "@/lib/dropToClean";
 
 type ViewMode = "cutout" | "original" | "compare";
 
 export default function BackgroundRemovalTool() {
   const { user, loading: authLoading, loginWithGoogle } = useAuth();
+  const { pendingBgId, consumePendingBgFile } = useDropToClean();
   const inputRef = useRef<HTMLInputElement>(null);
+  const heldFile = useRef<File | null>(null);
+  const [hasHeldShare, setHasHeldShare] = useState(false);
   const [dragging, setDragging] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -124,6 +128,26 @@ export default function BackgroundRemovalTool() {
     return () => document.removeEventListener("paste", onPaste);
   }, [processFile, user]);
 
+  useEffect(() => {
+    if (pendingBgId === 0 || authLoading) return;
+    const file = consumePendingBgFile();
+    if (!file) return;
+    if (user) {
+      void processFile(file);
+      return;
+    }
+    heldFile.current = file;
+    setHasHeldShare(true);
+  }, [pendingBgId, consumePendingBgFile, authLoading, user, processFile]);
+
+  useEffect(() => {
+    if (!user || !heldFile.current) return;
+    const file = heldFile.current;
+    heldFile.current = null;
+    setHasHeldShare(false);
+    void processFile(file);
+  }, [user, processFile]);
+
   const download = () => {
     if (!cutoutBlob || !cutoutUrl) return;
     const a = document.createElement("a");
@@ -174,7 +198,9 @@ export default function BackgroundRemovalTool() {
         {!user && !authLoading ? (
           <div className="mx-auto mt-10 max-w-md text-center">
             <p className="text-sm text-muted">
-              Sign in so your cutout can be processed and saved to Library.
+              {hasHeldShare
+                ? "Image is ready. Sign in so Unmark can remove the background and save it to Library."
+                : "Sign in so your cutout can be processed and saved to Library."}
             </p>
             <button
               type="button"
@@ -207,13 +233,11 @@ export default function BackgroundRemovalTool() {
                 setDragging(false);
               }}
               onDrop={onDrop}
-              className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center border-2 border-dashed px-6 py-12 text-center transition ${
-                dragging
-                  ? "border-brand bg-cream"
-                  : "border-border bg-surface/80 hover:border-brand hover:bg-cream/70"
+              className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-ink bg-surface px-6 py-12 text-center transition ${
+                dragging ? "bg-peach/30" : "hover:bg-cream"
               }`}
             >
-              <div className="mb-5 flex h-14 w-14 items-center justify-center border border-brand-line bg-cream text-brand">
+              <div className="mb-5 flex h-14 w-14 items-center justify-center bg-cobalt text-white">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path
                     d="M12 16V6M12 6l-4 4M12 6l4 4"

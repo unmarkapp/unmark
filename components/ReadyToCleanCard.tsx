@@ -117,7 +117,7 @@ export default function ReadyToCleanCard({
 
   if (processing && !resultUrl) {
     return (
-      <div className="border border-border bg-surface p-4 sm:p-5">
+      <div className="unmark-glass p-4 sm:p-5">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
           <div className="relative mx-auto w-full max-w-[240px] shrink-0 overflow-hidden bg-ink sm:mx-0">
             <img
@@ -130,8 +130,8 @@ export default function ReadyToCleanCard({
             <div className="watermark-scan-line" />
 
             <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-center px-3">
-              <div className="inline-flex items-center gap-2 rounded-full bg-black/70 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-sm">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-[#f59e0b]" />
+              <div className="inline-flex items-center gap-2 border-2 border-ink bg-ink px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-white">
+                <span className="h-2 w-2 bg-peach" />
                 {engine === "instant"
                   ? "Cleaning in your browser..."
                   : "Saving to your Library..."}
@@ -168,7 +168,7 @@ export default function ReadyToCleanCard({
   }
 
   return (
-    <div className="border border-border bg-surface p-4 sm:p-5">
+      <div className="unmark-glass p-4 sm:p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <div className="font-display text-sm font-semibold tracking-wide text-brand">
@@ -194,7 +194,7 @@ export default function ReadyToCleanCard({
           type="button"
           onClick={onReset}
           disabled={processing}
-          className="flex h-9 w-9 shrink-0 items-center justify-center border border-border bg-white text-foreground transition hover:bg-cream disabled:opacity-40"
+          className="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-ink bg-surface text-foreground transition hover:bg-cream disabled:opacity-40"
           aria-label="Change image"
           title="Change image"
         >
@@ -226,7 +226,7 @@ export default function ReadyToCleanCard({
         <div className="mb-4 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div
-              className="inline-flex border border-border bg-white p-0.5"
+              className="inline-flex border-2 border-ink bg-surface p-0.5"
               role="group"
               aria-label="Detection mode"
             >
@@ -234,10 +234,10 @@ export default function ReadyToCleanCard({
                 type="button"
                 onClick={() => onDetectModeChange("auto")}
                 disabled={processing}
-                className={`px-3 py-1.5 text-xs font-semibold transition ${
+                className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
                   detectMode === "auto"
                     ? "bg-brand text-white"
-                    : "text-muted hover:text-foreground"
+                    : "text-foreground hover:bg-cream"
                 }`}
               >
                 Auto (Gemini)
@@ -246,10 +246,10 @@ export default function ReadyToCleanCard({
                 type="button"
                 onClick={() => onDetectModeChange("manual")}
                 disabled={processing}
-                className={`px-3 py-1.5 text-xs font-semibold transition ${
+                className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
                   detectMode === "manual"
-                    ? "bg-brand text-white"
-                    : "text-muted hover:text-foreground"
+                    ? "bg-white text-ink"
+                    : "text-foreground hover:bg-cream"
                 }`}
               >
                 Manual
@@ -266,7 +266,7 @@ export default function ReadyToCleanCard({
           {detectMode === "auto" ? (
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div
-                className="inline-flex border border-border bg-white p-0.5"
+                className="inline-flex border-2 border-ink bg-surface p-0.5"
                 role="group"
                 aria-label="Processing mode"
               >
@@ -274,10 +274,10 @@ export default function ReadyToCleanCard({
                   type="button"
                   onClick={() => onEngineChange("instant")}
                   disabled={processing}
-                  className={`px-3 py-1.5 text-xs font-semibold transition ${
+                  className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
                     engine === "instant"
                       ? "bg-ink text-white"
-                      : "text-muted hover:text-foreground"
+                      : "text-foreground hover:bg-cream"
                   }`}
                 >
                   Instant
@@ -286,10 +286,10 @@ export default function ReadyToCleanCard({
                   type="button"
                   onClick={() => onEngineChange("cloud")}
                   disabled={processing}
-                  className={`px-3 py-1.5 text-xs font-semibold transition ${
+                  className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
                     engine === "cloud"
-                      ? "bg-ink text-white"
-                      : "text-muted hover:text-foreground"
+                      ? "bg-cobalt text-white"
+                      : "text-foreground hover:bg-cream"
                   }`}
                 >
                   Cloud
@@ -306,7 +306,7 @@ export default function ReadyToCleanCard({
         </div>
       )}
 
-      <div className="overflow-hidden border border-border bg-[#0b0b0f]">
+      <div className="overflow-hidden border-2 border-ink bg-cream">
         {resultUrl ? (
           <img
             src={resultUrl}
@@ -343,7 +343,7 @@ export default function ReadyToCleanCard({
               processing || !canSubmit || blockedByAuth || blockedByCredits
             }
             onClick={onRemove}
-            className="inline-flex w-full items-center justify-center gap-2 bg-brand px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            className="btn-play inline-flex w-full items-center justify-center gap-2 border-2 border-ink bg-cobalt px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {blockedByAuth
               ? "Sign in for Cloud"
@@ -362,7 +362,7 @@ export default function ReadyToCleanCard({
                 onDownloadComplete?.();
               });
             }}
-            className="inline-flex w-full items-center justify-center gap-2 bg-brand px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 border-2 border-ink bg-brand px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover sm:w-auto"
           >
             Download cleaned image
             <span aria-hidden>↓</span>

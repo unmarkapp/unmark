@@ -46,7 +46,7 @@ export default function LandingSeoContent() {
         {FORMATS.map((group) => (
           <div
             key={group.kind}
-            className="rounded-2xl border border-border bg-surface/60 px-5 py-6"
+            className="rounded-[2px] border-2 border-ink bg-surface/90 px-5 py-6"
           >
             <h3 className="text-sm font-semibold uppercase tracking-wide text-brand">
               {group.kind} formats

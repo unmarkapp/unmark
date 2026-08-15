@@ -20,7 +20,7 @@ export default function ClosingCta() {
         <h2 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl">
           Your media.
         </h2>
-        <p className="mt-2 bg-gradient-to-r from-brand to-brand-hover bg-clip-text font-display text-4xl font-semibold tracking-tight text-transparent sm:text-5xl md:text-6xl">
+        <p className="mt-2 inline-block bg-peach px-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl md:text-6xl">
           Clean and ready.
         </p>
 
@@ -33,16 +33,13 @@ export default function ClosingCta() {
           <button
             type="button"
             onClick={scrollToUpload}
-            className="inline-flex items-center justify-center bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
+            className="btn-play inline-flex items-center justify-center gap-2 border-2 border-ink bg-brand px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
           >
             Try Instant free
-            <span aria-hidden className="ml-2">
-              →
-            </span>
           </button>
           <a
             href="/tools/background-removal"
-            className="inline-flex items-center justify-center border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition hover:border-brand"
+            className="inline-flex items-center justify-center border-2 border-ink bg-surface px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
           >
             Background cutout
           </a>

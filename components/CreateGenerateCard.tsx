@@ -6,7 +6,7 @@ export default function CreateGenerateCard() {
   const defaultModel = GENERATE_MODELS[0];
 
   return (
-    <div className="relative overflow-hidden border border-border bg-surface/85 p-4 sm:p-5">
+    <div className="unmark-glass relative overflow-hidden p-4 sm:p-5">
       <div
         className="pointer-events-none select-none opacity-55"
         aria-hidden
@@ -56,8 +56,8 @@ export default function CreateGenerateCard() {
               key={ratio}
               className={`border px-2.5 py-1.5 text-[13px] font-medium ${
                 index === 0
-                  ? "border-brand bg-cream text-brand"
-                  : "border-border bg-surface text-foreground"
+                  ? "border-ink bg-brand text-white"
+                  : "border-ink bg-surface text-foreground"
               }`}
             >
               {ratio}
@@ -65,7 +65,7 @@ export default function CreateGenerateCard() {
           ))}
         </div>
 
-        <div className="mt-5 bg-brand/45 px-4 py-3.5 text-center text-[15px] font-semibold text-white">
+        <div className="btn-play mt-5 flex items-center justify-center gap-2.5 border-2 border-ink bg-brand px-4 py-3.5 text-center text-[15px] font-semibold uppercase tracking-[0.08em] text-white">
           Generate
         </div>
         <p className="mt-2.5 text-center text-xs text-muted">
@@ -77,7 +77,7 @@ export default function CreateGenerateCard() {
 
       {!GENERATE_WEB_ENABLED ? (
         <div className="absolute inset-0 flex items-center justify-center bg-surface/70 backdrop-blur-[1px]">
-          <div className="mx-6 max-w-sm border border-brand-line bg-cream px-5 py-4 text-center">
+          <div className="unmark-glass mx-6 max-w-sm px-5 py-4 text-center">
             <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand">
               Coming soon
             </p>

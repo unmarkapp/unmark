@@ -393,13 +393,13 @@ export default function LibraryView() {
         </div>
 
         {pendingCount > 0 && (
-          <div className="mt-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground">
+          <div className="mt-6 border-2 border-ink bg-surface px-4 py-3 text-sm text-foreground">
             {pendingBannerMessage()}
           </div>
         )}
 
         {libraryFull && (
-          <div className="mt-6 rounded-xl border border-border bg-surface px-4 py-3 text-sm text-foreground">
+          <div className="mt-6 border-2 border-ink bg-surface px-4 py-3 text-sm text-foreground">
             Library is full. Delete old items or{" "}
             <button
               type="button"
@@ -463,7 +463,7 @@ export default function LibraryView() {
                     <button
                       type="button"
                       onClick={() => setSelected(job)}
-                      className="group relative block w-full overflow-hidden rounded-2xl bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand/50"
+                      className="group relative block w-full overflow-hidden border-2 border-ink bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand"
                       aria-label={`Open ${label}`}
                     >
                       {thumb ? (
@@ -529,11 +529,11 @@ export default function LibraryView() {
                           Video
                         </span>
                       )}
-                      <span className="pointer-events-none absolute inset-0 rounded-2xl bg-black/0 transition group-hover:bg-black/10" />
+                      <span className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
                     </button>
                   ) : (
                     <div
-                      className={`relative flex w-full flex-col items-center justify-center gap-2 rounded-2xl bg-surface px-4 text-center ${
+                      className={`relative flex w-full flex-col items-center justify-center gap-2 border-2 border-ink bg-surface px-4 text-center ${
                         isVideo ? "aspect-[9/16]" : "aspect-[3/4]"
                       }`}
                     >

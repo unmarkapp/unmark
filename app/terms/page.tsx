@@ -109,9 +109,15 @@ export default function TermsPage() {
             <p>
               Some features require credits or paid plans. Prices and credit
               rules are shown in the product before purchase. Payments are
-              processed by third-party providers (for example Razorpay). Refunds
-              are handled according to our published refund policy at the time
-              of purchase, except where required by law.
+              processed by third-party providers (for example Stripe or
+              Razorpay). Refunds are handled according to our{" "}
+              <Link
+                href="/support#refunds"
+                className="text-brand-hover underline-offset-2 hover:underline"
+              >
+                refund policy
+              </Link>
+              , except where required by law.
             </p>
           </section>
 
@@ -195,6 +201,13 @@ export default function TermsPage() {
               >
                 pythondemo4@gmail.com
               </a>
+              , or visit{" "}
+              <Link
+                href="/support"
+                className="text-brand-hover underline-offset-2 hover:underline"
+              >
+                Contact support
+              </Link>
               .
             </p>
           </section>

@@ -25,7 +25,7 @@ export default function LandingBeforeAfter() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="inline-flex items-center gap-2 bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-cream">
+        <p className="inline-flex items-center gap-2 bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
           <span className="h-1.5 w-1.5 rounded-full bg-cream" aria-hidden />
           Before / after
         </p>

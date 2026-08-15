@@ -120,7 +120,7 @@ export default function BeforeAfterSlider({
           className="pointer-events-none absolute inset-0 z-0 opacity-40"
           style={{
             background:
-              "radial-gradient(ellipse at 20% 0%, rgba(199,123,54,0.35), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(251,240,230,0.12), transparent 50%)",
+              "radial-gradient(ellipse at 20% 0%, rgba(214,28,13,0.28), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(0,71,171,0.18), transparent 50%)",
           }}
         />
 
@@ -159,7 +159,7 @@ export default function BeforeAfterSlider({
         {!afterReady && !afterError && (
           <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-ink/55 text-sm text-cream">
             <span className="inline-flex items-center gap-2">
-              <SparkleMark fill={BRAND.copper} />
+              <SparkleMark fill={BRAND.yellow} />
               Loading cleaned image…
             </span>
           </div>
@@ -177,15 +177,14 @@ export default function BeforeAfterSlider({
           style={{ left: `${position}%` }}
         >
           <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand to-transparent" />
-          <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-cream/80 shadow-[0_0_12px_rgba(199,123,54,0.55)]" />
+          <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-ink" />
 
           <div
-            className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition ${
+            className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center border-2 border-ink transition ${
               aspectRatio ? "h-9 w-9" : "h-12 w-12"
             } ${dragging ? "scale-105" : ""}`}
             style={{
-              background: BRAND.copper,
-              boxShadow: "0 8px 24px rgba(26,26,23,0.45)",
+              background: BRAND.red,
             }}
           >
             <svg
@@ -210,24 +209,24 @@ export default function BeforeAfterSlider({
         </div>
 
         {/* Brand labels */}
-        <div className="pointer-events-none absolute left-3 top-3 z-30 inline-flex items-center gap-1.5 border border-brand/50 bg-ink/80 px-2.5 py-1 backdrop-blur-sm">
-          <SparkleMark fill={BRAND.peach} />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cream">
+        <div className="pointer-events-none absolute left-3 top-3 z-30 inline-flex items-center gap-1.5 border-2 border-ink bg-surface px-2.5 py-1">
+          <SparkleMark fill={BRAND.red} />
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
             Before
           </span>
         </div>
 
-        <div className="pointer-events-none absolute right-3 top-3 z-30 inline-flex items-center gap-1.5 border border-cream/25 bg-brand px-2.5 py-1">
+        <div className="pointer-events-none absolute right-3 top-3 z-30 inline-flex items-center gap-1.5 border-2 border-ink bg-cobalt px-2.5 py-1">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
             <path
               d="M2.5 6.2l2.2 2.2 4.8-4.8"
-              stroke={BRAND.cream}
+              stroke="#FFFFFF"
               strokeWidth="1.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-cream">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
             After
           </span>
         </div>

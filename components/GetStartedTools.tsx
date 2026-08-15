@@ -11,7 +11,7 @@ export default function GetStartedTools() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="text-sm font-medium text-brand">Get started</p>
+        <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Get started</p>
         <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
           Ready to use Unmark
         </h2>
@@ -28,9 +28,9 @@ export default function GetStartedTools() {
           const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
           const external = isExtension;
           const className =
-            "group flex h-full flex-col border border-border bg-surface/80 p-5 text-left transition hover:border-brand hover:bg-cream/50";
+            "group flex h-full flex-col border-2 border-ink bg-surface p-5 text-left transition hover:bg-cream";
           const lockedClassName =
-            "flex h-full flex-col border border-border bg-surface/80 p-5 text-left";
+            "flex h-full flex-col border-2 border-ink bg-surface p-5 text-left";
 
           const body = (
             <>

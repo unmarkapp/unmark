@@ -14,10 +14,20 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { useToast } from "@/components/Toast";
 import { isFileDrag, mediaFilesFromList } from "@/lib/mediaFiles";
+import { writeIncomingShare } from "@/lib/shareInbox";
+
+interface LaunchParams {
+  files?: FileSystemFileHandle[];
+}
 
 interface DropToCleanContextValue {
   pendingId: number;
   consumePendingFiles: () => File[] | null;
+  pendingBgId: number;
+  consumePendingBgFile: () => File | null;
+  incomingId: number;
+  offerCleanFiles: (files: File[]) => void;
+  offerBgFile: (file: File) => void;
   isDragging: boolean;
 }
 
@@ -29,7 +39,10 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
   const [pendingId, setPendingId] = useState(0);
+  const [pendingBgId, setPendingBgId] = useState(0);
+  const [incomingId, setIncomingId] = useState(0);
   const pendingFiles = useRef<File[] | null>(null);
+  const pendingBgFile = useRef<File | null>(null);
   const dragDepth = useRef(0);
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
@@ -40,7 +53,13 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
     return files && files.length > 0 ? files : null;
   }, []);
 
-  const offerFiles = useCallback(
+  const consumePendingBgFile = useCallback(() => {
+    const file = pendingBgFile.current;
+    pendingBgFile.current = null;
+    return file;
+  }, []);
+
+  const offerCleanFiles = useCallback(
     (files: File[]) => {
       pendingFiles.current = files;
       setPendingId((id) => id + 1);
@@ -55,6 +74,19 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
     },
     [router],
   );
+
+  const offerBgFile = useCallback(
+    (file: File) => {
+      pendingBgFile.current = file;
+      setPendingBgId((id) => id + 1);
+      if (pathnameRef.current !== "/tools/background-removal") {
+        router.push("/tools/background-removal");
+      }
+    },
+    [router],
+  );
+
+  const offerFiles = offerCleanFiles;
 
   useEffect(() => {
     const onDragEnter = (event: DragEvent) => {
@@ -114,9 +146,59 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
     };
   }, [offerFiles, toast]);
 
+  useEffect(() => {
+    const launchQueue = (
+      window as Window & {
+        launchQueue?: {
+          setConsumer: (
+            callback: (params: LaunchParams) => void | Promise<void>,
+          ) => void;
+        };
+      }
+    ).launchQueue;
+    if (!launchQueue) return;
+
+    launchQueue.setConsumer(async (params) => {
+      const handles = params.files ?? [];
+      if (handles.length === 0) return;
+      const opened: File[] = [];
+      for (const handle of handles) {
+        opened.push(await handle.getFile());
+      }
+      const media = mediaFilesFromList(opened, 10);
+      if (media.length === 0) {
+        toast("Open an image or video with Unmark.", "error");
+        return;
+      }
+      await writeIncomingShare(media);
+      setIncomingId((id) => id + 1);
+      if (pathnameRef.current !== "/share") {
+        router.push("/share");
+      }
+    });
+  }, [router, toast]);
+
   const value = useMemo(
-    () => ({ pendingId, consumePendingFiles, isDragging }),
-    [pendingId, consumePendingFiles, isDragging],
+    () => ({
+      pendingId,
+      consumePendingFiles,
+      pendingBgId,
+      consumePendingBgFile,
+      incomingId,
+      offerCleanFiles,
+      offerBgFile,
+      isDragging,
+    }),
+    [
+      pendingId,
+      consumePendingFiles,
+      pendingBgId,
+      consumePendingBgFile,
+      incomingId,
+      offerCleanFiles,
+      offerBgFile,
+      isDragging,
+    ],
   );
 
   return (
@@ -127,7 +209,7 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
           className="pointer-events-none fixed inset-0 z-[90] flex items-center justify-center bg-background/80 px-6 backdrop-blur-[2px]"
           aria-hidden
         >
-          <div className="max-w-md border-2 border-dashed border-brand bg-cream px-8 py-10 text-center">
+          <div className="max-w-md border-2 border-dashed border-ink bg-surface px-8 py-10 text-center">
             <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand">
               Drop to Clean
             </p>

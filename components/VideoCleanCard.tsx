@@ -160,7 +160,7 @@ export default function VideoCleanCard({
                   `${fileName.replace(/\.[^.]+$/, "") || "cleaned"}-cleaned.mp4`,
                 )
               }
-              className="inline-flex h-11 items-center justify-center bg-brand px-5 text-sm font-semibold text-brand-soft transition hover:brightness-95"
+              className="inline-flex h-11 items-center justify-center border-2 border-ink bg-cobalt px-5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:brightness-110"
             >
               Download MP4
             </button>
@@ -169,7 +169,7 @@ export default function VideoCleanCard({
               type="button"
               onClick={onRemove}
               disabled={blockedByAuth || blockedByCredits}
-              className="inline-flex h-11 items-center justify-center bg-brand px-5 text-sm font-semibold text-brand-soft transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center border-2 border-ink bg-brand px-5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {blockedByAuth
                 ? "Sign in to clean video"

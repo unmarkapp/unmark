@@ -1,16 +1,19 @@
 /** Unmark brand marks — four-point sparkle motif from the brand sheet. */
 
 export const BRAND = {
-  ink: "#1A1A17",
-  copper: "#C77B36",
-  peach: "#E8A05C",
-  cream: "#FBF0E6",
-  sand: "#F2EEE5",
+  ink: "#111111",
+  copper: "#D61C0D",
+  peach: "#FFCC00",
+  cream: "#FAF6EC",
+  sand: "#F4F0E6",
+  red: "#D61C0D",
+  blue: "#0047AB",
+  yellow: "#FFCC00",
 } as const;
 
 /** Classic 4-point sparkle path centered on (0, 0). */
 export const SPARKLE_PATH =
-  "M0 -9.2 C 0.42 -2.5 2.5 -0.42 9.2 0 C 2.5 0.42 0.42 2.5 0 9.2 C -0.42 2.5 -2.5 0.42 -9.2 0 C -2.5 -0.42 -0.42 -2.5 0 -9.2 Z";
+  "M0 -9.2 L 2.1 -2.1 L 9.2 0 L 2.1 2.1 L 0 9.2 L -2.1 2.1 L -9.2 0 L -2.1 -2.1 Z";
 
 /** Legacy 24×24 sparkle (center at 12,12) — prefer SPARKLE_PATH + translate. */
 export const SPARKLE_PATH_24 =
@@ -26,7 +29,7 @@ export const LOGO_THEMES: {
   {
     id: "knockout",
     name: "Knockout",
-    blurb: "Primary mark — copper tile, white sparkle cutout.",
+    blurb: "Primary mark — red tile, white sparkle cutout.",
   },
   {
     id: "fade",
@@ -79,10 +82,10 @@ export function LogoKnockout({
       className={className}
       aria-hidden
     >
-      <rect width="64" height="64" rx="14" fill={BRAND.copper} />
+      <rect width="64" height="64" fill={BRAND.red} />
       <path
         d={SPARKLE_PATH}
-        fill={BRAND.cream}
+        fill="#FFFFFF"
         transform="translate(32 32) scale(2.1)"
       />
     </svg>
@@ -96,7 +99,7 @@ export function LogoFadeOut({
   size?: number;
   className?: string;
 }) {
-  const fills = [BRAND.ink, "#5C4030", BRAND.copper, BRAND.peach];
+  const fills = [BRAND.ink, BRAND.blue, BRAND.red, BRAND.yellow];
   const opacities = [1, 0.85, 0.65, 0.4];
   return (
     <svg

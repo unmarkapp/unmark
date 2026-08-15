@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Fraunces, Geist_Mono } from "next/font/google";
+import { Figtree, Geist_Mono } from "next/font/google";
 import { AuthProvider } from "@/lib/auth";
 import { CreditsProvider } from "@/lib/credits";
 import {
@@ -14,15 +14,11 @@ import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { ToastProvider } from "@/components/Toast";
 import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
+import PwaRegister from "@/components/PwaRegister";
 import "./globals.css";
 
 const figtree = Figtree({
   variable: "--font-figtree",
-  subsets: ["latin"],
-});
-
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
   subsets: ["latin"],
 });
 
@@ -75,6 +71,11 @@ export const metadata: Metadata = {
     email: false,
     address: false,
     telephone: false,
+  },
+  appleWebApp: {
+    capable: true,
+    title: SITE_NAME,
+    statusBarStyle: "default",
   },
 };
 
@@ -152,7 +153,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${figtree.variable} ${fraunces.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${figtree.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
@@ -167,6 +168,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <CreditsProvider>
               <ReferralCapture />
               <ToastProvider>
+                <PwaRegister />
                 <DropToCleanProvider>{children}</DropToCleanProvider>
               </ToastProvider>
             </CreditsProvider>

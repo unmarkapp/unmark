@@ -190,6 +190,13 @@ export default function PrivacyPage() {
               >
                 pythondemo4@gmail.com
               </a>
+              . For billing or refunds, see{" "}
+              <Link
+                href="/support"
+                className="text-brand-hover underline-offset-2 hover:underline"
+              >
+                Contact support
+              </Link>
               .
             </p>
           </section>

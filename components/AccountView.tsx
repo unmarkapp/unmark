@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
 import {
@@ -311,10 +312,10 @@ export default function AccountView() {
             <img
               src={user.picture}
               alt={displayName}
-              className="h-16 w-16 rounded-full object-cover "
+              className="h-16 w-16 object-cover border-2 border-ink"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#fcd34d] to-brand text-lg font-bold text-white ">
+            <div className="flex h-16 w-16 items-center justify-center bg-cobalt text-lg font-bold text-white border-2 border-ink">
               {initials}
             </div>
           )}
@@ -554,7 +555,14 @@ export default function AccountView() {
                 Secure checkout powered by Razorpay. Credits are added after
                 payment succeeds. One pack funds Clean and Create. Create is
                 pay-as-you-go — cheaper than Gemini Ultra, no app sparkle.
-                Daily free credits are for Clean only.
+                Daily free credits are for Clean only.{" "}
+                <Link
+                  href="/support"
+                  className="font-medium text-brand hover:underline"
+                >
+                  Billing help and refunds
+                </Link>
+                .
               </p>
 
               <div className="mt-5 space-y-3">
@@ -707,7 +715,7 @@ function PackOption({
           type="button"
           onClick={onBuy}
           disabled={disabled}
-          className="bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="bg-brand border-2 border-ink px-4 py-2 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {busy ? "Redirecting…" : "Buy"}
         </button>

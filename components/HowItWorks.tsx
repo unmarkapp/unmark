@@ -35,7 +35,15 @@ export default function HowItWorks() {
       <ol className="mt-14 grid gap-8 sm:grid-cols-3 sm:gap-6">
         {steps.map((step) => (
           <li key={step.num} className="text-center sm:text-left">
-            <div className="font-display text-4xl font-semibold text-brand/80">
+            <div
+              className={`inline-flex h-12 w-12 items-center justify-center text-sm font-semibold ${
+                step.num === "01"
+                  ? "bg-cobalt text-white"
+                  : step.num === "02"
+                    ? "bg-brand text-white"
+                    : "bg-peach text-ink"
+              }`}
+            >
               {step.num}
             </div>
             <h3 className="mt-3 text-lg font-semibold text-foreground">

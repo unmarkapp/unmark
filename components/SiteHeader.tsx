@@ -26,7 +26,7 @@ export default function SiteHeader() {
         </span>
       </Link>
 
-      <nav className="hidden items-center gap-6 text-[13px] font-medium text-muted md:flex">
+      <nav className="hidden items-center gap-6 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted md:flex">
         <Link href="/#get-started" className="transition hover:text-foreground">
           Get started
         </Link>
@@ -57,7 +57,7 @@ export default function SiteHeader() {
           <>
             <Link
               href="/account"
-              className="hidden items-center gap-1.5 border border-brand-line/70 bg-cream px-2.5 py-1 text-xs font-semibold text-brand-hover sm:inline-flex"
+              className="hidden items-center gap-1.5 border-2 border-ink bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground sm:inline-flex"
             >
               {fastCredits === null ? "…" : `${fastCredits} credits`}
             </Link>
@@ -67,10 +67,10 @@ export default function SiteHeader() {
                 <img
                   src={user.picture}
                   alt={user.name}
-                  className="h-8 w-8 rounded-full object-cover ring-2 ring-brand-line/50"
+                  className="h-8 w-8 object-cover ring-2 ring-ink"
                 />
               ) : (
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-[#fbbf24] to-brand text-xs font-bold text-white">
+                <div className="flex h-8 w-8 items-center justify-center bg-cobalt text-xs font-bold text-white">
                   {(user.name || user.email || "U")[0].toUpperCase()}
                 </div>
               )}
@@ -88,7 +88,7 @@ export default function SiteHeader() {
             type="button"
             onClick={loginWithGoogle}
             disabled={loading}
-            className="inline-flex items-center gap-2 bg-brand px-3.5 py-2 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+            className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-3.5 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover disabled:opacity-50"
           >
             <GoogleIcon />
             Sign in

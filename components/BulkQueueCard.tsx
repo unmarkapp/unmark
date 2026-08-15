@@ -196,7 +196,7 @@ export default function BulkQueueCard({
             type="button"
             disabled={!isAuthenticated || !hasCredits || count === 0}
             onClick={onRemoveAll}
-            className="inline-flex flex-1 items-center justify-center bg-brand px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex flex-1 items-center justify-center border-2 border-ink bg-cobalt px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {!isAuthenticated
               ? "Sign in for cloud bulk"
@@ -209,7 +209,7 @@ export default function BulkQueueCard({
             type="button"
             disabled={!canZip || zipping}
             onClick={onDownloadZip}
-            className="inline-flex flex-1 items-center justify-center gap-2 bg-brand px-5 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex flex-1 items-center justify-center gap-2 border-2 border-ink bg-brand px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {zipping ? (
               <>

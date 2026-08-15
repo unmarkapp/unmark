@@ -30,7 +30,7 @@ export default function LandingShell({
           <h1 className="animate-rise font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl md:leading-[1.08]">
             Unmark
           </h1>
-          <p className="animate-rise-delay mt-3 text-sm font-medium tracking-wide text-brand sm:text-base">
+          <p className="animate-rise-delay mt-3 text-sm font-semibold uppercase tracking-[0.16em] text-brand sm:text-base">
             Gemini watermark remover · video · background cutout
           </p>
 

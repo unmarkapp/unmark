@@ -49,7 +49,7 @@ export default function ThemeToggle() {
         aria-label={`Theme: ${active.label}`}
         title="Theme"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-9 w-9 items-center justify-center border border-border bg-surface text-foreground transition hover:border-brand-line hover:text-brand"
+        className="inline-flex h-9 w-9 items-center justify-center border-2 border-ink bg-surface text-foreground transition hover:bg-cream"
       >
         <ThemeIcon name={active.icon} />
       </button>
@@ -59,7 +59,7 @@ export default function ThemeToggle() {
           id={listId}
           role="listbox"
           aria-label="Color theme"
-          className="absolute right-0 z-50 mt-2 min-w-[9.5rem] border border-border bg-surface py-1 shadow-[0_16px_40px_-20px_rgba(26,26,23,0.55)]"
+          className="absolute right-0 z-50 mt-2 min-w-[9.5rem] border-2 border-ink bg-surface py-1"
         >
           {OPTIONS.map((option) => {
             const selected = option.value === preference;

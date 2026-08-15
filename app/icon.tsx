@@ -3,7 +3,6 @@ import { ImageResponse } from "next/og";
 export const size = { width: 512, height: 512 };
 export const contentType = "image/png";
 
-/** Knockout mark: copper tile, white sparkle cutout. */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -14,8 +13,7 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#C77B36",
-          borderRadius: 96,
+          background: "#D61C0D",
         }}
       >
         <svg
@@ -25,8 +23,8 @@ export default function Icon() {
           style={{ display: "block" }}
         >
           <path
-            d="M0 -9.2 C 0.42 -2.5 2.5 -0.42 9.2 0 C 2.5 0.42 0.42 2.5 0 9.2 C -0.42 2.5 -2.5 0.42 -9.2 0 C -2.5 -0.42 -0.42 -2.5 0 -9.2 Z"
-            fill="#FBF0E6"
+            d="M0 -9.2 L 2.1 -2.1 L 9.2 0 L 2.1 2.1 L 0 9.2 L -2.1 2.1 L -9.2 0 L -2.1 -2.1 Z"
+            fill="#FFFFFF"
           />
         </svg>
       </div>

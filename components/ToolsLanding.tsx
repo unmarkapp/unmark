@@ -29,9 +29,9 @@ export default function ToolsLanding() {
             const comingSoon = "comingSoon" in tool && tool.comingSoon;
             const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
             const className =
-              "group flex flex-col gap-2 border border-border bg-surface/90 p-5 transition hover:border-brand hover:bg-cream/60 sm:flex-row sm:items-center sm:justify-between";
+              "group flex flex-col gap-2 border-2 border-ink bg-surface p-5 transition hover:bg-cream sm:flex-row sm:items-center sm:justify-between";
             const lockedClassName =
-              "flex flex-col gap-2 border border-border bg-surface/90 p-5 sm:flex-row sm:items-center sm:justify-between";
+              "flex flex-col gap-2 border-2 border-ink bg-surface p-5 sm:flex-row sm:items-center sm:justify-between";
             const inner = (
               <>
                 <div>
