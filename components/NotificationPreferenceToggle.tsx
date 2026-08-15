@@ -4,20 +4,18 @@ type NotificationPreferenceToggleProps = {
   enabled: boolean;
   onChange: (enabled: boolean) => void;
   disabled?: boolean;
-  compact?: boolean;
 };
 
 export default function NotificationPreferenceToggle({
   enabled,
   onChange,
   disabled = false,
-  compact = false,
 }: NotificationPreferenceToggleProps) {
   return (
     <label
-      className={`flex items-center gap-3 ${
+      className={`flex items-center justify-between gap-3 ${
         disabled ? "cursor-not-allowed opacity-60" : "cursor-pointer"
-      } ${compact ? "" : "justify-between"}`}
+      }`}
     >
       <span className="text-sm text-foreground">
         Email me when videos are ready

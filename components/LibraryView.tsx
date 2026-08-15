@@ -1,12 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import CanvaPromoModal, {
   shouldShowCanvaPromo,
   type CanvaPromoContext,
 } from "@/components/CanvaPromoModal";
-import NotificationPreferenceToggle from "@/components/NotificationPreferenceToggle";
 import { useAuth } from "@/lib/auth";
 import {
   openInCanva,
@@ -68,7 +68,7 @@ function isDriveFailed(job: LibraryJob): boolean {
 
 export default function LibraryView() {
   const router = useRouter();
-  const { user, loading, updateEmailNotifications } = useAuth();
+  const { user, loading } = useAuth();
   const [jobs, setJobs] = useState<LibraryJob[]>([]);
   const [libraryUsed, setLibraryUsed] = useState(0);
   const [libraryLimit, setLibraryLimit] = useState(50);
@@ -84,7 +84,6 @@ export default function LibraryView() {
   );
   const [canvaLoading, setCanvaLoading] = useState(false);
   const [bgRemovingId, setBgRemovingId] = useState<string | null>(null);
-  const [prefSaving, setPrefSaving] = useState(false);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
   const refresh = useCallback(async (opts?: { quiet?: boolean }) => {
@@ -206,26 +205,6 @@ export default function LibraryView() {
         : "Jobs are processing in the background. This page updates automatically when they are ready.";
     }
     return "Cleaning in the background. This page updates automatically when your files are ready.";
-  };
-
-  const handleNotificationPreference = async (enabled: boolean) => {
-    setPrefSaving(true);
-    try {
-      await updateEmailNotifications(enabled);
-      setToast(
-        enabled
-          ? "Email notifications enabled"
-          : "Email notifications turned off",
-      );
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Could not update notification preference",
-      );
-    } finally {
-      setPrefSaving(false);
-    }
   };
 
   const fileLabel = (job: LibraryJob) => {
@@ -375,21 +354,13 @@ export default function LibraryView() {
                 : ""}
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <NotificationPreferenceToggle
-              enabled={emailNotifications}
-              onChange={(enabled) => void handleNotificationPreference(enabled)}
-              disabled={prefSaving}
-              compact
-            />
-            <button
-              type="button"
-              onClick={() => void refresh()}
-              className="text-sm font-medium text-muted transition hover:text-foreground"
-            >
-              Refresh
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => void refresh()}
+            className="text-sm font-medium text-muted transition hover:text-foreground"
+          >
+            Refresh
+          </button>
         </div>
 
         {pendingCount > 0 && (
@@ -598,9 +569,11 @@ export default function LibraryView() {
         </div>
       )}
 
-      {selected && jobModalMediaUrl(selected) && (
+      {selected &&
+        jobModalMediaUrl(selected) &&
+        createPortal(
         <div
-          className="fixed inset-0 z-50 flex h-dvh max-h-dvh flex-col overflow-hidden bg-[#1c1c1e]/[0.94]"
+          className="fixed inset-0 z-[100] flex h-dvh max-h-dvh flex-col overflow-hidden bg-[#1c1c1e]/[0.94]"
           role="dialog"
           aria-modal="true"
           aria-label={
@@ -764,8 +737,9 @@ export default function LibraryView() {
               </div>
             )}
           </div>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </>
   );
 }
