@@ -43,6 +43,8 @@ export default function InstantCleanEmbed() {
       const client = await getClientWatermarkEngine();
       const result = await client.processFile(file);
       setResultUrl(URL.createObjectURL(result.blob));
+      const { trackEvent } = await import("@/lib/analytics");
+      trackEvent("instant_clean", { method: "embed" });
     } catch (err) {
       setError(
         err instanceof Error

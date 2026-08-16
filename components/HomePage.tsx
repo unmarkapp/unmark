@@ -845,6 +845,8 @@ export default function Home() {
         setResultUrl(url);
         setJobStatus("completed");
         setProcessing(false);
+        const { trackEvent } = await import("@/lib/analytics");
+        trackEvent("instant_clean", { method: "home" });
         toast("Cleaned — download now, or use Cloud to save to Library.", "success");
         return;
       }

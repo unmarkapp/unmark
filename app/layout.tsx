@@ -14,6 +14,7 @@ import {
 } from "@/lib/seo";
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { ToastProvider } from "@/components/Toast";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
@@ -166,6 +167,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        <GoogleAnalytics />
         <ThemeProvider>
           <AuthProvider>
             <CreditsProvider>

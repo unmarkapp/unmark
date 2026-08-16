@@ -8,7 +8,8 @@
 # Repository variables:
 #   AZURE_RESOURCE_GROUP, ACR_NAME, AZURE_CONTAINER_APP_NAME,
 #   AZURE_CONTAINER_APP_ENV, AZURE_LOCATION,
-#   NEXT_PUBLIC_API_URL, NEXT_PUBLIC_AUTH_URL, NEXT_PUBLIC_BILLING_URL
+#   NEXT_PUBLIC_API_URL, NEXT_PUBLIC_AUTH_URL, NEXT_PUBLIC_BILLING_URL,
+#   NEXT_PUBLIC_GA_MEASUREMENT_ID
 name: Deploy frontend to Azure
 
 on:
@@ -50,9 +51,11 @@ jobs:
           api="${{ vars.NEXT_PUBLIC_API_URL }}"
           auth="${{ vars.NEXT_PUBLIC_AUTH_URL }}"
           billing="${{ vars.NEXT_PUBLIC_BILLING_URL }}"
+          ga="${{ vars.NEXT_PUBLIC_GA_MEASUREMENT_ID }}"
           echo "api=${api:-https://api.unmark.ink}" >> "$GITHUB_OUTPUT"
           echo "auth=${auth:-https://auth.unmark.ink}" >> "$GITHUB_OUTPUT"
           echo "billing=${billing:-https://billing.unmark.ink}" >> "$GITHUB_OUTPUT"
+          echo "ga=${ga:-G-PJTRM78DME}" >> "$GITHUB_OUTPUT"
 
       - name: Validate configuration
         run: |
@@ -82,6 +85,7 @@ jobs:
             NEXT_PUBLIC_API_URL=${{ steps.urls.outputs.api }}
             NEXT_PUBLIC_AUTH_URL=${{ steps.urls.outputs.auth }}
             NEXT_PUBLIC_BILLING_URL=${{ steps.urls.outputs.billing }}
+            NEXT_PUBLIC_GA_MEASUREMENT_ID=${{ steps.urls.outputs.ga }}
 
       - name: Deploy to Container App
         run: |

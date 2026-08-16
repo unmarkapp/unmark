@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const updated = "August 9, 2026";
+const updated = "August 16, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -80,6 +80,13 @@ export default function PrivacyPage() {
                 (Razorpay). We do not store full card numbers.
               </li>
               <li>
+                <strong>Analytics.</strong> We use Google Analytics 4 to
+                understand how the site is used (pages viewed, traffic source,
+                and whether Instant cleanup completed). Google may set cookies
+                and receive your IP address and device/browser details. You can
+                block this with a browser analytics opt-out or cookie controls.
+              </li>
+              <li>
                 <strong>Extension settings.</strong> Preferences such as
                 environment URLs, download options, and prompt queue text are
                 stored locally in Chrome storage on your device.
@@ -126,9 +133,19 @@ export default function PrivacyPage() {
             </h2>
             <p>
               We use infrastructure and vendors necessary to run Unmark, such as
-              cloud hosting (AWS), databases, Google (sign-in), and Razorpay
-              (payments). They process data only to provide those services to
-              us, under their own terms and safeguards.
+              cloud hosting (AWS), databases, Google (sign-in and Analytics), and
+              Razorpay (payments). They process data only to provide those
+              services to us, under their own terms and safeguards. Google
+              Analytics is described in{" "}
+              <a
+                href="https://policies.google.com/privacy"
+                className="text-brand-hover underline-offset-2 hover:underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Google’s privacy policy
+              </a>
+              .
             </p>
           </section>
 
