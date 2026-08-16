@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import BrandLogo from "@/components/BrandLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/lib/auth";
@@ -11,16 +12,20 @@ export default function SiteHeader() {
   const router = useRouter();
   const { user, loading, loginWithGoogle, logout } = useAuth();
   const { fastCredits } = useCredits();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
+    setMenuOpen(false);
     await logout();
     router.replace("/");
   };
 
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-background">
       <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-3 sm:px-6">
-        <Link href="/" className="flex shrink-0 items-center gap-2.5">
+        <Link href="/" className="flex shrink-0 items-center gap-2.5" onClick={closeMenu}>
           <BrandLogo size={34} />
           <span className="font-display text-xl font-semibold tracking-tight text-foreground">
             Unmark
@@ -28,93 +33,157 @@ export default function SiteHeader() {
         </Link>
 
         <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted lg:flex">
-          <Link href="/#get-started" className="transition hover:text-foreground">
-            Get started
-          </Link>
-          <Link href="/#how" className="transition hover:text-foreground">
-            How it works
-          </Link>
-          <Link href="/tools" className="transition hover:text-foreground">
-            Tools
-          </Link>
-          <Link href="/extension" className="transition hover:text-foreground">
-            Extension
-          </Link>
-          <Link href="/skills" className="transition hover:text-foreground">
-            Skills
-          </Link>
-          {!user && (
-            <Link href="/developers" className="transition hover:text-foreground">
-              Developers
-            </Link>
-          )}
-          <Link
-            href="/#apps"
-            className="inline-flex items-center gap-1.5 transition hover:text-foreground"
-          >
-            Apps
-            <span className="border-2 border-ink bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
-              Soon
-            </span>
-          </Link>
-          {!loading && user ? (
-            <>
-              <Link href="/library" className="transition hover:text-foreground">
-                Library
-              </Link>
-              <Link href="/account" className="transition hover:text-foreground">
-                Credits
-              </Link>
-            </>
-          ) : null}
+          <NavLinks user={user} loading={loading} />
         </nav>
 
         <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
-        <ThemeToggle />
-        {!loading && user ? (
-          <>
-            <Link
-              href="/account"
-              className="hidden items-center gap-1.5 border-2 border-ink bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground sm:inline-flex"
-            >
-              {fastCredits === null ? "…" : `${fastCredits} credits`}
-            </Link>
-            <Link href="/account" className="flex items-center gap-2">
-              {user.picture ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={user.picture}
-                  alt={user.name}
-                  className="h-8 w-8 object-cover ring-2 ring-ink"
-                />
-              ) : (
-                <div className="flex h-8 w-8 items-center justify-center bg-cobalt text-xs font-bold text-white">
-                  {(user.name || user.email || "U")[0].toUpperCase()}
-                </div>
-              )}
-            </Link>
-            <button
-              type="button"
-              onClick={() => void handleLogout()}
-              className="text-sm font-medium text-muted transition hover:text-foreground"
-            >
-              Sign out
-            </button>
-          </>
-        ) : (
+          <ThemeToggle />
           <button
             type="button"
-            onClick={loginWithGoogle}
-            disabled={loading}
-            className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-3.5 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover disabled:opacity-50"
+            className="inline-flex h-12 w-12 items-center justify-center border-2 border-ink bg-surface text-foreground lg:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((open) => !open)}
           >
-            <GoogleIcon />
-            Sign in
+            {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
-        )}
+          {!loading && user ? (
+            <>
+              <Link
+                href="/account"
+                className="hidden items-center gap-1.5 border-2 border-ink bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground sm:inline-flex"
+              >
+                {fastCredits === null ? "…" : `${fastCredits} credits`}
+              </Link>
+              <Link href="/account" className="flex items-center gap-2">
+                {user.picture ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={user.picture}
+                    alt={user.name}
+                    className="h-8 w-8 object-cover ring-2 ring-ink"
+                  />
+                ) : (
+                  <div className="flex h-8 w-8 items-center justify-center bg-cobalt text-xs font-bold text-white">
+                    {(user.name || user.email || "U")[0].toUpperCase()}
+                  </div>
+                )}
+              </Link>
+              <button
+                type="button"
+                onClick={() => void handleLogout()}
+                className="hidden text-sm font-medium text-muted transition hover:text-foreground sm:inline"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={loginWithGoogle}
+              disabled={loading}
+              className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-3.5 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover disabled:opacity-50"
+            >
+              <GoogleIcon />
+              Sign in
+            </button>
+          )}
+        </div>
       </div>
-      </div>
+
+      {menuOpen ? (
+        <nav
+          id="mobile-nav"
+          className="border-t-2 border-ink bg-background px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-muted lg:hidden sm:px-6"
+        >
+          <div className="mx-auto flex max-w-5xl flex-col gap-3">
+            <NavLinks user={user} loading={loading} onNavigate={closeMenu} />
+            {!loading && user ? (
+              <button
+                type="button"
+                onClick={() => void handleLogout()}
+                className="text-left text-sm font-medium normal-case tracking-normal text-muted"
+              >
+                Sign out
+              </button>
+            ) : null}
+          </div>
+        </nav>
+      ) : null}
     </header>
+  );
+}
+
+function NavLinks({
+  user,
+  loading,
+  onNavigate,
+}: {
+  user: ReturnType<typeof useAuth>["user"];
+  loading: boolean;
+  onNavigate?: () => void;
+}) {
+  const linkClass = "transition hover:text-foreground";
+  return (
+    <>
+      <Link href="/#get-started" className={linkClass} onClick={onNavigate}>
+        Get started
+      </Link>
+      <Link href="/#how" className={linkClass} onClick={onNavigate}>
+        How it works
+      </Link>
+      <Link href="/tools" className={linkClass} onClick={onNavigate}>
+        Tools
+      </Link>
+      <Link href="/extension" className={linkClass} onClick={onNavigate}>
+        Extension
+      </Link>
+      <Link href="/skills" className={linkClass} onClick={onNavigate}>
+        Skills
+      </Link>
+      {!user ? (
+        <Link href="/developers" className={linkClass} onClick={onNavigate}>
+          Developers
+        </Link>
+      ) : null}
+      <Link
+        href="/#apps"
+        className={`inline-flex items-center gap-1.5 ${linkClass}`}
+        onClick={onNavigate}
+      >
+        Apps
+        <span className="border-2 border-ink bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
+          Soon
+        </span>
+      </Link>
+      {!loading && user ? (
+        <>
+          <Link href="/library" className={linkClass} onClick={onNavigate}>
+            Library
+          </Link>
+          <Link href="/account" className={linkClass} onClick={onNavigate}>
+            Credits
+          </Link>
+        </>
+      ) : null}
+    </>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+      <path d="M3 4.5h12M3 9h12M3 13.5h12" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+      <path d="M4 4l10 10M14 4 4 14" stroke="currentColor" strokeWidth="1.8" />
+    </svg>
   );
 }
 

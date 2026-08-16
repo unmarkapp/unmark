@@ -23,11 +23,11 @@ const steps = [
   },
   {
     title: "Sign in to Unmark Cloud",
-    body: "Open www.unmark.ink and sign in with Google. Video watermark removal runs on Cloud credits; new accounts receive free credits to try it.",
+    body: "Open www.unmark.ink and sign in. Video cleanup uses Cloud credits; new accounts include free credits to try it.",
   },
   {
     title: "Upload and start the job",
-    body: "Drop your clip on the homepage. Unmark detects the corner sparkle and queues a server-side job that processes every frame — not just a single screenshot.",
+    body: "Drop your clip on the homepage. Unmark finds the corner sparkle and cleans every frame — not just a screenshot.",
   },
   {
     title: "Download from Library",
@@ -39,7 +39,7 @@ const faqs = [
   {
     question: "Is there a free Gemini video watermark remover?",
     answer:
-      "Instant mode is free for single images in the browser. Video requires Cloud credits because every frame is processed on our servers. New signups include free credits to test video cleanup.",
+      "Instant is free for a single image in your browser. Video uses Cloud credits. New accounts include free credits to try a clip.",
   },
   {
     question: "Which video formats are supported?",

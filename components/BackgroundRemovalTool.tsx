@@ -189,9 +189,8 @@ export default function BackgroundRemovalTool() {
             Background removal
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-            Upload a photo — we queue it on Unmark Cloud, run remove.bg-style
-            segmentation + soft-edge matting, then you download a transparent
-            PNG.
+            Upload a photo. Unmark cuts out the subject so you can download a
+            transparent PNG — portraits, products, and AI stills.
           </p>
         </section>
 
@@ -374,6 +373,35 @@ export default function BackgroundRemovalTool() {
           className="hidden"
           onChange={onFileChange}
         />
+
+        <section className="mx-auto mt-16 max-w-3xl border-t border-border/80 pt-12">
+          <h2 className="font-display text-2xl font-semibold tracking-tight">
+            What you get
+          </h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            Unmark background removal keeps the subject and drops the rest so
+            you can drop the PNG onto a new backdrop, a slide, or a product
+            listing. Sign in so the cutout can save to Library alongside your
+            cleaned Gemini stills.
+          </p>
+          <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
+            How to cut out a photo
+          </h2>
+          <ol className="mt-4 list-decimal space-y-2 pl-5 text-[15px] leading-relaxed text-muted-strong">
+            <li>Sign in on Unmark.</li>
+            <li>Drop a PNG, JPG, or WebP (up to 25 MB).</li>
+            <li>Wait for the cutout, then download the transparent PNG.</li>
+          </ol>
+          <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
+            Best files to upload
+          </h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            A single subject on a simple background works best — a person, a
+            product, or an AI still. Busy collages and tiny subjects in the
+            corner are harder. For Gemini sparkle removal, use Instant or Cloud
+            on the homepage first, then cut out the cleaned file here.
+          </p>
+        </section>
 
         <SiteFooter />
       </div>

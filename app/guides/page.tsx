@@ -51,8 +51,10 @@ export default function GuidesIndexPage() {
         </h1>
         <p className="mt-4 text-base leading-relaxed text-muted-strong sm:text-lg">
           How to remove the visible Gemini and Veo sparkle from images and
-          video — including Google Flow exports, free browser cleanup, and the
-          Unmark Chrome extension.
+          video — including Google Flow exports, free Instant cleanup in the
+          browser (no account for a single still), and the Unmark Chrome
+          extension. Each guide below is for one job: stills, video, Flow, Veo,
+          or free Instant.
         </p>
 
         <ul className="mt-12 divide-y divide-border">

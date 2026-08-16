@@ -1,0 +1,28 @@
+# Unmark
+
+> Unmark cleans AI media: remove Gemini sparkles from images and videos, or cut out the subject. Free Instant image cleanup in your browser — Cloud for video, Library, bulk, background removal, and the Chrome extension.
+
+Unmark removes the visible Gemini sparkle from AI images and videos, and cuts out backgrounds to transparent PNGs.
+
+## Product
+- Instant: free single-image cleanup in the browser, no account
+- Cloud: video, Library, bulk, background cutouts, Chrome extension
+- Site: https://www.unmark.ink
+
+## Tools
+- Homepage Instant: https://www.unmark.ink/#upload
+- Background removal: https://www.unmark.ink/tools/background-removal
+- Chrome extension: https://www.unmark.ink/extension
+- MCP for agents: https://www.unmark.ink/developers
+- Agent skill: https://www.unmark.ink/skills
+
+## Guides
+- Remove Gemini watermark from an image: https://www.unmark.ink/guides/remove-gemini-watermark
+- Gemini video watermark remover: https://www.unmark.ink/guides/remove-gemini-video-watermark
+- Google Flow watermark remover: https://www.unmark.ink/guides/google-flow-watermark-remover
+- Remove Veo watermark: https://www.unmark.ink/guides/remove-veo-watermark
+- Free Gemini watermark remover: https://www.unmark.ink/guides/free-gemini-watermark-remover
+- MCP server for Claude: https://www.unmark.ink/guides/mcp-server
+
+## Limits
+Unmark targets the visible Gemini / Veo sparkle logo. It is not a generic watermark eraser.

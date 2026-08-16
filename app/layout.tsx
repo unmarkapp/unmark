@@ -4,6 +4,8 @@ import { AuthProvider } from "@/lib/auth";
 import { CreditsProvider } from "@/lib/credits";
 import {
   FAQ_ITEMS,
+  PRODUCT_HUNT_URL,
+  CHROME_WEB_STORE_URL,
   SITE_KEYWORDS,
   SITE_NAME,
   SITE_TAGLINE,
@@ -103,8 +105,9 @@ const jsonLd = {
       url: SITE_URL,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/icon`,
+        url: `${SITE_URL}/icon.png`,
       },
+      sameAs: [PRODUCT_HUNT_URL, CHROME_WEB_STORE_URL],
     },
     {
       "@type": "SoftwareApplication",

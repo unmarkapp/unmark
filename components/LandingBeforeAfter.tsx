@@ -6,14 +6,14 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 const EXAMPLES = [
   {
     id: "gallery-1",
-    beforeUrl: "/demo/sample-1-before.jpeg",
-    afterUrl: "/demo/sample-1-after.png",
+    beforeUrl: "/demo/sample-1-before.webp",
+    afterUrl: "/demo/sample-1-after.webp",
     caption: "Portrait · sparkle removed",
   },
   {
     id: "gallery-2",
-    beforeUrl: "/demo/sample-2-before.jpeg",
-    afterUrl: "/demo/sample-2-after.png",
+    beforeUrl: "/demo/sample-2-before.webp",
+    afterUrl: "/demo/sample-2-after.webp",
     caption: "Portrait · sparkle removed",
   },
 ] as const;

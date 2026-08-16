@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 
+import InstantCleanEmbed from "@/components/InstantCleanEmbed";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { SITE_URL } from "@/lib/seo";
@@ -26,6 +27,8 @@ type GuideArticleProps = {
   howToDescription?: string;
   ctaHeading?: string;
   ctaBody?: string;
+  ctaHref?: string;
+  embedInstant?: boolean;
 };
 
 export default function GuideArticle({
@@ -38,9 +41,49 @@ export default function GuideArticle({
   howToName,
   howToDescription,
   ctaHeading = "Ready to remove a Gemini watermark?",
-  ctaBody = "Start on the homepage — Instant is free in your browser; Cloud adds Library, video, bulk, and the extension.",
+  ctaBody = "Instant is free in your browser. Cloud adds Library, video, bulk, and the extension.",
+  ctaHref = "/#upload",
+  embedInstant = false,
 }: GuideArticleProps) {
-  const jsonLd: Record<string, unknown>[] = [];
+  const jsonLd: Record<string, unknown>[] = [
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: SITE_URL,
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Guides",
+          item: `${SITE_URL}/guides`,
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: title,
+          item: `${SITE_URL}${canonicalPath}`,
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      headline: title,
+      description: howToDescription ?? title,
+      url: `${SITE_URL}${canonicalPath}`,
+      publisher: {
+        "@type": "Organization",
+        name: "Unmark",
+        url: SITE_URL,
+        logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.png` },
+      },
+    },
+  ];
 
   if (steps?.length && howToName) {
     jsonLd.push({
@@ -95,6 +138,8 @@ export default function GuideArticle({
           {intro}
         </div>
 
+        {embedInstant ? <InstantCleanEmbed /> : null}
+
         {steps?.length ? (
           <ol className="mt-12 space-y-10">
             {steps.map((step, i) => (
@@ -134,7 +179,7 @@ export default function GuideArticle({
           </p>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted">{ctaBody}</p>
           <Link
-            href="/"
+            href={ctaHref}
             className="mt-5 inline-flex rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
           >
             Open Unmark

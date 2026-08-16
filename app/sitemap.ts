@@ -5,7 +5,9 @@ import { GUIDE_LINKS, SITE_URL } from "@/lib/seo";
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  const guideEntries: MetadataRoute.Sitemap = GUIDE_LINKS.map((guide) => ({
+  const guideEntries: MetadataRoute.Sitemap = GUIDE_LINKS.filter((guide) =>
+    guide.href.startsWith("/guides"),
+  ).map((guide) => ({
     url: `${SITE_URL}${guide.href}`,
     lastModified,
     changeFrequency: "monthly" as const,
@@ -36,6 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "weekly",
       priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/tools/create`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.7,
     },
     {
       url: `${SITE_URL}/guides`,

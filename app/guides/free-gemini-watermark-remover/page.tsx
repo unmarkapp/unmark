@@ -74,7 +74,8 @@ export default function FreeGeminiWatermarkRemoverGuidePage() {
       howToName="How to remove a Gemini watermark for free"
       howToDescription="Use Unmark Instant to remove the Gemini sparkle from an image without an account."
       ctaHeading="Try the free Gemini watermark remover"
-      ctaBody="Open the homepage, pick Instant, and upload — no account required for a single image."
+      ctaBody="Use Instant on this page — no account required for a single image."
+      embedInstant
     />
   );
 }

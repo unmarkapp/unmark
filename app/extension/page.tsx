@@ -32,6 +32,10 @@ const softwareLd = {
     "@type": "Organization",
     name: SITE_NAME,
     url: SITE_URL,
+    logo: {
+      "@type": "ImageObject",
+      url: `${SITE_URL}/icon.png`,
+    },
   },
   offers: {
     "@type": "Offer",

@@ -1,19 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
-import SiteFooter from "@/components/SiteFooter";
-import SiteHeader from "@/components/SiteHeader";
-import { FAQ_ITEMS, SITE_URL } from "@/lib/seo";
+import GuideArticle from "@/components/GuideArticle";
 
 export const metadata: Metadata = {
   title: "How to Remove a Gemini Watermark from an Image",
   description:
-    "Step-by-step guide to remove the Gemini sparkle watermark from images with Unmark. Free Instant mode or Cloud for Library, bulk, and 16:9 / 9:16 exports.",
+    "Remove the Gemini sparkle from an image in your browser. Instant is free — no account. Drop a Gemini export and download a clean PNG or JPG.",
   alternates: { canonical: "/guides/remove-gemini-watermark" },
   openGraph: {
     title: "How to Remove a Gemini Watermark · Unmark",
     description:
-      "Step-by-step guide to remove the Gemini sparkle watermark from images.",
+      "Free Instant cleanup for Gemini sparkle stills — no sign-in for a single image.",
     url: "/guides/remove-gemini-watermark",
     type: "article",
   },
@@ -22,131 +19,61 @@ export const metadata: Metadata = {
 const steps = [
   {
     title: "Export from Gemini",
-    body: "Download the image Gemini generated. Prefer PNG or high-quality JPG at 16:9 or 9:16 — the layouts Unmark is tuned for.",
+    body: "Download the image Gemini generated. PNG or high-quality JPG works best.",
   },
   {
-    title: "Open Unmark",
-    body: "Go to www.unmark.ink and sign in with Google. New accounts get free credits so you can try Gemini watermark removal right away.",
+    title: "Drop it on Instant",
+    body: "Use the box on this page, or open unmark.ink and stay on Instant. No Google sign-in for a single still.",
   },
   {
-    title: "Upload and detect",
-    body: "Drop the file. Use Auto to find the corner sparkle, or Manual if you need to draw the box yourself.",
+    title: "Let Auto find the sparkle",
+    body: "Unmark looks for the corner Gemini sparkle. Switch to Cloud later if you want the file saved in Library.",
   },
   {
     title: "Download the clean file",
-    body: "Process the job and download. Unmark keeps original resolution — no forced downscale.",
+    body: "Download at original resolution. Sign in only if you need video, bulk, or the Chrome extension.",
   },
 ] as const;
 
-const howToLd = {
-  "@context": "https://schema.org",
-  "@type": "HowTo",
-  name: "How to remove a Gemini watermark from an image",
-  description:
-    "Remove the Google Gemini sparkle watermark using Unmark in four steps.",
-  totalTime: "PT2M",
-  step: steps.map((step, i) => ({
-    "@type": "HowToStep",
-    position: i + 1,
-    name: step.title,
-    text: step.body,
-    url: `${SITE_URL}/guides/remove-gemini-watermark#step-${i + 1}`,
-  })),
-};
-
-const faqLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: FAQ_ITEMS.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
-    },
-  })),
-};
+const faqs = [
+  {
+    question: "Do I need an account to remove a Gemini watermark from an image?",
+    answer:
+      "No. Instant cleans one still in your browser with no sign-in. Create an account when you want Library, video, bulk, or the extension.",
+  },
+  {
+    question: "What files does Instant accept?",
+    answer:
+      "PNG, JPG, and WebP exports from Gemini, Imagen, and Nano Banana. Video clips need Cloud on the homepage.",
+  },
+  {
+    question: "Will this remove every watermark?",
+    answer:
+      "Unmark is built for the visible Gemini sparkle in the corner — not logos, captions, or marks from other tools.",
+  },
+] as const;
 
 export default function RemoveGeminiWatermarkGuidePage() {
   return (
-    <div className="surface-grain min-h-screen text-foreground">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-      />
-
-      <SiteHeader />
-
-      <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
-        <p className="text-sm font-medium text-brand">Guide</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
-          How to remove a Gemini watermark
-        </h1>
-        <p className="mt-4 text-base leading-relaxed text-muted-strong sm:text-lg">
+    <GuideArticle
+      canonicalPath="/guides/remove-gemini-watermark"
+      title="How to remove a Gemini watermark"
+      intro={
+        <>
           Gemini adds a small sparkle stamp to many AI images. Unmark is a{" "}
           <strong className="font-semibold text-foreground">
             Gemini watermark remover
           </strong>{" "}
-          built for that corner mark — upload, detect, download.
-        </p>
-
-        <ol className="mt-12 space-y-10">
-          {steps.map((step, i) => (
-            <li
-              key={step.title}
-              id={`step-${i + 1}`}
-              className="scroll-mt-24"
-            >
-              <p className="font-display text-3xl font-semibold text-brand/80">
-                {String(i + 1).padStart(2, "0")}
-              </p>
-              <h2 className="mt-2 text-xl font-semibold tracking-tight">
-                {step.title}
-              </h2>
-              <p className="mt-2 text-[15px] leading-relaxed text-muted-strong">
-                {step.body}
-              </p>
-            </li>
-          ))}
-        </ol>
-
-        <div className="mt-14 rounded-2xl border border-border bg-cream/50 px-6 py-8 text-center">
-          <p className="font-display text-2xl font-semibold tracking-tight">
-            Ready to clean a Gemini image?
-          </p>
-          <p className="mx-auto mt-2 max-w-md text-sm text-muted">
-            Start on the homepage — free credits included when you sign up.
-          </p>
-          <Link
-            href="/"
-            className="mt-5 inline-flex rounded-full bg-brand px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
-          >
-            Open Unmark
-          </Link>
-        </div>
-
-        <section className="mt-16 border-t border-border pt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
-            Common questions
-          </h2>
-          <div className="mt-8 space-y-8">
-            {FAQ_ITEMS.map((item) => (
-              <div key={item.question}>
-                <h3 className="text-base font-semibold">{item.question}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-strong">
-                  {item.answer}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-      </main>
-
-      <SiteFooter />
-    </div>
+          for that corner mark. Instant is free in the browser — try it below.
+        </>
+      }
+      steps={steps}
+      faqs={faqs}
+      howToName="How to remove a Gemini watermark from an image"
+      howToDescription="Remove the Google Gemini sparkle from a still using Unmark Instant — no account."
+      ctaHeading="Ready to clean a Gemini image?"
+      ctaBody="Use Instant on this page, or open the homepage drop zone. No account for a single still."
+      embedInstant
+    />
   );
 }

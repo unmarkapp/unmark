@@ -49,7 +49,7 @@ export default function ThemeToggle() {
         aria-label={`Theme: ${active.label}`}
         title="Theme"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-9 w-9 items-center justify-center border-2 border-ink bg-surface text-foreground transition hover:bg-cream"
+        className="inline-flex h-12 w-12 items-center justify-center border-2 border-ink bg-surface text-foreground transition hover:bg-cream"
       >
         <ThemeIcon name={active.icon} />
       </button>
