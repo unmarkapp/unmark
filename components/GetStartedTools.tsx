@@ -86,8 +86,8 @@ export default function GetStartedTools() {
         Prefer mobile?{" "}
         <a href="/#apps" className="font-medium text-brand underline-offset-2 hover:underline">
           iOS and Android
-        </a>{" "}
-        apps are on the way.
+        </a>
+        .
       </p>
     </section>
   );

@@ -10,8 +10,8 @@ const ROWS: Row[] = [
   { capability: "Image logo removal", others: "partial", unmark: "yes" },
   { capability: "Video logo removal", others: "partial", unmark: "yes" },
   { capability: "Library & account history", others: "no", unmark: "yes" },
-  { capability: "Notify", others: "no", unmark: "yes" },
-  { capability: "Credits survive a refresh", others: "no", unmark: "yes" },
+  { capability: "Email when ready", others: "no", unmark: "yes" },
+  { capability: "Work saved if you leave", others: "no", unmark: "yes" },
   { capability: "Removes from every frame", others: "no", unmark: "yes" },
 ];
 
@@ -75,9 +75,8 @@ export default function LandingCompare() {
           Video cleanup that you can actually keep
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-          Some Gemini removers run video jobs in the browser — refresh and the
-          credits vanish, with no Library and no Notify when the file is ready.
-          Unmark keeps work in your account.
+          Other removers can lose a video if you close the tab. Unmark saves it
+          to your Library and can email you when it’s ready.
         </p>
       </div>
 
@@ -148,8 +147,7 @@ export default function LandingCompare() {
         <a href="/library" className="font-medium text-brand underline-offset-2 hover:underline">
           Library
         </a>
-        , optional Notify when encoding finishes, and credits stay with your
-        account — not trapped in a single browser tab.
+        , and you can get an email when they’re ready.
       </p>
     </section>
   );

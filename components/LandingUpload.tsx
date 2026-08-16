@@ -53,7 +53,7 @@ export default function LandingUpload({
       {mode === "create" ? (
         <>
           <p className="mb-4 text-center text-sm text-muted">
-            Prompt Nano Banana — no Gemini app sparkle
+            Prompt Nano Banana — images without the Gemini sparkle
           </p>
           <CreateGenerateCard />
         </>
@@ -100,8 +100,8 @@ export default function LandingUpload({
             </h2>
 
             <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
-              Images: Instant or Cloud. Video: Cloud only — visible Gemini/Veo
-              sparkle, up to 60s / 1080p / 100MB.
+              Images with Instant or Cloud. Video with Cloud — Gemini sparkle,
+              up to 60s / 1080p / 100MB.
             </p>
 
             <p className="mt-5 text-xs tracking-wide text-muted">
@@ -132,7 +132,7 @@ export default function LandingUpload({
           </p>
 
           <p className="mt-4 text-center text-xs text-muted">
-            Visible Gemini sparkle only · not SynthID · files stay private
+            Removes the visible Gemini sparkle · files stay private
           </p>
         </>
       )}

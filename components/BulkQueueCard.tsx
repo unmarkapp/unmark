@@ -281,8 +281,8 @@ export default function BulkQueueCard({
           ) : (
             <>
               You’re out of credits for today. You get{" "}
-              {dailyFreeCredits ?? 5} free Cloud credits each day — check back
-              after midnight UTC, or use Instant for one image in-browser.
+              {dailyFreeCredits ?? 5} free Cloud credits each day, or use
+              Instant for one image.
             </>
           )}
         </p>

@@ -88,7 +88,7 @@ export default function VideoCleanCard({
           </div>
           <div className="min-w-0 flex-1 text-center sm:text-left">
             <p className="font-display text-lg font-semibold text-foreground">
-              Queuing your video…
+              Cleaning your video…
             </p>
             <p className="mt-1 text-sm text-muted">
               {statusLabel || "Uploading"} — then we’ll take you to Library.
@@ -175,7 +175,7 @@ export default function VideoCleanCard({
                 ? "Sign in to clean video"
                 : blockedByCredits
                   ? "Buy credits to continue"
-                  : `Queue in Cloud · ${estimatedCredits} credit${estimatedCredits === 1 ? "" : "s"}`}
+                  : `Clean video · ${estimatedCredits} credit${estimatedCredits === 1 ? "" : "s"}`}
             </button>
           )}
         </div>

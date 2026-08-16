@@ -16,7 +16,7 @@ const steps = [
   {
     num: "03",
     title: "Clean",
-    body: "Queue prompts or capture the latest image — Unmark removes the sparkle and downloads the clean file.",
+    body: "Generate or capture the latest image — Unmark removes the sparkle and downloads the clean file.",
   },
 ];
 
@@ -32,9 +32,9 @@ export default function ExtensionInstall() {
           Unmark while you generate.
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
-          Stay on Gemini or Google Flow. The extension queues prompts, removes
-          the sparkle automatically, and saves cleaned images — no manual upload
-          each time. For video watermark removal and background cutouts, use{" "}
+          Stay on Gemini or Google Flow. The extension cleans as you generate
+          and saves the file — no manual upload each time. For video watermark
+          removal and background cutouts, use{" "}
           <Link
             href="/"
             className="font-medium text-brand underline-offset-2 hover:underline"
@@ -83,8 +83,7 @@ export default function ExtensionInstall() {
           </span>
         </a>
         <p className="max-w-sm text-center text-xs leading-relaxed text-muted">
-          Free on the Chrome Web Store. Works with Gemini and Google Flow —
-          sign in on Unmark first so your credits apply.
+          Free on the Chrome Web Store. Works with Gemini and Google Flow.
         </p>
       </div>
     </section>

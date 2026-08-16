@@ -4,14 +4,14 @@ const stores = [
   {
     id: "ios",
     name: "App Store",
-    line: "Download on the App Store",
+    line: "Unmark for iPhone",
     href: IOS_APP_URL,
     kind: "apple" as const,
   },
   {
     id: "android",
     name: "Google Play",
-    line: "Get it on Google Play",
+    line: "Unmark for Android",
     href: ANDROID_APP_URL,
     kind: "play" as const,
   },
@@ -32,7 +32,7 @@ export default function AppsSection() {
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
           Same Cloud account as the web — Clean, Create, and Library on iOS and
-          Android. Listings open when the stores approve.
+          Android.
         </p>
       </div>
 

@@ -97,9 +97,9 @@ export default function Home() {
     }
     const daily = dailyFreeCredits ?? 5;
     if (needed && needed > 0) {
-      return `You need ${needed} credit${needed === 1 ? "" : "s"}. You get ${daily} free Cloud credits each day — check back after midnight UTC.`;
+      return `You need ${needed} credit${needed === 1 ? "" : "s"}. You get ${daily} free Cloud credits each day.`;
     }
-    return `You’re out of credits for today. You get ${daily} free Cloud credits each day — check back after midnight UTC.`;
+    return `You’re out of credits for today. You get ${daily} free Cloud credits each day.`;
   };
 
   const [bulkItems, setBulkItems] = useState<BulkQueueItem[]>([]);
@@ -280,7 +280,7 @@ export default function Home() {
 
     if (videos.length === 1) {
       if (authLoading) {
-        toast("Checking your session…");
+        toast("One moment…");
         return;
       }
       revokeBulkPreviews();
@@ -314,7 +314,7 @@ export default function Home() {
 
     // Multi → Cloud bulk (needs account)
     if (authLoading) {
-      toast("Checking your session…");
+      toast("One moment…");
       return;
     }
 
@@ -750,8 +750,8 @@ export default function Home() {
       void refreshCredits();
       toast(
         job.notify_email
-          ? "Video queued — we’ll email you when it’s ready."
-          : "Video queued — track it in Library.",
+          ? "Video is cleaning — we’ll email you when it’s ready."
+          : "Video is cleaning — follow it in Library.",
         "success",
       );
       router.push("/library");
@@ -845,7 +845,7 @@ export default function Home() {
         setResultUrl(url);
         setJobStatus("completed");
         setProcessing(false);
-        toast("Cleaned locally — download now. Use Cloud to save to Library.", "success");
+        toast("Cleaned — download now, or use Cloud to save to Library.", "success");
         return;
       }
 
@@ -1026,7 +1026,7 @@ export default function Home() {
               ? engine === "instant"
                 ? "Instant"
                 : "Cloud"
-              : "Queued"
+              : "Starting…"
             : `${imageDimensions.width} × ${imageDimensions.height}`
         }
         error={error}

@@ -8,7 +8,7 @@ export default function HowItWorks() {
     {
       num: "02",
       title: "Clean",
-      body: "Remove the Gemini sparkle with Auto, process video on Cloud, or cut out the subject.",
+      body: "Unmark removes the Gemini sparkle, cleans video, or cuts out the subject.",
     },
     {
       num: "03",

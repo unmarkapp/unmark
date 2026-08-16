@@ -70,8 +70,8 @@ export default function CreateGenerateCard() {
         </div>
         <p className="mt-2.5 text-center text-xs text-muted">
           {defaultModel.credits} Create credit
-          {creditPluralSuffix(defaultModel.credits)} for {defaultModel.label} · no
-          Gemini Ultra, no app sparkle. Daily free is for Clean.
+          {creditPluralSuffix(defaultModel.credits)} for {defaultModel.label} ·
+          images without the Gemini sparkle.
         </p>
       </div>
 
@@ -85,8 +85,7 @@ export default function CreateGenerateCard() {
               Create on the web
             </p>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Prompt Nano Banana without Gemini Ultra. API image, no app
-              sparkle. Live on iOS — web coming soon.
+              Prompt Nano Banana and get images without the Gemini sparkle.
             </p>
           </div>
         </div>

@@ -40,8 +40,14 @@ export default function SiteHeader() {
           <Link href="/extension" className="transition hover:text-foreground">
             Extension
           </Link>
-          <Link href="/#apps" className="transition hover:text-foreground">
+          <Link
+            href="/#apps"
+            className="inline-flex items-center gap-1.5 transition hover:text-foreground"
+          >
             Apps
+            <span className="border-2 border-ink bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
+              Soon
+            </span>
           </Link>
           {!loading && user ? (
             <>

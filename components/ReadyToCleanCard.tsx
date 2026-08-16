@@ -153,8 +153,8 @@ export default function ReadyToCleanCard({
 
             <p className="mt-2 text-sm text-muted">
               {engine === "instant"
-                ? "Stays on this device — no Library save or extension sync."
-                : "Uploading so you can reopen it from Library anytime."}
+                ? "Cleaning on this device. Download when it’s done."
+                : "Saving so you can open it from Library anytime."}
             </p>
 
             <div className="mt-4 truncate text-xs text-muted">
@@ -258,7 +258,7 @@ export default function ReadyToCleanCard({
 
             <p className="text-sm text-muted">
               {detectMode === "auto"
-                ? "Auto targets the Gemini sparkle on 16:9 and 9:16 images."
+                ? "Auto finds the Gemini sparkle."
                 : "Drag over the Gemini sparkle — Cloud saves to Library."}
             </p>
           </div>
@@ -298,8 +298,8 @@ export default function ReadyToCleanCard({
 
               <p className="text-sm text-muted">
                 {engine === "instant"
-                  ? "Free · private · download only (no Library, bulk, or extension)"
-                  : "Library save · bulk · Chrome extension · uses credits"}
+                  ? "Free and private — download from this device"
+                  : "Saves to Library · uses credits"}
               </p>
             </div>
           ) : null}
@@ -384,8 +384,7 @@ export default function ReadyToCleanCard({
 
         {!resultUrl && canSubmit && engine === "instant" && (
           <p className="mt-2 text-xs text-muted">
-            Instant stays on this device. For Library, bulk uploads, or the
-            Chrome extension, switch to Cloud.
+            Instant stays on this device. Switch to Cloud to save to Library.
           </p>
         )}
 
@@ -405,8 +404,7 @@ export default function ReadyToCleanCard({
             ) : (
               <>
                 Out of credits for today. You get {dailyFreeCredits ?? 5} free
-                Cloud credits daily (midnight UTC), or use Instant in-browser
-                now.
+                Cloud credits each day, or use Instant now.
               </>
             )}
           </p>
@@ -414,7 +412,7 @@ export default function ReadyToCleanCard({
 
         {!resultUrl && canSubmit && blockedByAuth && (
           <p className="mt-2 text-xs text-muted">
-            Cloud unlocks Library, bulk processing, and the Chrome extension.
+            Cloud unlocks Library and the Chrome extension.
             Instant works without signing in.
           </p>
         )}

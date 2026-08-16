@@ -19,11 +19,12 @@ export const MCP_SERVER_URL = "https://mcp.unmark.ink/mcp";
 
 /**
  * Public App Store and Play Store listings.
- * Homepage Apps section links these; empty string would show a Soon chip instead.
+ * Empty until listings are public — Apps cards and the header Apps link show Soon.
+ * https://apps.apple.com/us/app/unmark/id6756499973
+ * https://play.google.com/store/apps/details?id=ink.unmark.app
  */
-export const IOS_APP_URL = "https://apps.apple.com/us/app/unmark/id6756499973";
-export const ANDROID_APP_URL =
-  "https://play.google.com/store/apps/details?id=ink.unmark.app";
+export const IOS_APP_URL = "";
+export const ANDROID_APP_URL = "";
 
 /** Primary SERP title — Gemini wedge + suite coverage. */
 export const SITE_TITLE_DEFAULT =
@@ -92,7 +93,7 @@ export const PRODUCT_TOOLS = [
     id: "create",
     title: "Create with Nano Banana",
     description:
-      "Prompt Gemini in Unmark. API images have no Gemini-app sparkle. Live on iOS — web coming soon.",
+      "Prompt Nano Banana in Unmark. Images without the Gemini sparkle.",
     href: "/tools/create",
     cta: "Coming soon",
     badge: "Coming soon",
@@ -102,7 +103,7 @@ export const PRODUCT_TOOLS = [
     id: "extension",
     title: "Chrome extension",
     description:
-      "Unmark on Gemini and Google Flow while you generate — queue, clean, download.",
+      "Unmark on Gemini and Google Flow while you generate — clean and download.",
     href: "/extension",
     cta: "Get the extension",
     badge: "Chrome",
@@ -118,7 +119,7 @@ export const FAQ_ITEMS = [
   {
     question: "How do I remove the Gemini watermark from a video?",
     answer:
-      "Sign in and upload your Veo or Google Flow MP4, MOV, or WebM clip. Unmark Cloud detects the sparkle on every frame, processes on our servers, and saves the clean video to your Library. You can close the tab or refresh — the job keeps running and you can get notified when it is ready.",
+      "Sign in and upload your Veo or Google Flow MP4, MOV, or WebM clip. Unmark Cloud finds the sparkle on every frame and saves the clean video to your Library. You can close the tab — we’ll notify you when it’s ready.",
   },
   {
     question: "Can Unmark remove image backgrounds?",
@@ -143,17 +144,17 @@ export const FAQ_ITEMS = [
   {
     question: "What's the difference between Instant and Cloud?",
     answer:
-      "Instant is free and private on this device — download only. It does not save to Library, run bulk jobs, process video, remove backgrounds, or power the Chrome extension. Cloud uses credits and unlocks Library, video watermark removal, background cutouts, bulk processing, and extension workflows.",
+      "Instant is free in your browser — download the cleaned image. Cloud saves to Library and unlocks video, background removal, and the Chrome extension.",
   },
   {
     question: "Does Unmark work on Gemini 16:9 and 9:16 exports?",
     answer:
-      "Yes. Unmark is optimized for common Gemini aspect ratios (16:9 landscape and 9:16 portrait) and keeps the original resolution when you download.",
+      "Yes. Unmark is built for common Gemini landscape and portrait exports and keeps the original resolution when you download.",
   },
   {
     question: "Is there a Chrome extension for Gemini watermark removal?",
     answer:
-      "Yes. Unmark for Gemini pairs with Cloud — queue prompts on Gemini or Google Flow, remove the sparkle automatically, and download clean PNGs. Sign in on Unmark so extension jobs use your credits and appear in Library. For video and background removal, use the website.",
+      "Yes. Unmark for Gemini works on Gemini and Google Flow — clean as you generate, then download. Sign in on Unmark so results appear in Library. For video and background removal, use the website.",
   },
   {
     question: "Is removing the Gemini watermark legal?",
@@ -163,17 +164,17 @@ export const FAQ_ITEMS = [
   {
     question: "What happens to my video if I refresh the page?",
     answer:
-      "With Unmark Cloud, video jobs run on our servers and stay in your Library. You can also get notified when encoding finishes. Browser-only removers often lose the job if you refresh or close the tab.",
+      "With Unmark Cloud, video stays in your Library even if you close the tab. You can also get notified when it’s ready.",
   },
   {
     question: "Can I download a Gemini video without the watermark?",
     answer:
-      "Export the original clip from Gemini, Veo, or Google Flow, upload it to Unmark Cloud, and download the cleaned MP4 from your Library when processing finishes. Unmark preserves frame rate and resolution where possible.",
+      "Export the original clip from Gemini, Veo, or Google Flow, upload it to Unmark Cloud, and download the cleaned MP4 from your Library when it’s ready.",
   },
   {
     question: "Does Gemini Advanced remove the watermark for me?",
     answer:
-      "No. Google does not offer a setting to disable the visible sparkle on Gemini, Veo, Imagen, or Nano Banana exports. Removing it after export with a Gemini watermark remover like Unmark is the practical route to a clean file.",
+      "No. Google does not offer a setting to turn off the visible sparkle on Gemini, Veo, Imagen, or Nano Banana exports. Unmark removes it after you download the file.",
   },
 ] as const;
 

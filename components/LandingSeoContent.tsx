@@ -26,12 +26,12 @@ export default function LandingSeoContent() {
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
           Unmark removes the visible four-point sparkle Google adds to AI images
-          and video, and can cut out subjects for transparent PNGs. Instant mode
-          is a free{" "}
+          and video, and can cut out subjects for transparent PNGs. Instant is a
+          free{" "}
           <strong className="font-semibold text-foreground">
             Gemini watermark remover online
           </strong>{" "}
-          for stills; Cloud handles Veo clips, Library saves, bulk jobs, and{" "}
+          for stills. Cloud handles Veo clips, Library, and{" "}
           <Link
             href="/tools/background-removal"
             className="font-medium text-brand underline-offset-2 hover:underline"
