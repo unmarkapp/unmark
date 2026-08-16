@@ -128,6 +128,9 @@ export default function BeforeAfterSlider({
         <img
           src={beforeUrl}
           alt="Before Gemini watermark removal"
+          width={768}
+          height={1376}
+          sizes="(min-width: 640px) 360px, calc(100vw - 2rem)"
           className={
             aspectRatio
               ? `relative z-[1] block h-full w-full ${objectFit === "contain" ? "object-contain" : "object-cover"}`
@@ -142,6 +145,9 @@ export default function BeforeAfterSlider({
           <img
             src={afterUrl}
             alt="After Gemini watermark removal"
+            width={768}
+            height={1376}
+            sizes="(min-width: 640px) 360px, calc(100vw - 2rem)"
             className={`absolute inset-0 z-[2] h-full w-full ${
               objectFit === "contain" ? "object-contain" : "object-cover"
             }`}

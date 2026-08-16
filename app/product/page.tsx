@@ -13,7 +13,7 @@ import {
 } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Product",
+  title: "Unmark — Gemini Watermark Remover",
   description: SITE_TAGLINE,
   alternates: { canonical: "/product" },
   openGraph: {
@@ -34,7 +34,7 @@ export default function ProductPage() {
             Product
           </p>
           <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
-            Unmark
+            Unmark — Gemini watermark remover
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
             {SITE_ONE_LINER}

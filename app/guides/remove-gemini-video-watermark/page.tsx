@@ -5,7 +5,7 @@ import GuideArticle from "@/components/GuideArticle";
 export const metadata: Metadata = {
   title: "Gemini Video Watermark Remover",
   description:
-    "Remove the Gemini and Veo sparkle watermark from video online. Unmark Cloud cleans every frame, saves to Library, and keeps jobs running if you refresh.",
+    "Remove the Gemini sparkle from Veo and Gemini video online. Drop an MP4 on this page — Unmark cleans every frame and saves the clip to Library.",
   alternates: { canonical: "/guides/remove-gemini-video-watermark" },
   openGraph: {
     title: "Gemini Video Watermark Remover · Unmark",
@@ -18,20 +18,20 @@ export const metadata: Metadata = {
 
 const steps = [
   {
-    title: "Export the original video",
-    body: "Download the MP4, MOV, or WebM from Gemini, Veo, or Google Flow. Start from the highest-quality export — re-compressed copies are harder to clean.",
+    title: "Export the original clip",
+    body: "Download the MP4, MOV, or WebM from Gemini, Veo, or Google Flow. Start from the highest-quality export — a re-compressed copy from a chat app is harder to clean.",
   },
   {
-    title: "Sign in to Unmark Cloud",
-    body: "Open www.unmark.ink and sign in. Video cleanup uses Cloud credits; new accounts include free credits to try it.",
+    title: "Drop it on this page",
+    body: "Use the box below. Unmark opens the cleaner with your file. Sign in only if Cloud asks — new accounts include credits to try a short video.",
   },
   {
-    title: "Upload and start the job",
-    body: "Drop your clip on the homepage. Unmark finds the corner sparkle and cleans every frame — not just a screenshot.",
+    title: "Let Unmark clean every frame",
+    body: "The sparkle is on each frame, not one overlay. Unmark tracks that mark through the clip so the logo does not flicker back mid-shot.",
   },
   {
     title: "Download from Library",
-    body: "When processing finishes, open Library for the clean MP4. You can close the tab while the job runs and get notified when the video is ready.",
+    body: "When the clip is ready, open Library for the clean file. You can leave the tab — Unmark keeps the result until you download.",
   },
 ] as const;
 
@@ -39,22 +39,22 @@ const faqs = [
   {
     question: "Is there a free Gemini video watermark remover?",
     answer:
-      "Instant is free for a single image in your browser. Video uses Cloud credits. New accounts include free credits to try a clip.",
+      "Instant is free for a single still in your browser. Video uses Cloud credits because every frame needs the same cleanup. New accounts include free credits so you can try a short Gemini or Veo clip before you buy a pack. There is no separate “free video” mode that silently caps resolution or stamps Unmark on the MP4. If you only needed one image, stay on Instant. If you have an MP4, drop it here, use the starter credits, and download from Library when the clip is ready.",
   },
   {
     question: "Which video formats are supported?",
     answer:
-      "Common Gemini and Veo exports: MP4, MOV, WebM, and M4V. Upload the file Google gave you without re-encoding when possible.",
+      "Upload the file Google gave you: MP4 is the usual Gemini and Veo export, MOV and WebM are also accepted, and M4V works when that is what Flow saved. Keep audio on the source file — Unmark aims to preserve it. Screen recordings of a player, TikTok re-downloads, and files already run through a heavy compressor often smear the sparkle into neighbouring pixels. Re-export from Gemini, Veo, or Flow when you can. Limits on the homepage apply: short clips, up to 1080p, within the listed file size.",
   },
   {
     question: "Will video quality drop after removing the watermark?",
     answer:
-      "Unmark targets the sparkle region on each frame and aims to preserve resolution, frame rate, and audio from the source export.",
+      "Unmark targets the sparkle region on each frame and aims to keep the resolution, frame rate, and audio of the source export. You should not see a soft full-frame filter or a black box over the corner. A very small or fast-moving sparkle on a busy background can leave a faint patch; if that happens, re-run from the original export rather than from the first cleaned copy. Always start from the highest-quality file Google produced, not a social re-download.",
   },
   {
-    question: "What if I refresh the page during a long video job?",
+    question: "What if I close the tab during a long clip?",
     answer:
-      "Cloud jobs stay in your Library. Unlike browser-only tools, Unmark does not lose progress when you refresh or close the tab.",
+      "Cloud keeps the job in Library. You do not need to babysit the browser. Turn on email notify in account settings if you want a ping when the file is ready. Refreshing the page does not restart the clip. When you come back, open Library, preview, and download. That is the difference from in-browser-only video tools that lose the file if you navigate away.",
   },
 ] as const;
 
@@ -65,23 +65,89 @@ export default function RemoveGeminiVideoWatermarkGuidePage() {
       title="Gemini video watermark remover"
       intro={
         <>
-          Google stamps a visible sparkle logo on{" "}
-          <strong className="font-semibold text-foreground">Veo</strong> and{" "}
-          <strong className="font-semibold text-foreground">Gemini</strong>{" "}
-          video frames. Unmark Cloud is a{" "}
-          <strong className="font-semibold text-foreground">
-            Gemini video watermark remover
-          </strong>{" "}
-          that tracks and removes that mark across the full clip, then saves the
-          result to your Library.
+          <p>
+            Google stamps a visible sparkle on{" "}
+            <strong className="font-semibold text-foreground">Veo</strong> and{" "}
+            <strong className="font-semibold text-foreground">Gemini</strong>{" "}
+            video frames. Unmark Cloud is a{" "}
+            <strong className="font-semibold text-foreground">
+              Gemini video watermark remover
+            </strong>{" "}
+            that tracks that mark through the clip and saves the clean file to
+            Library.
+          </p>
+          <p>
+            Drop an MP4 on this page to start. Sign in only when Cloud asks.
+            Stills still belong on Instant — this page is for motion.
+          </p>
         </>
       }
       steps={steps}
+      sections={[
+        {
+          heading: "Why video is not Instant",
+          body: (
+            <>
+              <p>
+                Instant is a stills tool in your browser. A Veo or Gemini clip
+                has the sparkle on every frame. Cloud is the mode that can walk
+                the timeline, keep the job if you close the laptop, and hand
+                you an MP4 from Library.
+              </p>
+              <p>
+                That is also why this page asks for a file up front instead of
+                sending you to a blank homepage. You start the cleanup here;
+                Unmark only asks you to sign in if Cloud needs an account to
+                save the result.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "Gemini video vs a still export",
+          body: (
+            <>
+              <p>
+                A “Gemini video” is usually a Veo clip you started in Gemini
+                chat or in Flow. The sparkle matches the stills mark — a
+                four-point logo in a corner — but it is burned into each frame.
+                Cleaning one screenshot does not clean the MP4.
+              </p>
+              <p>
+                Portrait 9:16 and landscape 16:9 both work within the homepage
+                limits (short clips, up to 1080p). If you need a still from the
+                same prompt, export that image separately and use Instant.
+              </p>
+            </>
+          ),
+        },
+        {
+          heading: "After the clip is clean",
+          body: (
+            <>
+              <p>
+                Download from Library and publish to Reels, Shorts, or TikTok.
+                If a platform still asks you to disclose AI media, that rule is
+                separate from the visible sparkle — follow it even on a clean
+                file.
+              </p>
+              <p>
+                Need the same treatment on a Flow project or a Veo-branded
+                export? The Google Flow and Veo guides cover those surfaces.
+                Need a poster frame without the sparkle? Export a still from
+                the clean clip, or clean the original Gemini image with Instant.
+              </p>
+            </>
+          ),
+        },
+      ]}
       faqs={faqs}
       howToName="How to remove the Gemini watermark from a video"
       howToDescription="Remove the visible Gemini and Veo sparkle from video using Unmark Cloud."
       ctaHeading="Ready to clean a Gemini or Veo video?"
-      ctaBody="Upload a clip on the homepage with Cloud mode — jobs stay in Library even if you navigate away."
+      ctaBody="Drop a clip on this page. Cloud keeps the file in Library until you download."
+      ctaHref="#try"
+      embedVideo
     />
   );
 }

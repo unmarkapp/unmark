@@ -3,7 +3,14 @@ import Link from "next/link";
 
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { MCP_SERVER_URL, SITE_NAME } from "@/lib/seo";
+import {
+  ARTICLE_IMAGE,
+  EDITORIAL_AUTHOR,
+  GUIDES_PUBLISHED,
+  GUIDES_REVIEWED,
+  formatReviewDate,
+} from "@/lib/editorial";
+import { MCP_SERVER_URL, SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: "MCP Server Guide",
@@ -60,45 +67,93 @@ const faqItems = [
   {
     question: "Do I need a separate API key?",
     answer:
-      "No for Claude Connectors — OAuth uses your Unmark Google login. Local Cursor setups may use a bearer token or browser session cookie.",
+      "Not for Claude Connectors. Claude’s hosted MCP uses OAuth with the same Google account you use on Unmark — you sign in once when you add the connector. Local Cursor or other stdio setups can use a bearer token or a browser session cookie instead of OAuth. There is no second Unmark “MCP key” to buy. Cloud credits on your Unmark account are what the tools spend when they actually clean an image.",
   },
   {
     question: "Why does Claude say it cannot read my upload?",
     answer:
-      "Hosted MCP runs on Unmark's servers and cannot access Claude's private upload paths. Upload the image elsewhere (or share from Unmark Library) and pass the HTTPS URL.",
+      "Hosted MCP can only fetch public HTTPS image URLs or Unmark share links. Claude’s private upload paths (for example files under /mnt/user-data) are not visible to Unmark. Put the still on a public URL, share it from Library, or use the agent skill on a local file in Cursor. This is the most common setup miss — the connector is working; the image URL is not reachable.",
   },
   {
     question: "Does MCP use Cloud credits?",
     answer:
-      "Yes. MCP tools call the same Cloud API as the web app and extension. Jobs appear in your Library when complete.",
+      "Yes. remove_watermark, remove_background, and get_job_status call the same Cloud product as the website and the Chrome extension. Finished jobs show up in Library so you can download them in the browser too. Instant in the browser does not use MCP and does not need a connector — it is the no-account stills path. Use MCP when you want Claude or another client to trigger cleanup from chat.",
   },
   {
     question: "Can a coding agent clean files in my repo?",
     answer:
-      "Yes. Install the Unmark agent skill from https://www.unmark.ink/skills — Cursor, Claude Code, and Codex can clean local stills as part of a larger task. MCP stays the chat connector.",
+      "Yes — that is the agent skill, not hosted MCP. Install from https://www.unmark.ink/skills so Cursor, Claude Code, or Codex can clean local stills as part of a larger task. MCP stays the chat connector for public URLs. Pick skill for repo files, MCP for “clean this https link,” and Instant for a one-off drop in the browser.",
   },
 ];
 
-const faqLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqItems.map((item) => ({
-    "@type": "Question",
-    name: item.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: item.answer,
+const pageUrl = `${SITE_URL}/guides/mcp-server`;
+
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Guides",
+        item: `${SITE_URL}/guides`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: "Unmark MCP Server",
+        item: pageUrl,
+      },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    headline: "Unmark MCP Server",
+    description:
+      "Connect Unmark to Claude, Cursor, and other MCP clients for Gemini watermark removal and background cutouts.",
+    url: pageUrl,
+    image: ARTICLE_IMAGE,
+    datePublished: GUIDES_PUBLISHED,
+    dateModified: GUIDES_REVIEWED,
+    author: {
+      "@type": "Organization",
+      name: EDITORIAL_AUTHOR.name,
+      url: EDITORIAL_AUTHOR.url,
     },
-  })),
-};
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.png` },
+    },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  },
+];
 
 export default function McpServerGuidePage() {
   return (
     <div className="surface-grain min-h-screen text-foreground">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-      />
+      {jsonLd.map((ld, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
+        />
+      ))}
 
       <SiteHeader />
 
@@ -107,10 +162,22 @@ export default function McpServerGuidePage() {
         <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
           Unmark MCP Server
         </h1>
+        <p className="mt-3 text-sm text-muted">
+          By{" "}
+          <Link
+            href="/product"
+            className="font-medium text-foreground underline-offset-2 hover:underline"
+          >
+            {EDITORIAL_AUTHOR.name}
+          </Link>
+          {" · "}
+          Updated {formatReviewDate(GUIDES_REVIEWED)}
+        </p>
         <p className="mt-4 text-base leading-relaxed text-muted-strong sm:text-lg">
           Connect {SITE_NAME} to AI assistants via the Model Context Protocol (MCP).
           Remove Gemini watermarks, strip backgrounds, and poll Cloud jobs — all using
-          your Unmark credits and Library.
+          your Unmark credits and Library. This is the chat connector, not the free
+          Instant drop zone and not the repo skill.
         </p>
 
         <section className="mt-12 rounded-2xl border border-border bg-cream/50 p-6">
@@ -202,6 +269,25 @@ export default function McpServerGuidePage() {
               available in local stdio setups such as Cursor.
             </li>
           </ul>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="font-display text-2xl font-semibold tracking-tight">
+            MCP vs Instant vs the agent skill
+          </h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            Instant is the no-account stills tool in the browser. Use it when you
+            have one Gemini PNG and you want a download now. The agent skill is
+            for Cursor, Claude Code, and Codex working on files already in a
+            repo. MCP is for chat: you pass a public image URL or an Unmark
+            share link, and Claude (or another client) calls Unmark Cloud.
+          </p>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            Hosted MCP will not see a file you attached only inside Claude.
+            Local stdio in Cursor can use env tokens and, in some setups, local
+            paths — that is why the Cursor block below exists. If you only
+            needed a sparkle off a still, skip this page and open Instant.
+          </p>
         </section>
 
         <section className="mt-12 rounded-2xl border border-border bg-cream/50 p-6">

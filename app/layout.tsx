@@ -4,7 +4,7 @@ import { AuthProvider } from "@/lib/auth";
 import { CreditsProvider } from "@/lib/credits";
 import {
   FAQ_ITEMS,
-  PRODUCT_HUNT_URL,
+  PRODUCT_HUNT_PROFILE_URL,
   CHROME_WEB_STORE_URL,
   SITE_KEYWORDS,
   SITE_NAME,
@@ -107,7 +107,7 @@ const jsonLd = {
         "@type": "ImageObject",
         url: `${SITE_URL}/icon.png`,
       },
-      sameAs: [PRODUCT_HUNT_URL, CHROME_WEB_STORE_URL],
+      sameAs: [PRODUCT_HUNT_PROFILE_URL, CHROME_WEB_STORE_URL],
     },
     {
       "@type": "SoftwareApplication",
@@ -132,7 +132,7 @@ const jsonLd = {
       offers: {
         "@type": "Offer",
         price: "0",
-        priceCurrency: "INR",
+        priceCurrency: "USD",
         description: "Free signup credits; paid credit packs available",
       },
     },

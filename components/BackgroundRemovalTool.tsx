@@ -102,17 +102,35 @@ export default function BackgroundRemovalTool() {
     [revokeUrls, user],
   );
 
+  const holdOrProcess = (file: File) => {
+    if (!file.type.startsWith("image/")) {
+      setError("Please choose a valid image file.");
+      return;
+    }
+    if (file.size > 25 * 1024 * 1024) {
+      setError("File is too large (max 25 MB).");
+      return;
+    }
+    if (user) {
+      void processFile(file);
+      return;
+    }
+    heldFile.current = file;
+    setHasHeldShare(true);
+    setError("");
+  };
+
   const onFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     event.target.value = "";
-    if (file) void processFile(file);
+    if (file) holdOrProcess(file);
   };
 
   const onDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setDragging(false);
     const file = event.dataTransfer.files?.[0];
-    if (file) void processFile(file);
+    if (file) holdOrProcess(file);
   };
 
   useEffect(() => {
@@ -186,7 +204,7 @@ export default function BackgroundRemovalTool() {
             Unmark Tools
           </p>
           <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Background removal
+            Unmark background removal — transparent PNG cutouts
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
             Upload a photo. Unmark cuts out the subject so you can download a
@@ -194,12 +212,11 @@ export default function BackgroundRemovalTool() {
           </p>
         </section>
 
-        {!user && !authLoading ? (
+        {!user && !authLoading && hasHeldShare ? (
           <div className="mx-auto mt-10 max-w-md text-center">
             <p className="text-sm text-muted">
-              {hasHeldShare
-                ? "Image is ready. Sign in so Unmark can remove the background and save it to Library."
-                : "Sign in so your cutout can be processed and saved to Library."}
+              Image is ready. Sign in so Unmark can remove the background and
+              save it to Library.
             </p>
             <button
               type="button"
@@ -211,7 +228,7 @@ export default function BackgroundRemovalTool() {
           </div>
         ) : null}
 
-        {user && !hasResult ? (
+        {!hasResult && !authLoading && (user || !hasHeldShare) ? (
           <div className="mx-auto mt-10 max-w-2xl">
             <div
               role="button"
@@ -258,7 +275,8 @@ export default function BackgroundRemovalTool() {
                 or drop a file · paste from clipboard
               </p>
               <p className="mt-1 text-xs text-muted">
-                PNG, JPG, WebP · up to 25 MB · Cloud queue
+                PNG, JPG, WebP · up to 25 MB
+                {user ? " · saved to Library" : " · sign in after you pick a file"}
               </p>
             </div>
             {error ? (
@@ -380,16 +398,17 @@ export default function BackgroundRemovalTool() {
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
             Unmark background removal keeps the subject and drops the rest so
-            you can drop the PNG onto a new backdrop, a slide, or a product
-            listing. Sign in so the cutout can save to Library alongside your
-            cleaned Gemini stills.
+            you can place the PNG on a new backdrop, a slide, a listing, or a
+            social post. Results save to Library next to cleaned Gemini stills.
+            Drop a file first; sign in when Unmark asks so the cutout can be
+            stored.
           </p>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
             How to cut out a photo
           </h2>
           <ol className="mt-4 list-decimal space-y-2 pl-5 text-[15px] leading-relaxed text-muted-strong">
-            <li>Sign in on Unmark.</li>
-            <li>Drop a PNG, JPG, or WebP (up to 25 MB).</li>
+            <li>Drop a PNG, JPG, or WebP (up to 25 MB) on this page.</li>
+            <li>Sign in if Unmark asks — the file stays ready.</li>
             <li>Wait for the cutout, then download the transparent PNG.</li>
           </ol>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
@@ -398,8 +417,33 @@ export default function BackgroundRemovalTool() {
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
             A single subject on a simple background works best — a person, a
             product, or an AI still. Busy collages and tiny subjects in the
-            corner are harder. For Gemini sparkle removal, use Instant or Cloud
-            on the homepage first, then cut out the cleaned file here.
+            corner are harder. Hair, glasses, and product edges are the usual
+            stress tests; preview the checkerboard before you download. For
+            Gemini sparkle removal, clean the still with Instant or Cloud
+            first, then cut out the cleaned file here so the logo is not still
+            sitting on the subject.
+          </p>
+          <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
+            Portraits, products, and Gemini stills
+          </h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            Portraits: use a photo where the person is clearly separated from
+            the wall or scene. Products: shoot or generate on a plain surface
+            so the cutout does not eat the silhouette. Gemini stills: Instant
+            removes the sparkle; this tool then gives you a transparent PNG
+            for mockups and ads. Unmark is not a full studio suite — it will
+            not relight the subject or invent a new backdrop. Pair the PNG with
+            your own layout in Canva, Figma, or an editor.
+          </p>
+          <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
+            After you download
+          </h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            The file is a transparent PNG. Drop it onto a color field, a
+            lifestyle photo, or a slide. If you need the sparkle gone and the
+            background gone, run watermark cleanup first so you are not cutting
+            around a logo. Library keeps the cutout so you can download again
+            without re-uploading.
           </p>
         </section>
 
