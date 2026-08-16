@@ -18,6 +18,7 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
+import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -160,6 +161,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${figtree.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        {/* Google tag (gtag.js) — one tag, immediately after <head> */}
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = gtag;
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');`,
+          }}
+        />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
