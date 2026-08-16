@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 
+import AppsSection from "@/components/AppsSection";
 import ClosingCta from "@/components/ClosingCta";
 import ExtensionInstall from "@/components/ExtensionInstall";
 import GetStartedTools from "@/components/GetStartedTools";
@@ -55,6 +56,7 @@ export default function LandingShell({
           <LandingCompare />
           <HowItWorks />
           <ExtensionInstall />
+          <AppsSection />
           <LandingSeoContent />
           <LandingFaq />
           <ClosingCta />

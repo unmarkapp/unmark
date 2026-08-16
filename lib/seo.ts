@@ -18,10 +18,11 @@ export const PRODUCT_HUNT_BADGE_SRC =
 export const MCP_SERVER_URL = "https://mcp.unmark.ink/mcp";
 
 /**
- * Public iOS link when available (TestFlight or App Store).
- * Leave empty until a real URL exists — do not ship a dead link.
+ * Public App Store and Play Store listings.
+ * Homepage Apps section links these; empty string would show a Soon chip instead.
  */
-export const IOS_APP_URL = "";
+//export const IOS_APP_URL = "https://apps.apple.com/us/app/unmark/id6756499973";
+//export const ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=ink.unmark.app";
 
 /** Primary SERP title — Gemini wedge + suite coverage. */
 export const SITE_TITLE_DEFAULT =

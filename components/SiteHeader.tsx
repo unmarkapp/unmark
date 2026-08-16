@@ -40,6 +40,9 @@ export default function SiteHeader() {
           <Link href="/extension" className="transition hover:text-foreground">
             Extension
           </Link>
+          <Link href="/#apps" className="transition hover:text-foreground">
+            Apps
+          </Link>
           {!loading && user ? (
             <>
               <Link href="/library" className="transition hover:text-foreground">

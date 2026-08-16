@@ -73,6 +73,9 @@ export default function SiteFooter() {
                 <Link href="/extension" className="transition hover:text-brand">
                   Chrome extension
                 </Link>
+                <Link href="/#apps" className="transition hover:text-brand">
+                  iOS & Android
+                </Link>
                 <Link href="/tools/background-removal" className="transition hover:text-brand">
                   Background removal
                 </Link>

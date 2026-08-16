@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { CHROME_WEB_STORE_URL, IOS_APP_URL, PRODUCT_TOOLS } from "@/lib/seo";
+import { CHROME_WEB_STORE_URL, PRODUCT_TOOLS } from "@/lib/seo";
 
 export default function GetStartedTools() {
   return (
@@ -83,22 +83,11 @@ export default function GetStartedTools() {
       </ul>
 
       <p className="mx-auto mt-8 max-w-xl text-center text-sm text-muted">
-        {IOS_APP_URL ? (
-          <>
-            Prefer mobile?{" "}
-            <a
-              href={IOS_APP_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-medium text-brand underline-offset-2 hover:underline"
-            >
-              Get the iOS app
-            </a>
-            .
-          </>
-        ) : (
-          <>iOS app coming soon — use Instant or Cloud on the web today.</>
-        )}
+        Prefer mobile?{" "}
+        <a href="/#apps" className="font-medium text-brand underline-offset-2 hover:underline">
+          iOS and Android
+        </a>{" "}
+        apps are on the way.
       </p>
     </section>
   );

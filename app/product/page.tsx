@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import AppsSection from "@/components/AppsSection";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import {
   CHROME_WEB_STORE_URL,
-  IOS_APP_URL,
   PRODUCT_TOOLS,
   SITE_ONE_LINER,
   SITE_TAGLINE,
@@ -84,26 +84,10 @@ export default function ProductPage() {
             );
           })}
         </ul>
-
-        <p className="mx-auto mt-10 max-w-lg text-center text-sm text-muted">
-          {IOS_APP_URL ? (
-            <>
-              <a
-                href={IOS_APP_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-brand underline-offset-2 hover:underline"
-              >
-                Get Unmark on iOS
-              </a>
-            </>
-          ) : (
-            <>iOS app coming soon.</>
-          )}
-        </p>
-
-        <SiteFooter />
       </div>
+
+      <AppsSection />
+      <SiteFooter />
     </div>
   );
 }
