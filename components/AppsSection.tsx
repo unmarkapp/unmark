@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 import { ANDROID_APP_URL, IOS_APP_URL } from "@/lib/seo";
 
 const stores = [
@@ -8,16 +6,16 @@ const stores = [
     name: "App Store",
     line: "Download on the App Store",
     href: IOS_APP_URL,
-    icon: <AppleIcon />,
+    kind: "apple" as const,
   },
   {
     id: "android",
     name: "Google Play",
     line: "Get it on Google Play",
     href: ANDROID_APP_URL,
-    icon: <PlayIcon />,
+    kind: "play" as const,
   },
-] as const;
+];
 
 export default function AppsSection() {
   return (
@@ -53,13 +51,14 @@ function StoreCard({
   name,
   line,
   href,
-  icon,
+  kind,
 }: {
   name: string;
   line: string;
   href: string;
-  icon: ReactNode;
+  kind: "apple" | "play";
 }) {
+  const icon = kind === "apple" ? <AppleIcon /> : <PlayIcon />;
   const soon = !href;
   const className =
     "flex h-full items-center gap-4 border-2 border-ink bg-surface px-5 py-4 text-left";

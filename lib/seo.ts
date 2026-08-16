@@ -21,8 +21,9 @@ export const MCP_SERVER_URL = "https://mcp.unmark.ink/mcp";
  * Public App Store and Play Store listings.
  * Homepage Apps section links these; empty string would show a Soon chip instead.
  */
-//export const IOS_APP_URL = "https://apps.apple.com/us/app/unmark/id6756499973";
-//export const ANDROID_APP_URL = "https://play.google.com/store/apps/details?id=ink.unmark.app";
+export const IOS_APP_URL = "https://apps.apple.com/us/app/unmark/id6756499973";
+export const ANDROID_APP_URL =
+  "https://play.google.com/store/apps/details?id=ink.unmark.app";
 
 /** Primary SERP title — Gemini wedge + suite coverage. */
 export const SITE_TITLE_DEFAULT =
