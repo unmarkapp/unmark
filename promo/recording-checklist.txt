@@ -1,0 +1,107 @@
+UNMARK PROMO — RECORDING CHECKLIST
+Total target: 75 sec final · Record ~8–12 min raw · Edit in CapCut
+
+=== BEFORE YOU RECORD ===
+
+[ ] Browser: Chrome, 1440×900 or 1920×1080 window, zoom 100%
+[ ] Hide bookmarks bar · close extra tabs · turn off notifications
+[ ] Site: https://www.unmark.ink (production) or local dev
+[ ] Prepare 1 Gemini image WITH visible sparkle (PNG/JPG, 16:9 or 9:16)
+[ ] Prepare 1 short Veo/Flow MP4 (10–20 sec) WITH sparkle — for Cloud demo
+[ ] Optional: extension installed for clip 5
+[ ] Screen recorder: Screen Studio (Mac) or QuickTime → import to CapCut
+[ ] Dark mode OR light mode — pick one, stay consistent
+
+Demo assets: homepage already has before/after at /#compare
+  /demo/sample-1-before.jpeg vs sample-1-after.png
+
+=== CLIP 1 — HOOK (5 sec) · no narration during record ===
+Action:
+  1. Open Gemini image with sparkle full-screen (Preview or Photos)
+  2. Slow zoom on corner watermark (Screen Studio auto-zoom OR manual crop in edit)
+  OR: screen-record homepage Before/After slider — drag handle left/right
+
+=== CLIP 2 — HOMEPAGE (8 sec) ===
+Action:
+  1. Load www.unmark.ink
+  2. Pause on hero: "Gemini Watermark Remover"
+  3. Scroll slightly to upload zone "Drop Gemini images or video"
+
+=== CLIP 3 — INSTANT IMAGE DEMO (25 sec) ★ most important ===
+Action:
+  1. Drop watermarked Gemini PNG on upload area
+  2. Select engine: Instant (not Cloud)
+  3. Detect mode: Auto
+  4. Click Remove / process button
+  5. Wait for result — show clean image
+  6. Click Download
+Tips:
+  · Move cursor deliberately, pause 1 sec before each click
+  · If Instant fails offline, use Cloud with account — mention in edit text
+
+=== CLIP 4 — BEFORE/AFTER (8 sec) ===
+Action:
+  1. Scroll to #compare section
+  2. Drag slider on sample-1 slowly corner → clean
+
+=== CLIP 5 — VIDEO / CLOUD (15 sec) ===
+Action:
+  1. Sign in (if needed)
+  2. Upload short MP4 · select Cloud
+  3. Show job queued / processing
+  4. Open /library — show completed video thumbnail
+  OR: cut to pre-recorded finished clean clip if processing is slow
+
+=== CLIP 6 — EXTENSION (8 sec) — optional ===
+Action:
+  1. Open Chrome Web Store listing OR Gemini tab with extension panel
+  2. Show prompt queue / cleaned download
+
+=== CLIP 7 — CTA (5 sec) ===
+Action:
+  1. Homepage hero + URL bar showing www.unmark.ink
+  2. End card: logo + "Free to start"
+
+=== CAPCUT ASSEMBLY (75 sec timeline) ===
+
+Track 1 — Video
+  0:00  Clip 1 hook (5s)
+  0:05  Clip 2 homepage (3s) + Clip 3 demo (22s)
+  0:30  Clip 4 before/after (8s)
+  0:38  Clip 5 video/cloud (12s)
+  0:50  Clip 6 extension (8s) or B-roll
+  0:58  Clip 7 CTA (7s)
+
+Track 2 — Voiceover
+  Import voiceover-script.txt via ElevenLabs MP3
+  Align VO start to 0:00; trim clips to match
+
+Track 3 — Captions
+  CapCut → Auto captions → style: white text, dark outline
+  Fix "unmark.ink" spelling
+
+Track 4 — Music
+  CapCut royalty-free: search "minimal tech" or "uplifting corporate"
+  Volume: music −18dB under VO
+
+Export:
+  · 16:9 1920×1080 — YouTube + website
+  · 9:16 1080×1920 — Reels, TikTok, Shorts (reframe in CapCut)
+  · 1:1 1080×1080 — Instagram feed
+
+=== YOUTUBE UPLOAD (SEO) ===
+
+Title: How to Remove Gemini Watermark in Seconds | Unmark Demo
+Description:
+  Remove the Gemini and Veo sparkle watermark from images and video.
+  Free Instant mode in your browser: https://www.unmark.ink
+  Guides: https://www.unmark.ink/guides
+Tags: gemini watermark remover, remove gemini watermark, veo watermark, google flow
+
+=== AI B-ROLL (optional, 10 sec total) ===
+
+Runway / Kling prompt examples:
+  "Creator at desk reviewing photos on laptop, warm light, cinematic, no text"
+  "Abstract soft gradient background, cream and terracotta tones, slow motion"
+
+Use only for intro/outro — never replace real UI demo.

@@ -1,0 +1,36 @@
+UNMARK PROMO — PRODUCTION NOTES (do NOT paste into ElevenLabs)
+
+>>> For voice generation, paste ONLY the contents of:
+>>>   voiceover-spoken-only.txt        (75 sec full)
+>>>   voiceover-spoken-only-30s.txt    (30 sec short)
+
+Voice suggestion: calm, confident — try "Brian" or "Sarah" instead of "Adam - Dark and Tough"
+Model: Eleven Multilingual v2
+Speed: default · Stability: ~50% · Similarity: ~75%
+
+---
+
+TIMING GUIDE (for CapCut edit — not spoken)
+
+0:00–0:05  HOOK — show watermarked image
+0:05–0:12  PROBLEM
+0:12–0:35  DEMO — screen record Instant flow
+0:35–0:50  VIDEO — Cloud / Library
+0:50–0:62  EXTENSION
+0:62–0:75  CTA — www.unmark.ink
+
+---
+
+ON-SCREEN TEXT (add in CapCut — no voiceover)
+
+0:00  Gemini watermark?
+0:12  Unmark
+0:18  Instant = free · no sign-in
+0:28  Before → After
+0:35  Video · every frame
+0:50  Chrome extension
+0:62  www.unmark.ink · Free to start
+
+---
+
+See recording-checklist.txt for screen capture steps.

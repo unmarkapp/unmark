@@ -82,6 +82,9 @@ export default function SiteFooter() {
                 <Link href="/guides/mcp-server" className="transition hover:text-brand">
                   MCP server
                 </Link>
+                <Link href="/developers" className="transition hover:text-brand">
+                  Developers
+                </Link>
                 <Link href="/tools" className="transition hover:text-brand">
                   Tools
                 </Link>
