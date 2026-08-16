@@ -117,6 +117,12 @@ export default function DevelopersPage() {
             >
               Read the docs
             </Link>
+            <Link
+              href="/skills"
+              className="inline-flex items-center gap-2 border-2 border-ink bg-surface px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+            >
+              Agent skill
+            </Link>
             <a
               href={MCP_SERVER_URL}
               className="inline-flex items-center gap-2 border-2 border-ink bg-surface px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"

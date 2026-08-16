@@ -72,6 +72,11 @@ const faqItems = [
     answer:
       "Yes. MCP tools call the same Cloud API as the web app and extension. Jobs appear in your Library when complete.",
   },
+  {
+    question: "Can a coding agent clean files in my repo?",
+    answer:
+      "Yes. Install the Unmark agent skill from https://www.unmark.ink/skills — Cursor, Claude Code, and Codex can clean local stills as part of a larger task. MCP stays the chat connector.",
+  },
 ];
 
 const faqLd = {
@@ -260,7 +265,11 @@ export default function McpServerGuidePage() {
         </section>
 
         <p className="mt-12 text-sm text-muted">
-          Need the web app instead?{" "}
+          Need a repo workflow instead of chat tools?{" "}
+          <Link href="/skills" className="text-brand underline-offset-2 hover:underline">
+            Install the Unmark skill
+          </Link>
+          . Need the web app?{" "}
           <Link href="/" className="text-brand underline-offset-2 hover:underline">
             Open Unmark
           </Link>{" "}
