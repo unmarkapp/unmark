@@ -24,7 +24,7 @@ export default function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b-2 border-ink bg-background">
-      <div className="mx-auto flex w-full max-w-5xl items-center gap-3 px-4 py-3 sm:px-6">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 xl:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" onClick={closeMenu}>
           <BrandLogo size={34} />
           <span className="font-display text-xl font-semibold tracking-tight text-foreground">
@@ -97,7 +97,7 @@ export default function SiteHeader() {
           id="mobile-nav"
           className="border-t-2 border-ink bg-background px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-muted lg:hidden sm:px-6"
         >
-          <div className="mx-auto flex max-w-5xl flex-col gap-3">
+          <div className="mx-auto flex max-w-7xl flex-col gap-3">
             <NavLinks user={user} loading={loading} onNavigate={closeMenu} />
             {!loading && user ? (
               <button
