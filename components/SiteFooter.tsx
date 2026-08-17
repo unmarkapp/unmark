@@ -103,6 +103,9 @@ export default function SiteFooter() {
                 <Link href="/privacy" className="transition hover:text-brand">
                   Privacy
                 </Link>
+                <Link href="/delete-account" className="transition hover:text-brand">
+                  Delete account
+                </Link>
                 <Link href="/terms" className="transition hover:text-brand">
                   Terms
                 </Link>

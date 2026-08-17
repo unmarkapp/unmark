@@ -157,7 +157,14 @@ export default function PrivacyPage() {
               Processed images and job records are kept only as long as needed
               to provide the service (for example to show recent results in your
               library) and to meet operational or legal requirements. You may
-              request deletion of your account data by contacting us.
+              request deletion of your account and associated data on the{" "}
+              <Link
+                href="/delete-account"
+                className="text-brand-hover underline-offset-2 hover:underline"
+              >
+                Delete your Unmark account
+              </Link>{" "}
+              page.
             </p>
           </section>
 
