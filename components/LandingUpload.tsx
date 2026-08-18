@@ -4,6 +4,7 @@ import { ChangeEvent, useRef, useState } from "react";
 
 import CreateGenerateCard from "@/components/CreateGenerateCard";
 import LandingShell from "@/components/LandingShell";
+import Walkthrough from "@/components/Walkthrough";
 import { useDropToClean } from "@/lib/dropToClean";
 
 interface LandingUploadProps {
@@ -62,6 +63,7 @@ export default function LandingUpload({
           <div
             role="button"
             tabIndex={0}
+            data-walkthrough="drop"
             onClick={() => inputRef.current?.click()}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
@@ -120,6 +122,7 @@ export default function LandingUpload({
 
           <button
             type="button"
+            data-walkthrough="sample"
             onClick={onTrySample}
             disabled={sampleBusy}
             className="btn-play mt-4 inline-flex w-full items-center justify-center gap-2.5 border-2 border-ink bg-peach px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition hover:brightness-95 disabled:opacity-60"
@@ -136,6 +139,7 @@ export default function LandingUpload({
           </p>
         </>
       )}
+      <Walkthrough />
     </LandingShell>
   );
 }

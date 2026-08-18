@@ -36,7 +36,7 @@ export default function SiteHeader() {
           <NavLinks user={user} loading={loading} />
         </nav>
 
-        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3">
+        <div className="ml-auto flex shrink-0 items-center gap-2 sm:gap-3" data-walkthrough="account">
           <ThemeToggle />
           <button
             type="button"

@@ -7,6 +7,7 @@ import {
   SUPADEMO_EMBED_URL,
   SUPADEMO_SCRIPT_SRC,
 } from "@/lib/supademo";
+import { resetWalkthrough } from "@/lib/walkthrough";
 
 declare global {
   interface Window {
@@ -52,13 +53,23 @@ export default function ProductTour() {
         </div>
       </div>
 
-      <div className="mt-8 flex justify-center">
+      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
         <button
           type="button"
           onClick={openFullscreen}
           className="btn-play inline-flex items-center justify-center border-2 border-ink bg-brand px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
         >
           Watch full screen
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            resetWalkthrough();
+            window.location.assign("/?guide=1");
+          }}
+          className="inline-flex items-center justify-center border-2 border-ink bg-surface px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+        >
+          Start page guide
         </button>
       </div>
     </section>

@@ -8,6 +8,7 @@ export default function GetStartedTools() {
   return (
     <section
       id="get-started"
+      data-walkthrough="tools"
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
