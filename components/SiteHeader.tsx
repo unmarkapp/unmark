@@ -133,6 +133,9 @@ function NavLinks({
       <Link href="/#how" className={linkClass} onClick={onNavigate}>
         How it works
       </Link>
+      <Link href="/#tour" className={linkClass} onClick={onNavigate}>
+        Tour
+      </Link>
       <Link href="/tools" className={linkClass} onClick={onNavigate}>
         Tools
       </Link>

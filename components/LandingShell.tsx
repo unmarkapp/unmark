@@ -11,6 +11,7 @@ import LandingBeforeAfter from "@/components/LandingBeforeAfter";
 import LandingCompare from "@/components/LandingCompare";
 import LandingFaq from "@/components/LandingFaq";
 import LandingSeoContent from "@/components/LandingSeoContent";
+import ProductTour from "@/components/ProductTour";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { SITE_ONE_LINER } from "@/lib/seo";
@@ -55,6 +56,7 @@ export default function LandingShell({
           <LandingBeforeAfter />
           <LandingCompare />
           <HowItWorks />
+          <ProductTour />
           <ExtensionInstall />
           <AppsSection />
           <LandingSeoContent />
