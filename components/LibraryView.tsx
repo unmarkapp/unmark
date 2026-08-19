@@ -77,8 +77,10 @@ export default function LibraryView() {
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [selected, setSelected] = useState<LibraryJob | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   const [bgRemovingId, setBgRemovingId] = useState<string | null>(null);
+  const [bulkBusy, setBulkBusy] = useState<"delete" | "download" | null>(null);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
   const refresh = useCallback(async (opts?: { quiet?: boolean }) => {
@@ -113,6 +115,12 @@ export default function LibraryView() {
       }
 
       setJobs(next);
+      setSelectedIds((prev) => {
+        if (prev.size === 0) return prev;
+        const live = new Set(next.map((job) => job.job_id));
+        const kept = new Set([...prev].filter((id) => live.has(id)));
+        return kept.size === prev.size ? prev : kept;
+      });
       setLibraryUsed(result.library_used);
       setLibraryLimit(result.library_limit);
     } catch (err) {
@@ -150,19 +158,24 @@ export default function LibraryView() {
   }, [jobs, user, refresh]);
 
   useEffect(() => {
-    if (!selected) return;
-
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setSelected(null);
+      if (event.key !== "Escape") return;
+      if (selected) {
+        setSelected(null);
+        return;
+      }
+      if (selectedIds.size > 0) setSelectedIds(new Set());
     };
     const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    if (selected) {
+      document.body.style.overflow = "hidden";
+    }
     window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onKey);
     };
-  }, [selected]);
+  }, [selected, selectedIds.size]);
 
   useEffect(() => {
     if (!toast) return;
@@ -286,7 +299,7 @@ export default function LibraryView() {
   };
 
   const handleDelete = async (job: LibraryJob) => {
-    if (deletingId) return;
+    if (deletingId || bulkBusy) return;
     const confirmed = window.confirm(
       "Delete this item from your Library? This cannot be undone.",
     );
@@ -296,12 +309,106 @@ export default function LibraryView() {
     try {
       await deleteJob(job.job_id);
       setSelected(null);
+      setSelectedIds((prev) => {
+        if (!prev.has(job.job_id)) return prev;
+        const next = new Set(prev);
+        next.delete(job.job_id);
+        return next;
+      });
       setToast("Deleted");
       await refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Delete failed");
     } finally {
       setDeletingId(null);
+    }
+  };
+
+  const allSelected = jobs.length > 0 && selectedIds.size === jobs.length;
+  const selecting = selectedIds.size > 0;
+  const selectedJobs = jobs.filter((job) => selectedIds.has(job.job_id));
+  const selectedCompleted = selectedJobs.filter(
+    (job) => job.status === "completed",
+  );
+
+  const toggleSelected = (jobId: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(jobId)) next.delete(jobId);
+      else next.add(jobId);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelectedIds(new Set());
+      return;
+    }
+    setSelectedIds(new Set(jobs.map((job) => job.job_id)));
+  };
+
+  const openOrToggle = (job: LibraryJob, canOpen: boolean) => {
+    if (selecting) {
+      toggleSelected(job.job_id);
+      return;
+    }
+    if (canOpen) setSelected(job);
+  };
+
+  const handleDeleteSelected = async () => {
+    if (selectedIds.size === 0 || bulkBusy) return;
+    const count = selectedIds.size;
+    const confirmed = window.confirm(
+      `Delete ${count} item${count === 1 ? "" : "s"} from your Library? This cannot be undone.`,
+    );
+    if (!confirmed) return;
+
+    setBulkBusy("delete");
+    setError(null);
+    try {
+      const ids = [...selectedIds];
+      let failed = 0;
+      for (const id of ids) {
+        try {
+          await deleteJob(id);
+        } catch {
+          failed += 1;
+        }
+      }
+      setSelected(null);
+      setSelectedIds(new Set());
+      setToast(
+        failed
+          ? `Deleted ${ids.length - failed}. ${failed} failed.`
+          : `Deleted ${ids.length - failed}`,
+      );
+      await refresh();
+    } finally {
+      setBulkBusy(null);
+    }
+  };
+
+  const handleDownloadSelected = async () => {
+    if (selectedCompleted.length === 0 || bulkBusy) return;
+    setBulkBusy("download");
+    setError(null);
+    try {
+      let failed = 0;
+      for (const job of selectedCompleted) {
+        try {
+          await downloadLibraryJob(job.job_id, fileLabel(job));
+        } catch {
+          failed += 1;
+        }
+      }
+      setToast(
+        failed
+          ? `Downloaded ${selectedCompleted.length - failed}. ${failed} failed.`
+          : `Download started (${selectedCompleted.length})`,
+      );
+    } finally {
+      setBulkBusy(null);
     }
   };
 
@@ -315,7 +422,7 @@ export default function LibraryView() {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
+      <div className={`mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 ${selecting ? "pb-32" : ""}`}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
@@ -328,13 +435,24 @@ export default function LibraryView() {
                 : ""}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={() => void refresh()}
-            className="text-sm font-medium text-muted transition hover:text-foreground"
-          >
-            Refresh
-          </button>
+          <div className="flex items-center gap-3">
+            {jobs.length > 0 ? (
+              <button
+                type="button"
+                onClick={toggleSelectAll}
+                className="text-sm font-medium text-muted transition hover:text-foreground"
+              >
+                {allSelected ? "Deselect all" : "Select all"}
+              </button>
+            ) : null}
+            <button
+              type="button"
+              onClick={() => void refresh()}
+              className="text-sm font-medium text-muted transition hover:text-foreground"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
 
         {pendingCount > 0 && (
@@ -404,13 +522,28 @@ export default function LibraryView() {
                 !driveSyncing;
 
               return (
-                <li key={job.job_id} className="library-masonry-item">
+                <li key={job.job_id} className="library-masonry-item relative">
+                  <div className="absolute right-2 top-2 z-10">
+                    <SelectionCheck
+                      checked={selectedIds.has(job.job_id)}
+                      label={
+                        selectedIds.has(job.job_id)
+                          ? `Deselect ${label}`
+                          : `Select ${label}`
+                      }
+                      onChange={() => toggleSelected(job.job_id)}
+                    />
+                  </div>
                   {canOpen && (thumb || isVideo) ? (
                     <button
                       type="button"
-                      onClick={() => setSelected(job)}
-                      className="group relative block w-full overflow-hidden border-2 border-ink bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand"
-                      aria-label={`Open ${label}`}
+                      onClick={() => openOrToggle(job, canOpen)}
+                      className={`group relative block w-full overflow-hidden border-2 border-ink bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand ${
+                        selectedIds.has(job.job_id) ? "ring-2 ring-brand" : ""
+                      }`}
+                      aria-label={
+                        selecting ? `Toggle ${label}` : `Open ${label}`
+                      }
                     >
                       {thumb ? (
                         /* eslint-disable-next-line @next/next/no-img-element */
@@ -484,9 +617,24 @@ export default function LibraryView() {
                     </button>
                   ) : (
                     <div
+                      role={selecting ? "button" : undefined}
+                      tabIndex={selecting ? 0 : undefined}
+                      onClick={
+                        selecting ? () => toggleSelected(job.job_id) : undefined
+                      }
+                      onKeyDown={
+                        selecting
+                          ? (event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                toggleSelected(job.job_id);
+                              }
+                            }
+                          : undefined
+                      }
                       className={`relative flex w-full flex-col items-center justify-center gap-2 border-2 border-ink bg-surface px-4 text-center ${
                         isVideo ? "aspect-[9/16]" : "aspect-[3/4]"
-                      }`}
+                      } ${selectedIds.has(job.job_id) ? "ring-2 ring-brand" : ""}`}
                     >
                       <p className="text-xs font-semibold uppercase tracking-wide text-muted">
                         {isPending
@@ -549,6 +697,48 @@ export default function LibraryView() {
           </ul>
         )}
       </div>
+
+      {selecting && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
+          <div className="pointer-events-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-3 border-2 border-ink bg-surface px-4 py-3 shadow-[4px_4px_0_0_#000]">
+            <p className="text-sm font-semibold text-foreground">
+              {selectedIds.size} selected
+            </p>
+            <div className="flex flex-wrap items-center gap-2">
+              {selectedCompleted.length > 0 ? (
+                <button
+                  type="button"
+                  onClick={() => void handleDownloadSelected()}
+                  disabled={Boolean(bulkBusy)}
+                  className="border-2 border-ink bg-white px-3 py-1.5 text-sm font-semibold text-foreground disabled:opacity-50"
+                >
+                  {bulkBusy === "download"
+                    ? "Downloading…"
+                    : `Download ${selectedCompleted.length}`}
+                </button>
+              ) : null}
+              <button
+                type="button"
+                onClick={() => void handleDeleteSelected()}
+                disabled={Boolean(bulkBusy)}
+                className="border-2 border-ink bg-foreground px-3 py-1.5 text-sm font-semibold text-background disabled:opacity-50"
+              >
+                {bulkBusy === "delete"
+                  ? "Deleting…"
+                  : `Delete ${selectedIds.size}`}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedIds(new Set())}
+                disabled={Boolean(bulkBusy)}
+                className="text-sm font-medium text-muted hover:text-foreground disabled:opacity-50"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {toast && !selected && (
         <div className="pointer-events-none fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background shadow">
@@ -747,6 +937,44 @@ function ToolbarButton({
           {children}
         </svg>
       )}
+    </button>
+  );
+}
+
+function SelectionCheck({
+  checked,
+  onChange,
+  label,
+}: {
+  checked: boolean;
+  onChange: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      title={label}
+      aria-label={label}
+      aria-pressed={checked}
+      onClick={(event) => {
+        event.stopPropagation();
+        onChange();
+      }}
+      className={`flex h-7 w-7 items-center justify-center border-2 border-ink shadow-[2px_2px_0_0_#000] ${
+        checked ? "bg-[#E2FF3B]" : "bg-white"
+      }`}
+    >
+      {checked ? (
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+          <path
+            d="M5 12.5l5 5 9-11"
+            stroke="#000"
+            strokeWidth="2.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      ) : null}
     </button>
   );
 }
