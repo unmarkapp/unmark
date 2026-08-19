@@ -22,7 +22,7 @@ export interface JobResponse {
   job_type?: string;
 }
 
-export type MediaType = "image" | "video";
+export type MediaType = "image" | "video" | "pdf";
 
 export type StorageProvider = "unmark" | "google_drive";
 
@@ -54,6 +54,8 @@ export interface JobStatus {
   duration_sec?: number;
   credits_charged?: number;
   error?: string;
+  pdf_summary?: string;
+  pdf_page_count?: number;
 }
 
 export interface LibraryJob extends JobStatus {
@@ -82,8 +84,9 @@ const API_BASE_URL =
 export function isWatermarkRemovalJob(job: LibraryJob): boolean {
   return (
     job.status === "completed" &&
-    job.media_type !== "video" &&
-    job.job_type !== "bg_remove"
+    (job.media_type || "image") === "image" &&
+    job.job_type !== "bg_remove" &&
+    job.job_type !== "pdf_watermark"
   );
 }
 
@@ -363,7 +366,11 @@ export async function downloadLibraryJob(
   fileName: string,
 ): Promise<void> {
   const safeName = fileName.replace(/[^\w.\-]+/g, "_") || "cleaned.png";
-  const fallbackExt = /\.mp4$/i.test(safeName) ? ".mp4" : ".png";
+  const fallbackExt = /\.pdf$/i.test(safeName)
+    ? ".pdf"
+    : /\.mp4$/i.test(safeName)
+      ? ".mp4"
+      : ".png";
   const downloadName = safeName.includes(".")
     ? safeName
     : `${safeName}${fallbackExt}`;
