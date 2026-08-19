@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import ToolsLanding from "@/components/ToolsLanding";
 
 export const metadata: Metadata = {
-  title: "Unmark Tools — Watermark, Video, and Cutouts",
+    title: "Unmark Tools — Watermark, Video, Cutouts, and PDF",
   description:
-    "Unmark tools — Gemini image watermark removal, video cleanup, background cutouts, Nano Banana create, and the Chrome extension.",
+    "Unmark tools — Gemini image watermark removal, video cleanup, background cutouts, PDF overlay stamps, Nano Banana create, and the Chrome extension.",
   alternates: { canonical: "/tools" },
 };
 
