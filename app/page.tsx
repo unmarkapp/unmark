@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 
 import HomePage from "@/components/HomePage";
-import { SITE_TAGLINE, SITE_TITLE_DEFAULT, SITE_URL } from "@/lib/seo";
+import JsonLd from "@/components/JsonLd";
+import { faqPageJsonLd } from "@/lib/jsonld";
+import { FAQ_ITEMS, SITE_TAGLINE, SITE_TITLE_DEFAULT, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
   title: {
@@ -20,5 +22,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <HomePage />;
+  return (
+    <>
+      <JsonLd data={faqPageJsonLd(FAQ_ITEMS)} />
+      <HomePage />
+    </>
+  );
 }

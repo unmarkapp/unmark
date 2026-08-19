@@ -201,7 +201,12 @@ export const FAQ_ITEMS = [
   {
     question: "Does Gemini Advanced remove the watermark for me?",
     answer:
-      "No. Google does not offer a setting to turn off the visible sparkle on Gemini, Veo, Imagen, or Nano Banana exports, including higher-tier Gemini plans. Unmark removes the sparkle after you download the file. Instant covers a single still in the browser; Cloud covers video and Library. If a Google product later adds an official unmarked export, you would not need Unmark for that file — until then, cleanup happens on the export you already have.",
+      "A Gemini plan does not, by itself, strip the sparkle from files you already downloaded. Around mid-August 2026 Google began rolling out a setting in Gemini and Flow that can hide the visible watermark on new generations for some regions and accounts. That toggle is not universal, and it does not clean exports sitting on your disk. Unmark is for those files: Instant for a still in the browser, Cloud for Veo and Flow clips in Library.",
+  },
+  {
+    question: "Google added a watermark-off toggle — do I still need Unmark?",
+    answer:
+      "Yes, if you already exported media with the sparkle, or if the native Gemini/Flow toggle is not available on your account. Google’s mid-August 2026 setting (geo- and plan-restricted) can hide the visible mark on some new generations. It does not walk back through Library-less downloads you made last week. Unmark Instant still cleans one Gemini still in the browser with no account; Cloud still cleans Veo and Google Flow video. If Google hands you an unmarked file going forward, you do not need Unmark for that file.",
   },
 ] as const;
 

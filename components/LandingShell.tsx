@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import dynamic from "next/dynamic";
 
 import AppsSection from "@/components/AppsSection";
 import ClosingCta from "@/components/ClosingCta";
@@ -11,10 +12,20 @@ import LandingBeforeAfter from "@/components/LandingBeforeAfter";
 import LandingCompare from "@/components/LandingCompare";
 import LandingFaq from "@/components/LandingFaq";
 import LandingSeoContent from "@/components/LandingSeoContent";
-import ProductTour from "@/components/ProductTour";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { SITE_ONE_LINER } from "@/lib/seo";
+
+const ProductTour = dynamic(() => import("@/components/ProductTour"), {
+  ssr: false,
+  loading: () => (
+    <section
+      id="tour"
+      className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
+      aria-hidden
+    />
+  ),
+});
 
 export default function LandingShell({
   children,

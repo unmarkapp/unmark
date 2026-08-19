@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
+import JsonLd from "@/components/JsonLd";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
+import { breadcrumbJsonLd } from "@/lib/jsonld";
 
 export const metadata: Metadata = {
   title: "Contact support",
@@ -23,6 +25,7 @@ const updated = "August 14, 2026";
 export default function SupportPage() {
   return (
     <div className="surface-grain min-h-screen text-foreground">
+      <JsonLd data={breadcrumbJsonLd([{ name: "Support", path: "/support" }])} />
       <SiteHeader />
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">

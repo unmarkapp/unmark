@@ -24,6 +24,7 @@ on:
       - "next.config.ts"
       - "package.json"
       - "package-lock.json"
+      - "scripts/**"
       - ".github/workflows/frontend-azure.yml"
   workflow_dispatch:
 
@@ -106,3 +107,7 @@ jobs:
           echo "## Frontend deployed" >> "$GITHUB_STEP_SUMMARY"
           echo "https://${FQDN}" >> "$GITHUB_STEP_SUMMARY"
           echo "Frontend live at: https://${FQDN}"
+
+      - name: Submit IndexNow
+        continue-on-error: true
+        run: node scripts/submit-indexnow.mjs

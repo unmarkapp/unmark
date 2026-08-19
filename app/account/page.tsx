@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Account",
   description: "Manage your Unmark credits for Gemini watermark removal.",
   robots: { index: false, follow: false },
+  alternates: { canonical: "/account" },
 };
 
 export default function AccountPage() {

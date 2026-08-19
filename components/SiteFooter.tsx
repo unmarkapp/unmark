@@ -6,7 +6,6 @@ import { GUIDE_LINKS } from "@/lib/seo";
 
 export default function SiteFooter() {
   const year = new Date().getFullYear();
-  const primaryGuides = GUIDE_LINKS.slice(0, 4);
 
   return (
     <footer className="border-t border-border/80">
@@ -35,7 +34,7 @@ export default function SiteFooter() {
                 Guides
               </p>
               <nav className="mt-3 flex flex-col gap-2 text-sm font-medium text-muted-strong">
-                {primaryGuides.map((guide) => (
+                {GUIDE_LINKS.map((guide) => (
                   <Link
                     key={guide.href}
                     href={guide.href}
@@ -55,6 +54,9 @@ export default function SiteFooter() {
                 Product
               </p>
               <nav className="mt-3 flex flex-col gap-2 text-sm font-medium text-muted-strong">
+                <Link href="/about" className="transition hover:text-brand">
+                  About
+                </Link>
                 <Link href="/product" className="transition hover:text-brand">
                   Product
                 </Link>
@@ -87,9 +89,6 @@ export default function SiteFooter() {
                 </Link>
                 <Link href="/skills" className="transition hover:text-brand">
                   Agent skill
-                </Link>
-                <Link href="/developers" className="transition hover:text-brand">
-                  Developers
                 </Link>
                 <Link href="/tools" className="transition hover:text-brand">
                   Tools

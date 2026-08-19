@@ -148,7 +148,7 @@ export default function SkillsPage() {
             sparkles on local stills while it updates docs, prepares repo files,
             or runs a batch. {SITE_NAME} already has{" "}
             <Link
-              href="/developers"
+              href="/guides/mcp-server"
               className="font-medium text-brand underline-offset-2 hover:underline"
             >
               MCP
@@ -224,7 +224,7 @@ export default function SkillsPage() {
           <p className="mx-auto mt-6 max-w-3xl text-center text-sm text-muted">
             Prefer a connector instead of a script?{" "}
             <Link
-              href="/developers"
+              href="/guides/mcp-server"
               className="font-medium text-brand underline-offset-2 hover:underline"
             >
               Add Unmark MCP

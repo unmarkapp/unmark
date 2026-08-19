@@ -54,7 +54,9 @@ export default function GuidesIndexPage() {
           video — including Google Flow exports, free Instant cleanup in the
           browser (no account for a single still), and the Unmark Chrome
           extension. Each guide below is for one job: stills, video, Flow, Veo,
-          or free Instant.
+          or free Instant. Unmark is built for that Google sparkle family, not
+          for Sora, Midjourney, Runway, or Adobe Firefly stamps — those are a
+          different mark and a different product.
         </p>
 
         <ul className="mt-12 divide-y divide-border">

@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 
 import BackgroundRemovalTool from "@/components/BackgroundRemovalTool";
+import JsonLd from "@/components/JsonLd";
 import {
   ARTICLE_IMAGE,
-  EDITORIAL_AUTHOR,
   GUIDES_REVIEWED,
+  personJsonLd,
 } from "@/lib/editorial";
+import { breadcrumbJsonLd } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
@@ -26,20 +28,10 @@ const BG_PUBLISHED = "2026-08-11";
 const pageUrl = `${SITE_URL}/tools/background-removal`;
 
 const jsonLd = [
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "Tools", item: `${SITE_URL}/tools` },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: "Background removal",
-        item: pageUrl,
-      },
-    ],
-  },
+  breadcrumbJsonLd([
+    { name: "Tools", path: "/tools" },
+    { name: "Background removal", path: "/tools/background-removal" },
+  ]),
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
@@ -50,11 +42,7 @@ const jsonLd = [
     image: ARTICLE_IMAGE,
     datePublished: BG_PUBLISHED,
     dateModified: GUIDES_REVIEWED,
-    author: {
-      "@type": "Organization",
-      name: EDITORIAL_AUTHOR.name,
-      url: EDITORIAL_AUTHOR.url,
-    },
+    author: personJsonLd(),
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -69,11 +57,7 @@ export default function BackgroundRemovalPage() {
   return (
     <>
       {jsonLd.map((ld, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-        />
+        <JsonLd key={i} data={ld} />
       ))}
       <BackgroundRemovalTool />
     </>

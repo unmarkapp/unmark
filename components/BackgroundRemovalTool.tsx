@@ -187,9 +187,33 @@ export default function BackgroundRemovalTool() {
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
             Upload a photo. Unmark cuts out the subject so you can download a
-            transparent PNG — portraits, products, and AI stills.
+            transparent PNG — portraits, products, and AI stills. Cloud saves
+            the cutout to Library. If the still still shows a Gemini sparkle,
+            clean it with Instant first so the logo is not left on the subject.
           </p>
         </section>
+
+        <figure className="mx-auto mt-10 grid max-w-2xl grid-cols-2 gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/demo/bg-remove-before.jpg"
+            alt="Product photo of a ceramic mug on a wooden table before background removal"
+            className="w-full border-2 border-ink object-cover"
+            width={450}
+            height={600}
+          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/demo/bg-remove-after.jpg"
+            alt="Same ceramic mug isolated on a checkerboard after Unmark background removal"
+            className="w-full border-2 border-ink object-cover"
+            width={450}
+            height={600}
+          />
+          <figcaption className="col-span-2 text-center text-xs text-muted">
+            Before (left) and after (right): subject kept, background dropped.
+          </figcaption>
+        </figure>
 
         {!user && !authLoading && hasHeldShare ? (
           <div className="mx-auto mt-10 max-w-md text-center">
@@ -373,7 +397,7 @@ export default function BackgroundRemovalTool() {
 
         <section className="mx-auto mt-16 max-w-3xl border-t border-border/80 pt-12">
           <h2 className="font-display text-2xl font-semibold tracking-tight">
-            What you get
+            What do you get from background removal?
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
             Unmark background removal keeps the subject and drops the rest so
@@ -383,7 +407,7 @@ export default function BackgroundRemovalTool() {
             stored.
           </p>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
-            How to cut out a photo
+            How do I cut out a photo?
           </h2>
           <ol className="mt-4 list-decimal space-y-2 pl-5 text-[15px] leading-relaxed text-muted-strong">
             <li>Drop a PNG, JPG, or WebP (up to 25 MB) on this page.</li>
@@ -391,7 +415,7 @@ export default function BackgroundRemovalTool() {
             <li>Wait for the cutout, then download the transparent PNG.</li>
           </ol>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
-            Best files to upload
+            Which files work best?
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
             A single subject on a simple background works best — a person, a
@@ -403,7 +427,7 @@ export default function BackgroundRemovalTool() {
             sitting on the subject.
           </p>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
-            Portraits, products, and Gemini stills
+            Does this work on portraits, products, and Gemini stills?
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
             Portraits: use a photo where the person is clearly separated from
@@ -415,8 +439,18 @@ export default function BackgroundRemovalTool() {
             your own layout in Figma or an editor.
           </p>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
-            After you download
+            What should I do after I download?
           </h2>
+          <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
+            The file is a transparent PNG. Drop it onto a color field, a
+            lifestyle photo, or a slide. If you need the sparkle gone and the
+            background gone, run watermark cleanup first so you are not cutting
+            around a logo. Library keeps the cutout so you can download again
+            without re-uploading. Unmark does not relight the subject or invent
+            a new backdrop — pair the PNG with your own layout in Figma or an
+            editor. Hair, glasses, and thin product edges are the usual stress
+            tests: preview the checkerboard before you ship the file to a client.
+          </p>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
             The file is a transparent PNG. Drop it onto a color field, a
             lifestyle photo, or a slide. If you need the sparkle gone and the

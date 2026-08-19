@@ -18,19 +18,19 @@ export const metadata: Metadata = {
 
 const steps = [
   {
-    title: "Export from Google Flow",
+    title: "How do I export from Google Flow?",
     body: "Download the original Veo or Gemini clip from Flow — MP4, MOV, or WebM. Skip cropping or a social re-encode before cleanup.",
   },
   {
-    title: "Drop the Flow export here",
+    title: "Where do I drop the Flow export?",
     body: "Use the box on this page. Unmark opens the cleaner with your file. Sign in only if Cloud asks so the clip can live in Library.",
   },
   {
-    title: "Review the cleaned shot",
+    title: "How do I review the cleaned shot?",
     body: "Unmark locates the Gemini or Veo sparkle and removes it across frames so the mark does not pop back on a cut.",
   },
   {
-    title: "Download for delivery",
+    title: "Where do I download for delivery?",
     body: "Open Library when the file is ready. Preview, then download for TikTok, Reels, Shorts, or a client cut.",
   },
 ] as const;
@@ -69,7 +69,10 @@ export default function GoogleFlowWatermarkRemoverGuidePage() {
               Google Flow watermark remover
             </strong>{" "}
             cleans that logo frame by frame without boxing out the whole
-            corner of the shot.
+            corner of the shot. Drop the original Flow export — not a screenshot
+            of the player, not a social re-download. You only sign in if Cloud
+            needs an account to keep the clip in Library. Stills from the same
+            Flow board still belong on Instant; this page is for the MP4.
           </p>
           <p>
             Drop the export on this page. You only sign in if Cloud needs an
@@ -80,7 +83,7 @@ export default function GoogleFlowWatermarkRemoverGuidePage() {
       steps={steps}
       sections={[
         {
-          heading: "Flow exports vs Gemini chat stills",
+          heading: "How are Flow exports different from Gemini chat stills?",
           body: (
             <>
               <p>
@@ -99,7 +102,7 @@ export default function GoogleFlowWatermarkRemoverGuidePage() {
           ),
         },
         {
-          heading: "Keeping continuity across a Flow scene",
+          heading: "How do I keep continuity across a Flow scene?",
           body: (
             <>
               <p>
@@ -118,7 +121,7 @@ export default function GoogleFlowWatermarkRemoverGuidePage() {
           ),
         },
         {
-          heading: "From Flow to social",
+          heading: "How do I get a Flow clip to social?",
           body: (
             <>
               <p>
@@ -138,7 +141,6 @@ export default function GoogleFlowWatermarkRemoverGuidePage() {
         },
       ]}
       faqs={faqs}
-      howToName="How to remove the Google Flow watermark from a video"
       howToDescription="Remove the visible Gemini or Veo mark from Google Flow video exports with Unmark."
       ctaHeading="Clean a Google Flow export"
       ctaBody="Drop your Flow or Veo clip on this page — Cloud keeps it in Library until you download."

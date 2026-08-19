@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Figtree, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import { AuthProvider } from "@/lib/auth";
 import { CreditsProvider } from "@/lib/credits";
 import {
-  FAQ_ITEMS,
   PRODUCT_HUNT_PROFILE_URL,
   CHROME_WEB_STORE_URL,
   SITE_KEYWORDS,
@@ -15,6 +15,7 @@ import {
 import { ThemeProvider, themeInitScript } from "@/lib/theme";
 import { ToastProvider } from "@/components/Toast";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import JsonLd from "@/components/JsonLd";
 import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
@@ -40,13 +41,10 @@ export const metadata: Metadata = {
   description: SITE_TAGLINE,
   applicationName: SITE_NAME,
   keywords: SITE_KEYWORDS,
-  authors: [{ name: SITE_NAME, url: SITE_URL }],
+  authors: [{ name: "Sumit Kumar", url: `${SITE_URL}/about` }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: "technology",
-  alternates: {
-    canonical: "/",
-  },
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -110,6 +108,13 @@ const jsonLd = {
         url: `${SITE_URL}/icon.png`,
       },
       sameAs: [PRODUCT_HUNT_PROFILE_URL, CHROME_WEB_STORE_URL],
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        email: "pythondemo4@gmail.com",
+        url: `${SITE_URL}/support`,
+        availableLanguage: ["English"],
+      },
     },
     {
       "@type": "SoftwareApplication",
@@ -138,18 +143,6 @@ const jsonLd = {
         description: "Free signup credits; paid credit packs available",
       },
     },
-    {
-      "@type": "FAQPage",
-      "@id": `${SITE_URL}/#faq`,
-      mainEntity: FAQ_ITEMS.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    },
   ],
 };
 
@@ -161,27 +154,30 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${figtree.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
-        {/* Google tag (gtag.js) — one tag, immediately after <head> */}
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.dataLayer = window.dataLayer || [];
-function gtag(){dataLayer.push(arguments);}
-window.gtag = gtag;
-gtag('js', new Date());
-gtag('config', '${GA_MEASUREMENT_ID}');`,
-          }}
-        />
+        <link rel="preconnect" href="https://auth.unmark.ink" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://script.supademo.com" />
+        <link rel="dns-prefetch" href="https://app.supademo.com" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        {GA_MEASUREMENT_ID ? (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+              strategy="lazyOnload"
+            />
+            <Script id="ga-init" strategy="lazyOnload">{`
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+window.gtag = gtag;
+gtag('js', new Date());
+gtag('config', '${GA_MEASUREMENT_ID}');
+`}</Script>
+          </>
+        ) : null}
+        <JsonLd data={jsonLd} />
         <GoogleAnalytics />
         <ThemeProvider>
           <AuthProvider>

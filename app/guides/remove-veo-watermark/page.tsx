@@ -18,19 +18,19 @@ export const metadata: Metadata = {
 
 const steps = [
   {
-    title: "Get the Veo source file",
+    title: "How do I get the Veo source file?",
     body: "Export or download the clip directly from Veo, Google Flow, or Gemini video — not a screen recording. MP4 is the most common format.",
   },
   {
-    title: "Drop the clip on this page",
+    title: "Where do I drop the Veo clip?",
     body: "Use the box below. Unmark opens the cleaner with your file. Sign in only if Cloud asks so the result can sit in Library.",
   },
   {
-    title: "Auto-detect the sparkle",
+    title: "How does Auto-detect find the sparkle?",
     body: "Unmark finds the four-point Veo / Gemini logo in the corner (or a tiled placement) and applies the same cleanup across the timeline.",
   },
   {
-    title: "Download the clean Veo clip",
+    title: "Where do I download the clean Veo clip?",
     body: "Collect the finished file from Library. Share to social without the visible AI sparkle in every frame.",
   },
 ] as const;
@@ -68,7 +68,12 @@ export default function RemoveVeoWatermarkGuidePage() {
               Veo watermark remover
             </strong>{" "}
             that processes the full clip, saves it to Library, and lets you
-            download when it is ready.
+            download when it is ready. Start from the original Veo, Flow, or
+            Gemini video export — a screen recording of the preview player adds
+            chrome Unmark is not meant to erase. Homepage limits still apply
+            (short clips, up to 1080p). Instant remains the free path for
+            stills; this page spends Cloud credits because every frame needs
+            the same cleanup.
           </p>
           <p>
             Drop the MP4 here. Sign in only if Cloud needs an account. Instant
@@ -79,7 +84,7 @@ export default function RemoveVeoWatermarkGuidePage() {
       steps={steps}
       sections={[
         {
-          heading: "Veo, Gemini video, and Flow — same sparkle",
+          heading: "Are Veo, Gemini video, and Flow the same sparkle?",
           body: (
             <>
               <p>
@@ -99,7 +104,7 @@ export default function RemoveVeoWatermarkGuidePage() {
           ),
         },
         {
-          heading: "Portrait vs landscape Veo clips",
+          heading: "Do portrait and landscape Veo clips both work?",
           body: (
             <>
               <p>
@@ -118,7 +123,7 @@ export default function RemoveVeoWatermarkGuidePage() {
           ),
         },
         {
-          heading: "Publishing a clean Veo clip",
+          heading: "How do I publish a clean Veo clip?",
           body: (
             <>
               <p>
@@ -138,7 +143,6 @@ export default function RemoveVeoWatermarkGuidePage() {
         },
       ]}
       faqs={faqs}
-      howToName="How to remove the Veo watermark from a video"
       howToDescription="Remove the visible Veo sparkle logo from AI video with Unmark."
       ctaHeading="Remove the Veo sparkle from your clip"
       ctaBody="Drop MP4, MOV, or WebM from Veo or Google Flow — Cloud handles every frame."

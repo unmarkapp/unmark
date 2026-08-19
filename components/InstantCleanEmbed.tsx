@@ -74,7 +74,7 @@ export default function InstantCleanEmbed() {
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">
         Drop a Gemini still. Cleanup runs in your browser — then download the
-        PNG.
+        PNG. Instant stills never leave your device.
       </p>
 
       {!resultUrl ? (

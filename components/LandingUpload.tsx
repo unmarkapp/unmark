@@ -4,6 +4,7 @@ import { ChangeEvent, useRef, useState } from "react";
 
 import CreateGenerateCard from "@/components/CreateGenerateCard";
 import LandingShell from "@/components/LandingShell";
+import PrivacyNote from "@/components/PrivacyNote";
 import Walkthrough from "@/components/Walkthrough";
 import { useDropToClean } from "@/lib/dropToClean";
 
@@ -106,6 +107,19 @@ export default function LandingUpload({
               up to 60s / 1080p / 100MB.
             </p>
 
+            <button
+              type="button"
+              data-walkthrough="sample"
+              onClick={(event) => {
+                event.stopPropagation();
+                onTrySample();
+              }}
+              disabled={sampleBusy}
+              className="btn-play mt-6 inline-flex min-h-11 items-center justify-center gap-2.5 border-2 border-ink bg-peach px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition hover:brightness-95 disabled:opacity-60"
+            >
+              {sampleBusy ? "Loading sample…" : "Try a sample"}
+            </button>
+
             <p className="mt-5 text-xs tracking-wide text-muted">
               Images up to 10 · Video 1 credit / 5s
             </p>
@@ -120,23 +134,11 @@ export default function LandingUpload({
             />
           </div>
 
-          <button
-            type="button"
-            data-walkthrough="sample"
-            onClick={onTrySample}
-            disabled={sampleBusy}
-            className="btn-play mt-4 inline-flex w-full items-center justify-center gap-2.5 border-2 border-ink bg-peach px-4 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition hover:brightness-95 disabled:opacity-60"
-          >
-            {sampleBusy ? "Loading sample…" : "Try a sample"}
-          </button>
           <p className="mt-2 text-center text-xs text-muted">
             Sample Gemini still with a sparkle in the corner — Instant is free,
             no account.
           </p>
-
-          <p className="mt-4 text-center text-xs text-muted">
-            Removes the visible Gemini sparkle · files stay private
-          </p>
+          <PrivacyNote className="mt-3 text-center text-xs leading-relaxed text-muted" />
         </>
       )}
       <Walkthrough />

@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "Library",
   description: "Browse and download your cleaned Gemini images.",
   robots: { index: false, follow: false },
+  alternates: { canonical: "/library" },
 };
 
 export default function LibraryPage() {

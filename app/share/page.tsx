@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description:
     "Share a photo to Unmark, then clean the Gemini sparkle or remove the background.",
   robots: { index: false, follow: false },
+  alternates: { canonical: "/share" },
 };
 
 export default function SharePage() {

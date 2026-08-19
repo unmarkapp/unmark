@@ -6,7 +6,6 @@ import { createPortal } from "react-dom";
 import { useAuth } from "@/lib/auth";
 import {
   completeWalkthrough,
-  isWalkthroughDone,
   resetWalkthrough,
   shouldForceWalkthrough,
 } from "@/lib/walkthrough";
@@ -92,8 +91,8 @@ export default function Walkthrough() {
   useEffect(() => {
     if (loading) return;
     const force = shouldForceWalkthrough();
-    if (force) resetWalkthrough();
-    if (!force && isWalkthroughDone()) return;
+    if (!force) return;
+    resetWalkthrough();
     const timer = window.setTimeout(() => setStepIndex(0), 650);
     return () => window.clearTimeout(timer);
   }, [loading]);
@@ -205,7 +204,7 @@ export default function Walkthrough() {
           <button
             type="button"
             onClick={finish}
-            className="text-sm font-medium text-muted transition hover:text-foreground"
+            className="min-h-11 min-w-11 px-3 text-sm font-medium text-muted transition hover:text-foreground"
           >
             Skip
           </button>
@@ -214,7 +213,7 @@ export default function Walkthrough() {
               <button
                 type="button"
                 onClick={back}
-                className="border-2 border-ink bg-surface px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+                className="min-h-11 border-2 border-ink bg-surface px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
               >
                 Back
               </button>
@@ -222,7 +221,7 @@ export default function Walkthrough() {
             <button
               type="button"
               onClick={next}
-              className="border-2 border-ink bg-brand px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+              className="min-h-11 border-2 border-ink bg-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
             >
               {isLast ? "Done" : "Next"}
             </button>

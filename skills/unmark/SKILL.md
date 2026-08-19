@@ -10,7 +10,7 @@ Clean visible Gemini sparkles on stills as part of a larger agent task.
 Prefer simpler options first:
 
 1. Website Instant (no account): https://www.unmark.ink/
-2. Hosted MCP connector: https://www.unmark.ink/developers
+2. Hosted MCP connector: https://www.unmark.ink/guides/mcp-server
 3. This skill (local files in a workspace)
 
 ## If Unmark MCP tools are already connected

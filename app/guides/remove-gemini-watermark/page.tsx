@@ -18,19 +18,19 @@ export const metadata: Metadata = {
 
 const steps = [
   {
-    title: "Export the original still",
+    title: "How do I export the original still?",
     body: "Download the image Gemini, Imagen, or Nano Banana generated. Use the file Google gave you — PNG or a high-quality JPG — rather than a screenshot or a copy that already went through a social app.",
   },
   {
-    title: "Drop it on Instant",
+    title: "Where do I drop the Gemini image?",
     body: "Use the box on this page. Instant runs in your browser for a single still. You do not need an account to try one image.",
   },
   {
-    title: "Let Auto find the sparkle",
+    title: "How does Auto find the sparkle?",
     body: "Unmark looks for the four-point Gemini mark, usually in a corner. If Auto misses an unusual placement, open the homepage and switch to Cloud so you can save the result in Library.",
   },
   {
-    title: "Download the clean file",
+    title: "How do I download the clean file?",
     body: "Download at the original resolution. Sign in only if you want Library history, video, bulk, or the Chrome extension.",
   },
 ] as const;
@@ -51,6 +51,11 @@ const faqs = [
     answer:
       "Unmark is built for the visible Gemini sparkle in the corner of Google AI stills — not logos, captions, timestamps, stock-photo bugs, or marks from other generators. If the sparkle is tiled, tiny, or sitting on a busy pattern, Instant may leave a faint edge; try Cloud from the homepage so you can inspect the result in Library and run the file again. For a subject cutout after the sparkle is gone, use background removal under Tools. Do not expect Unmark to erase text overlays you added in Canva or CapCut.",
   },
+  {
+    question: "Google added a watermark-off toggle — do I still need this guide?",
+    answer:
+      "Yes if the still already has the sparkle, or if the Gemini/Flow setting is not on your account. Around mid-August 2026 Google started rolling out a toggle that can hide the visible mark on some new generations (region and plan restricted). It does not clean files you already exported. Instant on this page is still the path for a sparkle that is burned into a PNG, JPG, or WebP.",
+  },
 ] as const;
 
 export default function RemoveGeminiWatermarkGuidePage() {
@@ -61,25 +66,34 @@ export default function RemoveGeminiWatermarkGuidePage() {
       intro={
         <>
           <p>
-            Gemini adds a small four-point sparkle to many AI stills. Unmark is a{" "}
+            Gemini, Imagen, and Nano Banana burn a small four-point sparkle into
+            many stills you download from Google. There is no layer to toggle
+            off inside the export, and cropping the corner usually wrecks the
+            composition. Unmark Instant is a{" "}
             <strong className="font-semibold text-foreground">
               Gemini watermark remover
             </strong>{" "}
-            for that corner mark — not a generic logo eraser. Instant is free in
-            the browser: drop one export, download a clean PNG, and skip an
-            account unless you need video or Library.
+            for that visible mark: drop one PNG, JPG, or WebP on this page, let
+            Auto find the sparkle, and download a clean file at the original
+            resolution. You do not need an account for a single still. The file
+            stays in your browser — Instant never uploads it to Unmark Cloud.
           </p>
           <p>
-            This guide covers stills only. For Veo or Google Flow clips, use the
-            video guides. For a transparent cutout after the sparkle is gone,
-            open background removal.
+            This guide is the how-to for stills. If you only wanted to know
+            whether Instant is actually free, read the{" "}
+            <a href="/guides/free-gemini-watermark-remover" className="text-brand hover:underline">
+              free Gemini watermark remover
+            </a>{" "}
+            comparison instead of repeating these steps. For Veo or Google Flow
+            clips, use the video guides. For a transparent cutout after the
+            sparkle is gone, open background removal.
           </p>
         </>
       }
       steps={steps}
       sections={[
         {
-          heading: "What the Gemini sparkle looks like",
+          heading: "What does the Gemini sparkle look like?",
           body: (
             <>
               <p>
@@ -98,7 +112,7 @@ export default function RemoveGeminiWatermarkGuidePage() {
           ),
         },
         {
-          heading: "Instant vs Cloud for a still",
+          heading: "When should I use Instant vs Cloud for a still?",
           body: (
             <>
               <p>
@@ -120,7 +134,7 @@ export default function RemoveGeminiWatermarkGuidePage() {
           ),
         },
         {
-          heading: "If the sparkle is still visible",
+          heading: "What if the sparkle is still visible?",
           body: (
             <>
               <p>
@@ -141,7 +155,6 @@ export default function RemoveGeminiWatermarkGuidePage() {
         },
       ]}
       faqs={faqs}
-      howToName="How to remove a Gemini watermark from an image"
       howToDescription="Remove the Google Gemini sparkle from a still using Unmark Instant — no account."
       ctaHeading="Ready to clean a Gemini image?"
       ctaBody="Use Instant on this page, or open the homepage drop zone. No account for a single still."

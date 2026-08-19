@@ -18,19 +18,19 @@ export const metadata: Metadata = {
 
 const steps = [
   {
-    title: "Export the original clip",
+    title: "How do I export the original clip?",
     body: "Download the MP4, MOV, or WebM from Gemini, Veo, or Google Flow. Start from the highest-quality export — a re-compressed copy from a chat app is harder to clean.",
   },
   {
-    title: "Drop it on this page",
+    title: "Where do I drop the Gemini video?",
     body: "Use the box below. Unmark opens the cleaner with your file. Sign in only if Cloud asks — new accounts include credits to try a short video.",
   },
   {
-    title: "Let Unmark clean every frame",
+    title: "How does Unmark clean every frame?",
     body: "The sparkle is on each frame, not one overlay. Unmark tracks that mark through the clip so the logo does not flicker back mid-shot.",
   },
   {
-    title: "Download from Library",
+    title: "Where do I download the clean file?",
     body: "When the clip is ready, open Library for the clean file. You can leave the tab — Unmark keeps the result until you download.",
   },
 ] as const;
@@ -74,7 +74,12 @@ export default function RemoveGeminiVideoWatermarkGuidePage() {
               Gemini video watermark remover
             </strong>{" "}
             that tracks that mark through the clip and saves the clean file to
-            Library.
+            Library. Instant cannot do this job: a stills engine in the browser
+            does not walk sixty frames a second. Drop an original MP4, MOV, or
+            WebM on this page — not a screen recording of the player, not a
+            WhatsApp recompress. Sign in only when Cloud asks so the job can
+            live in Library until you download. New accounts include credits to
+            try a short clip before you buy a pack.
           </p>
           <p>
             Drop an MP4 on this page to start. Sign in only when Cloud asks.
@@ -85,7 +90,7 @@ export default function RemoveGeminiVideoWatermarkGuidePage() {
       steps={steps}
       sections={[
         {
-          heading: "Why video is not Instant",
+          heading: "Why is video not Instant?",
           body: (
             <>
               <p>
@@ -104,7 +109,7 @@ export default function RemoveGeminiVideoWatermarkGuidePage() {
           ),
         },
         {
-          heading: "Gemini video vs a still export",
+          heading: "What is the difference between Gemini video and a still export?",
           body: (
             <>
               <p>
@@ -122,7 +127,7 @@ export default function RemoveGeminiVideoWatermarkGuidePage() {
           ),
         },
         {
-          heading: "After the clip is clean",
+          heading: "What happens after the clip is clean?",
           body: (
             <>
               <p>
@@ -142,7 +147,6 @@ export default function RemoveGeminiVideoWatermarkGuidePage() {
         },
       ]}
       faqs={faqs}
-      howToName="How to remove the Gemini watermark from a video"
       howToDescription="Remove the visible Gemini and Veo sparkle from video using Unmark Cloud."
       ctaHeading="Ready to clean a Gemini or Veo video?"
       ctaBody="Drop a clip on this page. Cloud keeps the file in Library until you download."

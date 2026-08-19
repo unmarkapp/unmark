@@ -9,6 +9,7 @@ import {
   GUIDES_PUBLISHED,
   GUIDES_REVIEWED,
   formatReviewDate,
+  personJsonLd,
 } from "@/lib/editorial";
 import { MCP_SERVER_URL, SITE_NAME, SITE_URL } from "@/lib/seo";
 
@@ -118,11 +119,7 @@ const jsonLd = [
     image: ARTICLE_IMAGE,
     datePublished: GUIDES_PUBLISHED,
     dateModified: GUIDES_REVIEWED,
-    author: {
-      "@type": "Organization",
-      name: EDITORIAL_AUTHOR.name,
-      url: EDITORIAL_AUTHOR.url,
-    },
+    author: personJsonLd(),
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
@@ -165,7 +162,7 @@ export default function McpServerGuidePage() {
         <p className="mt-3 text-sm text-muted">
           By{" "}
           <Link
-            href="/product"
+            href="/about"
             className="font-medium text-foreground underline-offset-2 hover:underline"
           >
             {EDITORIAL_AUTHOR.name}
@@ -176,8 +173,12 @@ export default function McpServerGuidePage() {
         <p className="mt-4 text-base leading-relaxed text-muted-strong sm:text-lg">
           Connect {SITE_NAME} to AI assistants via the Model Context Protocol (MCP).
           Remove Gemini watermarks, strip backgrounds, and poll Cloud jobs — all using
-          your Unmark credits and Library. This is the chat connector, not the free
-          Instant drop zone and not the repo skill.
+          your Unmark credits and Library. This is the chat connector for Claude,
+          Cursor, and other MCP clients: paste the hosted server URL, sign in with
+          Google, then ask the agent to call remove_watermark or remove_background on
+          a public image URL. It is not the free Instant drop zone and not the repo
+          skill on /skills. Instant stills stay in the browser; MCP tool calls use
+          the same Cloud balance as the website.
         </p>
 
         <section className="mt-12 rounded-2xl border border-border bg-cream/50 p-6">

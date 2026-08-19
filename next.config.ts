@@ -60,6 +60,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/developers",
+        destination: "/guides/mcp-server",
+        permanent: true,
+      },
+    ];
+  },
   async rewrites() {
     if (useClusterRewrites) {
       const api =

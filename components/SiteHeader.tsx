@@ -134,7 +134,7 @@ function NavLinks({
       <Link href="/#how" className={linkClass} onClick={onNavigate}>
         How it works
       </Link>
-      <Link href="/#tour" className={linkClass} onClick={onNavigate}>
+      <Link href="/?guide=1" className={linkClass} onClick={onNavigate}>
         Tour
       </Link>
       <Link href="/tools" className={linkClass} onClick={onNavigate}>
@@ -146,11 +146,6 @@ function NavLinks({
       <Link href="/skills" className={linkClass} onClick={onNavigate}>
         Skills
       </Link>
-      {!user ? (
-        <Link href="/developers" className={linkClass} onClick={onNavigate}>
-          Developers
-        </Link>
-      ) : null}
       <Link
         href="/#apps"
         className={`inline-flex items-center gap-1.5 ${linkClass}`}

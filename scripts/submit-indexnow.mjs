@@ -23,9 +23,14 @@ const URLS = [
   "https://www.unmark.ink/guides/remove-veo-watermark",
   "https://www.unmark.ink/guides/free-gemini-watermark-remover",
   "https://www.unmark.ink/guides/mcp-server",
+  "https://www.unmark.ink/android",
   "https://www.unmark.ink/extension",
-  "https://www.unmark.ink/developers",
   "https://www.unmark.ink/skills",
+  "https://www.unmark.ink/about",
+  "https://www.unmark.ink/support",
+  "https://www.unmark.ink/privacy",
+  "https://www.unmark.ink/terms",
+  "https://www.unmark.ink/brand",
 ];
 
 const response = await fetch("https://api.indexnow.org/indexnow", {

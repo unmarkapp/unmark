@@ -2,16 +2,20 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 import InstantCleanEmbed from "@/components/InstantCleanEmbed";
+import PrivacyNote from "@/components/PrivacyNote";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import VideoCleanEmbed from "@/components/VideoCleanEmbed";
+import JsonLd from "@/components/JsonLd";
 import {
   ARTICLE_IMAGE,
   EDITORIAL_AUTHOR,
   GUIDES_PUBLISHED,
   GUIDES_REVIEWED,
   formatReviewDate,
+  personJsonLd,
 } from "@/lib/editorial";
+import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/jsonld";
 import { SITE_NAME, SITE_URL } from "@/lib/seo";
 
 export type GuideStep = {
@@ -62,7 +66,6 @@ type GuideArticleProps = {
   steps?: readonly GuideStep[];
   sections?: readonly { heading: string; body: ReactNode }[];
   faqs?: readonly GuideFaq[];
-  howToName?: string;
   howToDescription?: string;
   ctaHeading?: string;
   ctaBody?: string;
@@ -80,7 +83,6 @@ export default function GuideArticle({
   steps,
   sections,
   faqs,
-  howToName,
   howToDescription,
   ctaHeading = "Ready to remove a Gemini watermark?",
   ctaBody = "Instant is free in your browser. Cloud adds Library, video, bulk, and the Chrome extension.",
@@ -90,46 +92,21 @@ export default function GuideArticle({
   datePublished = GUIDES_PUBLISHED,
   dateModified = GUIDES_REVIEWED,
 }: GuideArticleProps) {
-  const pageUrl = `${SITE_URL}${canonicalPath}`;
   const jsonLd: Record<string, unknown>[] = [
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: SITE_URL,
-        },
-        {
-          "@type": "ListItem",
-          position: 2,
-          name: "Guides",
-          item: `${SITE_URL}/guides`,
-        },
-        {
-          "@type": "ListItem",
-          position: 3,
-          name: title,
-          item: pageUrl,
-        },
-      ],
-    },
+    breadcrumbJsonLd([
+      { name: "Guides", path: "/guides" },
+      { name: title, path: canonicalPath },
+    ]),
     {
       "@context": "https://schema.org",
       "@type": "TechArticle",
       headline: title,
       description: howToDescription ?? title,
-      url: pageUrl,
+      url: `${SITE_URL}${canonicalPath}`,
       image: ARTICLE_IMAGE,
       datePublished,
       dateModified,
-      author: {
-        "@type": "Organization",
-        name: EDITORIAL_AUTHOR.name,
-        url: EDITORIAL_AUTHOR.url,
-      },
+      author: personJsonLd(),
       publisher: {
         "@type": "Organization",
         name: SITE_NAME,
@@ -139,36 +116,8 @@ export default function GuideArticle({
     },
   ];
 
-  if (steps?.length && howToName) {
-    jsonLd.push({
-      "@context": "https://schema.org",
-      "@type": "HowTo",
-      name: howToName,
-      description: howToDescription ?? howToName,
-      totalTime: "PT5M",
-      step: steps.map((step, i) => ({
-        "@type": "HowToStep",
-        position: i + 1,
-        name: step.title,
-        text: step.body,
-        url: `${pageUrl}#step-${i + 1}`,
-      })),
-    });
-  }
-
   if (faqs?.length) {
-    jsonLd.push({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqs.map((item) => ({
-        "@type": "Question",
-        name: item.question,
-        acceptedAnswer: {
-          "@type": "Answer",
-          text: item.answer,
-        },
-      })),
-    });
+    jsonLd.push(faqPageJsonLd(faqs));
   }
 
   const related = RELATED_GUIDES.filter((item) => item.href !== canonicalPath);
@@ -176,11 +125,7 @@ export default function GuideArticle({
   return (
     <div className="surface-grain min-h-screen text-foreground">
       {jsonLd.map((ld, i) => (
-        <script
-          key={i}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(ld) }}
-        />
+        <JsonLd key={i} data={ld} />
       ))}
 
       <SiteHeader />
@@ -193,7 +138,7 @@ export default function GuideArticle({
         <p className="mt-3 text-sm text-muted">
           By{" "}
           <Link
-            href="/product"
+            href="/about"
             className="font-medium text-foreground underline-offset-2 hover:underline"
           >
             {EDITORIAL_AUTHOR.name}
@@ -205,7 +150,12 @@ export default function GuideArticle({
           {intro}
         </div>
 
-        {embedInstant ? <InstantCleanEmbed /> : null}
+        {embedInstant ? (
+          <>
+            <InstantCleanEmbed />
+            <PrivacyNote />
+          </>
+        ) : null}
         {embedVideo ? <VideoCleanEmbed /> : null}
 
         {steps?.length ? (
