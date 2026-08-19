@@ -22,7 +22,7 @@ export interface JobResponse {
   job_type?: string;
 }
 
-export type MediaType = "image" | "video" | "pdf";
+export type MediaType = "image" | "video";
 
 export type StorageProvider = "unmark" | "google_drive";
 
@@ -85,8 +85,7 @@ export function isWatermarkRemovalJob(job: LibraryJob): boolean {
   return (
     job.status === "completed" &&
     (job.media_type || "image") === "image" &&
-    job.job_type !== "bg_remove" &&
-    job.job_type !== "pdf_watermark"
+    job.job_type !== "bg_remove"
   );
 }
 

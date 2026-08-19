@@ -19,17 +19,10 @@ function isVideoJob(job: LibraryJob): boolean {
   return job.media_type === "video";
 }
 
-function isPdfJob(job: LibraryJob): boolean {
-  return job.media_type === "pdf" || job.job_type === "pdf_watermark";
-}
-
 function jobThumbnailUrl(job: LibraryJob): string | undefined {
   if (isVideoJob(job)) {
     // Never use the mp4 result as an <img> src.
     return job.poster_url || undefined;
-  }
-  if (isPdfJob(job)) {
-    return job.preview_url || undefined;
   }
   if (job.preview_url) return job.preview_url;
   // After Drive offload, result_url is a Drive HTML page — not an image.
@@ -102,11 +95,7 @@ export default function LibraryView() {
           job.status === "completed"
         ) {
           const label =
-            job.media_type === "video"
-              ? "Video ready"
-              : job.media_type === "pdf"
-                ? "PDF ready"
-                : "Image ready";
+            job.media_type === "video" ? "Video ready" : "Image ready";
           setToast(label);
         }
         if (job.status) {
@@ -194,12 +183,8 @@ export default function LibraryView() {
   const pendingBgCount = pendingJobs.filter(
     (job) => job.job_type === "bg_remove",
   ).length;
-  const pendingPdfCount = pendingJobs.filter((job) => isPdfJob(job)).length;
   const pendingImageCount = pendingJobs.filter(
-    (job) =>
-      job.media_type !== "video" &&
-      job.job_type !== "bg_remove" &&
-      !isPdfJob(job),
+    (job) => job.media_type !== "video" && job.job_type !== "bg_remove",
   ).length;
 
   const emailNotifications = user?.email_notifications !== false;
@@ -210,11 +195,8 @@ export default function LibraryView() {
         ? "Cleaning in the background. We’ll email you when your video is ready — this page also updates automatically."
         : "Cleaning in the background. This page updates automatically when your video is ready.";
     }
-    if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0 && pendingPdfCount === 0) {
+    if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0) {
       return "Removing backgrounds in the background. This page updates automatically when each cutout is ready.";
-    }
-    if (pendingPdfCount > 0 && pendingVideoCount === 0 && pendingBgCount === 0 && pendingImageCount === 0) {
-      return "Cleaning PDFs. This page updates automatically when each file is ready.";
     }
     if (pendingVideoCount > 0 && (pendingBgCount > 0 || pendingImageCount > 0)) {
       return emailNotifications
@@ -228,8 +210,7 @@ export default function LibraryView() {
     const base =
       job.filename?.replace(/\.[^.]+$/, "") ||
       `cleaned-${job.job_id.slice(0, 8)}`;
-    const ext =
-      job.media_type === "video" ? "mp4" : job.media_type === "pdf" ? "pdf" : "png";
+    const ext = job.media_type === "video" ? "mp4" : "png";
     return `${base}-cleaned.${ext}`;
   };
 
@@ -509,7 +490,6 @@ export default function LibraryView() {
                 job.status === "completed" && Boolean(thumb || jobModalMediaUrl(job));
               const label = job.filename || `Job ${job.job_id.slice(0, 8)}`;
               const isVideo = isVideoJob(job);
-              const isPdf = isPdfJob(job);
               const isBgRemove = job.job_type === "bg_remove";
               const isPending =
                 job.status === "queued" || job.status === "processing";
@@ -608,11 +588,6 @@ export default function LibraryView() {
                           Video
                         </span>
                       )}
-                      {isPdf && (
-                        <span className="pointer-events-none absolute bottom-3 left-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
-                          PDF
-                        </span>
-                      )}
                       <span className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
                     </button>
                   ) : (
@@ -641,9 +616,7 @@ export default function LibraryView() {
                           ? job.status === "processing"
                             ? isBgRemove
                               ? "Removing BG…"
-                              : isPdf
-                                ? "Cleaning PDF…"
-                                : "Cleaning…"
+                              : "Cleaning…"
                             : "Queued"
                           : isFailed
                             ? "Failed"
@@ -667,11 +640,6 @@ export default function LibraryView() {
                           {job.duration_sec
                             ? ` · ${Math.round(job.duration_sec)}s`
                             : ""}
-                        </span>
-                      )}
-                      {isPdf && (
-                        <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
-                          PDF
                         </span>
                       )}
                       {isFailed && job.error && (
@@ -754,11 +722,7 @@ export default function LibraryView() {
           role="dialog"
           aria-modal="true"
           aria-label={
-            isVideoJob(selected)
-              ? "Video preview"
-              : isPdfJob(selected)
-                ? "PDF preview"
-                : "Image preview"
+            isVideoJob(selected) ? "Video preview" : "Image preview"
           }
         >
           <div className="flex shrink-0 items-center px-3 pb-1 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-4">

@@ -84,8 +84,6 @@ export const SITE_KEYWORDS = [
   "background removal",
   "remove background from image",
   "transparent png cutout",
-  "pdf watermark remover",
-  "remove watermark from pdf",
   "unmark",
 ];
 
@@ -117,15 +115,6 @@ export const PRODUCT_TOOLS = [
     href: "/tools/background-removal",
     cta: "Open cutout tool",
     badge: "Cloud",
-  },
-  {
-    id: "pdf",
-    title: "PDF watermark",
-    description:
-      "Remove overlay stamps and repeating marks from PDFs you own. Clean file saves to Library.",
-    href: "/tools/pdf-watermark",
-    cta: "Open PDF tool",
-    badge: "New",
   },
   {
     id: "create",
@@ -163,11 +152,6 @@ export const FAQ_ITEMS = [
     question: "Can Unmark remove image backgrounds?",
     answer:
       "Yes. Open Background removal under Tools, drop a PNG, JPG, or WebP, and download a transparent cutout for portraits, products, and AI stills. Sign in when Unmark asks so the PNG can save to Library. If the still still shows a Gemini sparkle, clean it with Instant or Cloud first, then cut out the cleaned file so the logo is not left on the subject. Hair, glasses, and product edges are the usual stress tests — preview the checkerboard before you download. Unmark does not relight the subject or invent a new backdrop; pair the PNG with your own layout.",
-  },
-  {
-    question: "Can Unmark remove a watermark from a PDF?",
-    answer:
-      "Yes, for overlay stamps, repeating marks, and watermark annotations on a PDF you own. Open PDF watermark under Tools, drop the file, and download the cleaned PDF from Library. Marks that are flattened into a scan are not supported yet. Encrypted PDFs are skipped. This is not a tool for stripping someone else’s copyright mark.",
   },
   {
     question: "Does this work with Google Flow and Veo videos?",
@@ -251,11 +235,6 @@ export const GUIDE_LINKS = [
     href: "/tools/background-removal",
     title: "Background removal",
     description: "Cut out subjects and download transparent PNG cutouts.",
-  },
-  {
-    href: "/tools/pdf-watermark",
-    title: "PDF watermark remover",
-    description: "Remove overlay stamps and repeating marks from PDFs you own.",
   },
   {
     href: "/guides/mcp-server",

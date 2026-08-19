@@ -15,12 +15,11 @@ export default function ToolsLanding() {
             Unmark
           </p>
           <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-            Unmark tools — watermark, video, cutouts, and PDF
+            Unmark tools — watermark, video, and cutouts
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-            Image watermark removal, video cleanup, background cutouts, and
-            PDF overlay stamps — one product for media that is ready to
-            publish.
+            Image watermark removal, video cleanup, and background cutouts —
+            one product for AI media that is ready to publish.
           </p>
         </section>
 

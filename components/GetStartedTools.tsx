@@ -17,8 +17,8 @@ export default function GetStartedTools() {
           Ready to use Unmark
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
-          Pick the tool you need — Instant images free, Cloud for video,
-          cutouts, and PDFs, or the Chrome extension on Gemini.
+          Pick the tool you need — Instant images free, Cloud for video
+          and cutouts, or the Chrome extension on Gemini.
         </p>
       </div>
 

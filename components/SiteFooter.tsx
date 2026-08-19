@@ -82,9 +82,6 @@ export default function SiteFooter() {
                 <Link href="/tools/background-removal" className="transition hover:text-brand">
                   Background removal
                 </Link>
-                <Link href="/tools/pdf-watermark" className="transition hover:text-brand">
-                  PDF watermark
-                </Link>
                 <Link href="/guides/mcp-server" className="transition hover:text-brand">
                   MCP server
                 </Link>
