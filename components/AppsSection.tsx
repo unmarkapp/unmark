@@ -1,4 +1,11 @@
-import { ANDROID_APP_URL, IOS_APP_URL } from "@/lib/seo";
+import Link from "next/link";
+
+import {
+  ANDROID_APP_URL,
+  ANDROID_EARLY_ACCESS_URL,
+  ANDROID_INSTALL_URL,
+  IOS_APP_URL,
+} from "@/lib/seo";
 
 const stores = [
   {
@@ -7,13 +14,21 @@ const stores = [
     line: "Unmark for iPhone",
     href: IOS_APP_URL,
     kind: "apple" as const,
+    badge: IOS_APP_URL ? null : ("Soon" as const),
   },
   {
     id: "android",
     name: "Google Play",
-    line: "Unmark for Android",
-    href: ANDROID_APP_URL,
+    line: ANDROID_APP_URL
+      ? "Unmark for Android"
+      : "Join closed testing — Become a tester",
+    href: ANDROID_APP_URL ? ANDROID_INSTALL_URL : "/android",
     kind: "play" as const,
+    badge: ANDROID_APP_URL
+      ? null
+      : ANDROID_EARLY_ACCESS_URL
+        ? ("Early access" as const)
+        : ("Soon" as const),
   },
 ];
 
@@ -32,7 +47,8 @@ export default function AppsSection() {
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
           Same Cloud account as the web — Clean, Create, and Library on iOS and
-          Android.
+          Android. Android is in closed testing: opt in on Play so we can ship
+          to production.
         </p>
       </div>
 
@@ -52,11 +68,13 @@ function StoreCard({
   line,
   href,
   kind,
+  badge,
 }: {
   name: string;
   line: string;
   href: string;
   kind: "apple" | "play";
+  badge: "Soon" | "Early access" | null;
 }) {
   const icon = kind === "apple" ? <AppleIcon /> : <PlayIcon />;
   const soon = !href;
@@ -73,9 +91,9 @@ function StoreCard({
           <span className="font-display text-lg font-semibold text-foreground">
             {name}
           </span>
-          {soon ? (
+          {badge ? (
             <span className="border-2 border-ink bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
-              Soon
+              {badge}
             </span>
           ) : null}
         </span>
@@ -92,15 +110,26 @@ function StoreCard({
     );
   }
 
+  const linkClass = `${className} transition hover:bg-cream`;
+  const external = href.startsWith("http");
+
+  if (external) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={linkClass}
+      >
+        {body}
+      </a>
+    );
+  }
+
   return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={`${className} transition hover:bg-cream`}
-    >
+    <Link href={href} className={linkClass}>
       {body}
-    </a>
+    </Link>
   );
 }
 

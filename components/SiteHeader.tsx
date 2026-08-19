@@ -7,6 +7,7 @@ import BrandLogo from "@/components/BrandLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
+import { APPS_NAV_BADGE } from "@/lib/seo";
 
 export default function SiteHeader() {
   const router = useRouter();
@@ -156,9 +157,11 @@ function NavLinks({
         onClick={onNavigate}
       >
         Apps
-        <span className="border-2 border-ink bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
-          Soon
-        </span>
+        {APPS_NAV_BADGE ? (
+          <span className="border-2 border-ink bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
+            {APPS_NAV_BADGE}
+          </span>
+        ) : null}
       </Link>
       {!loading && user ? (
         <>

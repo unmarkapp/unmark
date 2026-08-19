@@ -40,6 +40,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${SITE_URL}/tools/pdf-watermark`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
       url: `${SITE_URL}/tools/create`,
       lastModified,
       changeFrequency: "weekly",
@@ -52,6 +58,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.92,
     },
     ...guideEntries,
+    {
+      url: `${SITE_URL}/android`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
     {
       url: `${SITE_URL}/extension`,
       lastModified,

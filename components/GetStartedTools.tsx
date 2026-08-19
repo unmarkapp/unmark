@@ -17,8 +17,8 @@ export default function GetStartedTools() {
           Ready to use Unmark
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
-          Pick the tool you need — Instant images free, Cloud for video and
-          cutouts, or the Chrome extension on Gemini.
+          Pick the tool you need — Instant images free, Cloud for video,
+          cutouts, and PDFs, or the Chrome extension on Gemini.
         </p>
       </div>
 
@@ -85,8 +85,12 @@ export default function GetStartedTools() {
 
       <p className="mx-auto mt-8 max-w-xl text-center text-sm text-muted">
         Prefer mobile?{" "}
+        <a href="/android" className="font-medium text-brand underline-offset-2 hover:underline">
+          Android early access
+        </a>
+        {" · "}
         <a href="/#apps" className="font-medium text-brand underline-offset-2 hover:underline">
-          iOS and Android
+          iOS soon
         </a>
         .
       </p>

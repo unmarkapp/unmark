@@ -23,12 +23,35 @@ export const MCP_SERVER_URL = "https://mcp.unmark.ink/mcp";
 
 /**
  * Public App Store and Play Store listings.
- * Empty until listings are public — Apps cards and the header Apps link show Soon.
+ * Empty until listings are public — Apps cards and the header Apps link show Soon
+ * unless Android closed testing is live (see ANDROID_EARLY_ACCESS_URL).
  * https://apps.apple.com/us/app/unmark/id6756499973
  * https://play.google.com/store/apps/details?id=ink.unmark.app
  */
 export const IOS_APP_URL = "";
 export const ANDROID_APP_URL = "";
+
+/** Play application id (release `applicationId`, not the Kotlin namespace). */
+export const ANDROID_PACKAGE_ID = "ink.unmark.app";
+
+/**
+ * Closed testing opt-in. Testers must open this URL and tap Become a tester —
+ * that is what Play counts toward the 12-tester / 14-day production gate.
+ * Play Console → Testing → Closed testing → Testers → Copy link.
+ * Replace if Console shows a different URL.
+ */
+export const ANDROID_EARLY_ACCESS_URL = `https://play.google.com/apps/testing/${ANDROID_PACKAGE_ID}`;
+
+/** Install / join URL: production listing when live, otherwise closed testing. */
+export const ANDROID_INSTALL_URL = ANDROID_APP_URL || ANDROID_EARLY_ACCESS_URL;
+
+/** Header Apps badge: hide when a public store listing exists. */
+export const APPS_NAV_BADGE: "Soon" | "Early access" | null =
+  ANDROID_APP_URL || IOS_APP_URL
+    ? null
+    : ANDROID_EARLY_ACCESS_URL
+      ? "Early access"
+      : "Soon";
 
 /** Primary SERP title — Gemini wedge + suite coverage. */
 export const SITE_TITLE_DEFAULT =
@@ -61,6 +84,8 @@ export const SITE_KEYWORDS = [
   "background removal",
   "remove background from image",
   "transparent png cutout",
+  "pdf watermark remover",
+  "remove watermark from pdf",
   "unmark",
 ];
 
@@ -91,6 +116,15 @@ export const PRODUCT_TOOLS = [
       "Cut out the subject and download a transparent PNG — portraits, products, and AI stills.",
     href: "/tools/background-removal",
     cta: "Open cutout tool",
+    badge: "Cloud",
+  },
+  {
+    id: "pdf",
+    title: "PDF watermark",
+    description:
+      "Remove overlay stamps and repeating marks from PDFs you own. Clean file saves to Library.",
+    href: "/tools/pdf-watermark",
+    cta: "Open PDF tool",
     badge: "New",
   },
   {
@@ -129,6 +163,11 @@ export const FAQ_ITEMS = [
     question: "Can Unmark remove image backgrounds?",
     answer:
       "Yes. Open Background removal under Tools, drop a PNG, JPG, or WebP, and download a transparent cutout for portraits, products, and AI stills. Sign in when Unmark asks so the PNG can save to Library. If the still still shows a Gemini sparkle, clean it with Instant or Cloud first, then cut out the cleaned file so the logo is not left on the subject. Hair, glasses, and product edges are the usual stress tests — preview the checkerboard before you download. Unmark does not relight the subject or invent a new backdrop; pair the PNG with your own layout.",
+  },
+  {
+    question: "Can Unmark remove a watermark from a PDF?",
+    answer:
+      "Yes, for overlay stamps, repeating marks, and watermark annotations on a PDF you own. Open PDF watermark under Tools, drop the file, and download the cleaned PDF from Library. Marks that are flattened into a scan are not supported yet. Encrypted PDFs are skipped. This is not a tool for stripping someone else’s copyright mark.",
   },
   {
     question: "Does this work with Google Flow and Veo videos?",
@@ -212,6 +251,11 @@ export const GUIDE_LINKS = [
     href: "/tools/background-removal",
     title: "Background removal",
     description: "Cut out subjects and download transparent PNG cutouts.",
+  },
+  {
+    href: "/tools/pdf-watermark",
+    title: "PDF watermark remover",
+    description: "Remove overlay stamps and repeating marks from PDFs you own.",
   },
   {
     href: "/guides/mcp-server",
