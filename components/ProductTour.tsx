@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { useState } from "react";
 
 import {
   SUPADEMO_DEMO_ID,
@@ -16,7 +17,12 @@ declare global {
 }
 
 export default function ProductTour() {
+  const [playing, setPlaying] = useState(false);
+
+  const startEmbed = () => setPlaying(true);
+
   const openFullscreen = () => {
+    setPlaying(true);
     window.Supademo?.open(SUPADEMO_DEMO_ID);
   };
 
@@ -25,7 +31,7 @@ export default function ProductTour() {
       id="tour"
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
-      <Script src={SUPADEMO_SCRIPT_SRC} strategy="lazyOnload" />
+      {playing ? <Script src={SUPADEMO_SCRIPT_SRC} strategy="afterInteractive" /> : null}
 
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
@@ -42,14 +48,31 @@ export default function ProductTour() {
 
       <div className="mx-auto mt-10 max-w-3xl overflow-hidden border-2 border-ink bg-ink shadow-[8px_8px_0_0_var(--ink)]">
         <div className="relative aspect-video w-full bg-ink">
-          <iframe
-            src={SUPADEMO_EMBED_URL}
-            title="Unmark product tour — Gemini watermark remover"
-            allow="clipboard-write; fullscreen"
-            allowFullScreen
-            loading="lazy"
-            className="absolute inset-0 h-full w-full border-0"
-          />
+          {playing ? (
+            <iframe
+              src={SUPADEMO_EMBED_URL}
+              title="Unmark product tour — Gemini watermark remover"
+              allow="clipboard-write; fullscreen"
+              allowFullScreen
+              className="absolute inset-0 h-full w-full border-0"
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={startEmbed}
+              className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink text-white transition hover:bg-ink/90"
+              aria-label="Play product tour"
+            >
+              <span className="flex h-16 w-16 items-center justify-center border-2 border-white bg-brand">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </span>
+              <span className="text-sm font-semibold uppercase tracking-[0.08em]">
+                Play tour
+              </span>
+            </button>
+          )}
         </div>
       </div>
 

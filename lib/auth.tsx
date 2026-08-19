@@ -53,7 +53,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const data = (await response.json()) as AuthUser;
+      const data = (await response.json()) as AuthUser & { id?: string };
+      if (!data?.id) {
+        setUser(null);
+        return;
+      }
       setUser({
         ...data,
         email_notifications: data.email_notifications !== false,
