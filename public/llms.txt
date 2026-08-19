@@ -5,25 +5,33 @@
 Unmark removes the visible Gemini sparkle from AI images and videos, and cuts out backgrounds to transparent PNGs.
 
 ## Product
-- Instant: free single-image cleanup in the browser, no account
-- Cloud: video, Library, bulk, background cutouts, Chrome extension
-- Site: https://www.unmark.ink
-- About: https://www.unmark.ink/about
+
+- [Unmark homepage](https://www.unmark.ink/): Instant cleanup in the browser, no account
+- [About Unmark](https://www.unmark.ink/about): who builds the product
+- [Product overview](https://www.unmark.ink/product): Instant, Cloud, video, and cutouts
 
 ## Tools
-- Homepage Instant: https://www.unmark.ink/#upload
-- Background removal: https://www.unmark.ink/tools/background-removal
-- Chrome extension: https://www.unmark.ink/extension
-- MCP for agents: https://www.unmark.ink/guides/mcp-server
-- Agent skill: https://www.unmark.ink/skills
+
+- [Instant upload](https://www.unmark.ink/#upload): drop a Gemini still or video
+- [Background removal](https://www.unmark.ink/tools/background-removal): transparent PNG cutouts
+- [Chrome extension](https://www.unmark.ink/extension): clean on Gemini and Google Flow
+- [MCP server guide](https://www.unmark.ink/guides/mcp-server): connect Claude or Cursor
+- [Agent skill](https://www.unmark.ink/skills): local-file cleanup for coding agents
 
 ## Guides
-- Remove Gemini watermark from an image: https://www.unmark.ink/guides/remove-gemini-watermark
-- Gemini video watermark remover: https://www.unmark.ink/guides/remove-gemini-video-watermark
-- Google Flow watermark remover: https://www.unmark.ink/guides/google-flow-watermark-remover
-- Remove Veo watermark: https://www.unmark.ink/guides/remove-veo-watermark
-- Free Gemini watermark remover: https://www.unmark.ink/guides/free-gemini-watermark-remover
-- MCP server for Claude: https://www.unmark.ink/guides/mcp-server
+
+- [Remove a Gemini watermark from an image](https://www.unmark.ink/guides/remove-gemini-watermark)
+- [Gemini video watermark remover](https://www.unmark.ink/guides/remove-gemini-video-watermark)
+- [Google Flow watermark remover](https://www.unmark.ink/guides/google-flow-watermark-remover)
+- [Remove Veo watermark](https://www.unmark.ink/guides/remove-veo-watermark)
+- [Free Gemini watermark remover](https://www.unmark.ink/guides/free-gemini-watermark-remover)
+
+## Optional
+
+- [Support](https://www.unmark.ink/support)
+- [Privacy](https://www.unmark.ink/privacy)
+- [Terms](https://www.unmark.ink/terms)
 
 ## Limits
+
 Unmark targets the visible Gemini / Veo sparkle logo. It is not a generic watermark eraser, and it is not built for Sora, Midjourney, Runway, or Adobe Firefly stamps.

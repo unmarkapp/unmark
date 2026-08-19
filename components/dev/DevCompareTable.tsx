@@ -19,7 +19,11 @@ const ROWS: Row[] = [
 function CellValue({ value }: { value: Cell }) {
   if (value === "yes") {
     return (
-      <span className="inline-flex items-center justify-center text-success" aria-label="Yes">
+      <span
+        className="inline-flex items-center justify-center text-success"
+        role="img"
+        aria-label="Yes"
+      >
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
           <path
             d="M4.5 10.5 8 14l7.5-8"
@@ -34,7 +38,11 @@ function CellValue({ value }: { value: Cell }) {
   }
   if (value === "no") {
     return (
-      <span className="inline-flex items-center justify-center text-danger" aria-label="No">
+      <span
+        className="inline-flex items-center justify-center text-danger"
+        role="img"
+        aria-label="No"
+      >
         <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
           <path d="M4 4l10 10M14 4 4 14" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
         </svg>
@@ -45,6 +53,7 @@ function CellValue({ value }: { value: Cell }) {
     return (
       <span
         className="inline-flex items-center justify-center font-display text-xl font-semibold text-brand/80"
+        role="img"
         aria-label="Limited"
       >
         ~
