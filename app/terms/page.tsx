@@ -7,12 +7,12 @@ import SiteHeader from "@/components/SiteHeader";
 export const metadata: Metadata = {
   title: "Terms of Service",
   description:
-    "Terms of Service for Unmark — Gemini watermark removal, Library, and optional Canva integration.",
+    "Terms of Service for Unmark — Gemini watermark removal, Library, and related services.",
   alternates: { canonical: "/terms" },
   openGraph: {
     title: "Terms of Service · Unmark",
     description:
-      "Terms of Service for Unmark — Gemini watermark removal, Library, and optional Canva integration.",
+      "Terms of Service for Unmark — Gemini watermark removal, Library, and related services.",
     url: "/terms",
   },
 };
@@ -64,7 +64,7 @@ export default function TermsPage() {
               watermarks from images and video they upload or submit for
               processing. Features may include instant (browser) processing,
               cloud jobs, a personal Library, background removal, share links,
-              and optional third-party integrations such as Canva Connect.
+              and optional third-party storage such as Google Drive.
             </p>
             <p>
               We may change, suspend, or discontinue any part of the Service at
@@ -90,7 +90,7 @@ export default function TermsPage() {
               <li>
                 You are responsible for ensuring you have the right to upload
                 and edit the content you submit, including compliance with
-                Google, Canva, and other third-party terms.
+                Google and other third-party terms.
               </li>
               <li>
                 Do not use the Service for unlawful, harmful, or abusive
@@ -124,12 +124,12 @@ export default function TermsPage() {
               Third-party integrations
             </h2>
             <p>
-              Optional integrations (for example{" "}
-              <strong>Canva Connect</strong>) are provided by third parties
-              under their own terms. When you connect Canva, you authorize Unmark
-              to import images you choose into your Canva account using Canva’s
-              APIs. We are not affiliated with or endorsed by Canva. Your use of
-              Canva remains subject to Canva’s terms and policies.
+              Optional integrations (for example Google Drive) are provided by
+              third parties under their own terms. When you connect Drive, you
+              authorize Unmark to store files you choose in your Google account
+              using Google’s APIs. We are not affiliated with or endorsed by
+              those providers. Your use of them remains subject to their terms
+              and policies.
             </p>
           </section>
 

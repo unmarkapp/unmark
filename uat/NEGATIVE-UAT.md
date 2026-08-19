@@ -195,18 +195,7 @@ If `GENERATE_WEB_ENABLED` is true on staging:
 
 ---
 
-## 12. Canva
-
-| ID | Pre | Steps | Expected |
-| --- | --- | --- | --- |
-| N-CV-01 | A2, Canva not connected | Edit in Canva | Connect flow or **canva_not_connected**. No hang. |
-| N-CV-02 | A2 | Canva on a **video** job | **Canva import supports images only** or control hidden. |
-| N-CV-03 | A2 | Canva on incomplete job | **Job is not completed yet** or button disabled. |
-| N-CV-04 | A2 | Expired Canva token | **canva_reconnect_required** / reconnect CTA. |
-
----
-
-## 13. Session, network, abuse
+## 12. Session, network, abuse
 
 | ID | Pre | Steps | Expected |
 | --- | --- | --- | --- |
@@ -220,7 +209,7 @@ If `GENERATE_WEB_ENABLED` is true on staging:
 
 ---
 
-## 14. Product claims (must fail the UAT if copy is wrong)
+## 13. Product claims (must fail the UAT if copy is wrong)
 
 | ID | Steps | Expected |
 | --- | --- | --- |
@@ -245,7 +234,6 @@ If `GENERATE_WEB_ENABLED` is true on staging:
 | BG remove | N-BG-01–05 | | | |
 | Account | N-AC-01–08 | | | |
 | Referral | N-RF-01–06 | | | |
-| Canva | N-CV-01–04 | | | |
 | Network | N-NW-01–07 | | | |
 | Claims | N-CL-01–03 | | | |
 

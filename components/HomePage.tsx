@@ -12,10 +12,6 @@ import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import BulkQueueCard, {
   type BulkQueueItem,
 } from "@/components/BulkQueueCard";
-import CanvaPromoModal, {
-  shouldShowCanvaPromo,
-  type CanvaPromoContext,
-} from "@/components/CanvaPromoModal";
 import LandingShell from "@/components/LandingShell";
 import LandingUpload from "@/components/LandingUpload";
 import ReadyToCleanCard from "@/components/ReadyToCleanCard";
@@ -35,7 +31,6 @@ import {
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
 import { useToast } from "@/components/Toast";
-import { shareUrlForJob } from "@/lib/canva";
 import { useDropToClean } from "@/lib/dropToClean";
 import { isVideoFile } from "@/lib/mediaFiles";
 import type { CleanEngine } from "@/components/ReadyToCleanCard";
@@ -124,16 +119,6 @@ export default function Home() {
   const [selection, setSelection] = useState<Selection | null>(null);
   const [detectMode, setDetectMode] = useState<"auto" | "manual">("auto");
   const [engine, setEngine] = useState<CleanEngine>("instant");
-  const [canvaPromoOpen, setCanvaPromoOpen] = useState(false);
-  const [canvaPromoContext, setCanvaPromoContext] = useState<CanvaPromoContext>(
-    {},
-  );
-
-  const showCanvaPromo = (ctx: CanvaPromoContext) => {
-    if (!shouldShowCanvaPromo()) return;
-    setCanvaPromoContext(ctx);
-    setCanvaPromoOpen(true);
-  };
   const [quality] = useState<"fast" | "high">("fast");
 
   const [imageDimensions, setImageDimensions] =
@@ -995,11 +980,6 @@ export default function Home() {
 
   return (
     <LandingShell showHow={false}>
-      <CanvaPromoModal
-        open={canvaPromoOpen}
-        onClose={() => setCanvaPromoOpen(false)}
-        context={canvaPromoContext}
-      />
       <ReadyToCleanCard
         imageUrl={imageUrl}
         imageWidth={imageDimensions.width}
@@ -1036,14 +1016,6 @@ export default function Home() {
         onSelectionChange={setSelection}
         onRemove={handleRemoveWatermark}
         onReset={resetImage}
-        onDownloadComplete={() => {
-          showCanvaPromo({
-            jobId: jobId ?? undefined,
-            shareUrl: jobId ? shareUrlForJob(jobId) : undefined,
-            title: file?.name,
-            mediaType: "image",
-          });
-        }}
       />
 
       {resultUrl && (

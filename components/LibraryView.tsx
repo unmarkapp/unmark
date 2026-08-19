@@ -3,14 +3,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
-import CanvaPromoModal, {
-  shouldShowCanvaPromo,
-  type CanvaPromoContext,
-} from "@/components/CanvaPromoModal";
 import { useAuth } from "@/lib/auth";
-import {
-  openInCanva,
-} from "@/lib/canva";
 import {
   deleteJob,
   downloadLibraryJob,
@@ -26,10 +19,17 @@ function isVideoJob(job: LibraryJob): boolean {
   return job.media_type === "video";
 }
 
+function isPdfJob(job: LibraryJob): boolean {
+  return job.media_type === "pdf" || job.job_type === "pdf_watermark";
+}
+
 function jobThumbnailUrl(job: LibraryJob): string | undefined {
   if (isVideoJob(job)) {
     // Never use the mp4 result as an <img> src.
     return job.poster_url || undefined;
+  }
+  if (isPdfJob(job)) {
+    return job.preview_url || undefined;
   }
   if (job.preview_url) return job.preview_url;
   // After Drive offload, result_url is a Drive HTML page — not an image.
@@ -78,11 +78,6 @@ export default function LibraryView() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [selected, setSelected] = useState<LibraryJob | null>(null);
   const [toast, setToast] = useState<string | null>(null);
-  const [canvaPromoOpen, setCanvaPromoOpen] = useState(false);
-  const [canvaPromoContext, setCanvaPromoContext] = useState<CanvaPromoContext>(
-    {},
-  );
-  const [canvaLoading, setCanvaLoading] = useState(false);
   const [bgRemovingId, setBgRemovingId] = useState<string | null>(null);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
@@ -105,7 +100,11 @@ export default function LibraryView() {
           job.status === "completed"
         ) {
           const label =
-            job.media_type === "video" ? "Video ready" : "Image ready";
+            job.media_type === "video"
+              ? "Video ready"
+              : job.media_type === "pdf"
+                ? "PDF ready"
+                : "Image ready";
           setToast(label);
         }
         if (job.status) {
@@ -182,10 +181,12 @@ export default function LibraryView() {
   const pendingBgCount = pendingJobs.filter(
     (job) => job.job_type === "bg_remove",
   ).length;
+  const pendingPdfCount = pendingJobs.filter((job) => isPdfJob(job)).length;
   const pendingImageCount = pendingJobs.filter(
     (job) =>
       job.media_type !== "video" &&
-      job.job_type !== "bg_remove",
+      job.job_type !== "bg_remove" &&
+      !isPdfJob(job),
   ).length;
 
   const emailNotifications = user?.email_notifications !== false;
@@ -196,8 +197,11 @@ export default function LibraryView() {
         ? "Cleaning in the background. We’ll email you when your video is ready — this page also updates automatically."
         : "Cleaning in the background. This page updates automatically when your video is ready.";
     }
-    if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0) {
+    if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0 && pendingPdfCount === 0) {
       return "Removing backgrounds in the background. This page updates automatically when each cutout is ready.";
+    }
+    if (pendingPdfCount > 0 && pendingVideoCount === 0 && pendingBgCount === 0 && pendingImageCount === 0) {
+      return "Cleaning PDFs. This page updates automatically when each file is ready.";
     }
     if (pendingVideoCount > 0 && (pendingBgCount > 0 || pendingImageCount > 0)) {
       return emailNotifications
@@ -211,7 +215,8 @@ export default function LibraryView() {
     const base =
       job.filename?.replace(/\.[^.]+$/, "") ||
       `cleaned-${job.job_id.slice(0, 8)}`;
-    const ext = job.media_type === "video" ? "mp4" : "png";
+    const ext =
+      job.media_type === "video" ? "mp4" : job.media_type === "pdf" ? "pdf" : "png";
     return `${base}-cleaned.${ext}`;
   };
 
@@ -228,36 +233,10 @@ export default function LibraryView() {
     try {
       await downloadLibraryJob(job.job_id, fileLabel(job));
       setToast("Download started");
-      if (shouldShowCanvaPromo()) {
-        setCanvaPromoContext({
-          jobId: job.job_id,
-          shareUrl: shareLink(job),
-          title: fileLabel(job),
-          mediaType: job.media_type === "video" ? "video" : "image",
-        });
-        setCanvaPromoOpen(true);
-      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Download failed");
     } finally {
       setDownloadingId(null);
-    }
-  };
-
-  const handleEditInCanva = async (job: LibraryJob) => {
-    if (job.media_type === "video") return;
-    setCanvaLoading(true);
-    try {
-      await openInCanva({
-        jobId: job.job_id,
-        shareUrl: shareLink(job),
-        title: fileLabel(job),
-        mediaType: "image",
-      });
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not open Canva");
-    } finally {
-      setCanvaLoading(false);
     }
   };
 
@@ -336,11 +315,6 @@ export default function LibraryView() {
 
   return (
     <>
-      <CanvaPromoModal
-        open={canvaPromoOpen}
-        onClose={() => setCanvaPromoOpen(false)}
-        context={canvaPromoContext}
-      />
       <div className="mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -400,7 +374,7 @@ export default function LibraryView() {
           <p className="py-16 text-sm text-muted">Loading library…</p>
         ) : jobs.length === 0 ? (
           <div className="py-20 text-center">
-            <p className="text-sm text-muted">No cleaned images or videos yet.</p>
+            <p className="text-sm text-muted">No cleaned files yet.</p>
             <button
               type="button"
               onClick={() => router.push("/")}
@@ -417,6 +391,7 @@ export default function LibraryView() {
                 job.status === "completed" && Boolean(thumb || jobModalMediaUrl(job));
               const label = job.filename || `Job ${job.job_id.slice(0, 8)}`;
               const isVideo = isVideoJob(job);
+              const isPdf = isPdfJob(job);
               const isBgRemove = job.job_type === "bg_remove";
               const isPending =
                 job.status === "queued" || job.status === "processing";
@@ -500,6 +475,11 @@ export default function LibraryView() {
                           Video
                         </span>
                       )}
+                      {isPdf && (
+                        <span className="pointer-events-none absolute bottom-3 left-3 rounded-md bg-black/70 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-white">
+                          PDF
+                        </span>
+                      )}
                       <span className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
                     </button>
                   ) : (
@@ -513,7 +493,9 @@ export default function LibraryView() {
                           ? job.status === "processing"
                             ? isBgRemove
                               ? "Removing BG…"
-                              : "Cleaning…"
+                              : isPdf
+                                ? "Cleaning PDF…"
+                                : "Cleaning…"
                             : "Queued"
                           : isFailed
                             ? "Failed"
@@ -537,6 +519,11 @@ export default function LibraryView() {
                           {job.duration_sec
                             ? ` · ${Math.round(job.duration_sec)}s`
                             : ""}
+                        </span>
+                      )}
+                      {isPdf && (
+                        <span className="text-[10px] font-semibold uppercase tracking-wide text-muted">
+                          PDF
                         </span>
                       )}
                       {isFailed && job.error && (
@@ -577,7 +564,11 @@ export default function LibraryView() {
           role="dialog"
           aria-modal="true"
           aria-label={
-            isVideoJob(selected) ? "Video preview" : "Image preview"
+            isVideoJob(selected)
+              ? "Video preview"
+              : isPdfJob(selected)
+                ? "PDF preview"
+                : "Image preview"
           }
         >
           <div className="flex shrink-0 items-center px-3 pb-1 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-4">
@@ -694,23 +685,6 @@ export default function LibraryView() {
                     strokeWidth="1.6"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                  />
-                </ToolbarButton>
-              ) : null}
-              {selected.media_type !== "video" ? (
-                <ToolbarButton
-                  label={canvaLoading ? "Opening Canva…" : "Edit in Canva"}
-                  onClick={() => void handleEditInCanva(selected)}
-                  disabled={canvaLoading || selected.status !== "completed"}
-                  rawIcon
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/canva/icon.svg"
-                    alt=""
-                    aria-hidden
-                    className="h-5 w-5"
-                    draggable={false}
                   />
                 </ToolbarButton>
               ) : null}

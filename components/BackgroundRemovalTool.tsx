@@ -9,9 +9,6 @@ import {
   useState,
 } from "react";
 
-import CanvaPromoModal, {
-  shouldShowCanvaPromo,
-} from "@/components/CanvaPromoModal";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { useAuth } from "@/lib/auth";
@@ -20,7 +17,6 @@ import {
   pollBackgroundRemovalJob,
   submitBackgroundRemoval,
 } from "@/lib/bg-remove";
-import { shareUrlForJob } from "@/lib/canva";
 import { useDropToClean } from "@/lib/dropToClean";
 
 type ViewMode = "cutout" | "original" | "compare";
@@ -41,8 +37,6 @@ export default function BackgroundRemovalTool() {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [cutoutUrl, setCutoutUrl] = useState<string | null>(null);
   const [cutoutBlob, setCutoutBlob] = useState<Blob | null>(null);
-  const [completedJobId, setCompletedJobId] = useState<string | null>(null);
-  const [canvaPromoOpen, setCanvaPromoOpen] = useState(false);
 
   const revokeUrls = useCallback(() => {
     if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -51,7 +45,6 @@ export default function BackgroundRemovalTool() {
     setCutoutUrl(null);
     setCutoutBlob(null);
     setHasResult(false);
-    setCompletedJobId(null);
   }, [originalUrl, cutoutUrl]);
 
   const processFile = useCallback(
@@ -87,7 +80,6 @@ export default function BackgroundRemovalTool() {
         const blob = await fetchResultBlob(done.result_url);
         setCutoutBlob(blob);
         setCutoutUrl(URL.createObjectURL(blob));
-        setCompletedJobId(done.job_id);
         setHasResult(true);
         setStatus("Done");
       } catch (err) {
@@ -172,9 +164,6 @@ export default function BackgroundRemovalTool() {
     a.href = cutoutUrl;
     a.download = `${fileName}-nobg.png`;
     a.click();
-    if (shouldShowCanvaPromo()) {
-      setCanvaPromoOpen(true);
-    }
   };
 
   const reset = () => {
@@ -186,16 +175,6 @@ export default function BackgroundRemovalTool() {
 
   return (
     <div className="surface-grain min-h-screen text-foreground">
-      <CanvaPromoModal
-        open={canvaPromoOpen}
-        onClose={() => setCanvaPromoOpen(false)}
-        context={{
-          jobId: completedJobId ?? undefined,
-          shareUrl: completedJobId ? shareUrlForJob(completedJobId) : undefined,
-          title: `${fileName}-nobg`,
-          mediaType: "image",
-        }}
-      />
       <SiteHeader />
       <div className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-8 sm:px-6">
 
@@ -433,7 +412,7 @@ export default function BackgroundRemovalTool() {
             removes the sparkle; this tool then gives you a transparent PNG
             for mockups and ads. Unmark is not a full studio suite — it will
             not relight the subject or invent a new backdrop. Pair the PNG with
-            your own layout in Canva, Figma, or an editor.
+            your own layout in Figma or an editor.
           </p>
           <h2 className="mt-10 font-display text-2xl font-semibold tracking-tight">
             After you download
