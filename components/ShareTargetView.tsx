@@ -123,7 +123,7 @@ export default function ShareTargetView() {
   return (
     <div className="surface-grain min-h-screen text-foreground">
       <SiteHeader />
-      <div className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-8 sm:px-6">
+      <main className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-8 sm:px-6">
 
         <section className="mx-auto mt-10 max-w-xl text-center sm:mt-14">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
@@ -247,9 +247,8 @@ export default function ShareTargetView() {
           className="hidden"
           onChange={onPick}
         />
-
-        <SiteFooter />
-      </div>
+      </main>
+      <SiteFooter />
     </div>
   );
 }

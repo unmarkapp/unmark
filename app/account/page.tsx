@@ -17,7 +17,7 @@ export default function AccountPage() {
     <div className="surface-grain min-h-screen text-foreground">
       <SiteHeader />
 
-      <div className="relative">
+      <main className="relative">
         <Suspense
           fallback={
             <div className="mx-auto max-w-5xl px-4 py-20 text-sm text-muted">
@@ -27,7 +27,7 @@ export default function AccountPage() {
         >
           <AccountView />
         </Suspense>
-      </div>
+      </main>
 
       <SiteFooter />
     </div>

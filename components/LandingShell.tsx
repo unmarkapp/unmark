@@ -37,6 +37,7 @@ export default function LandingShell({
   return (
     <div className="surface-grain min-h-screen text-foreground">
       <SiteHeader />
+      <main>
       <div className="relative mx-auto w-full max-w-5xl px-4 pb-8 pt-8 sm:px-6">
 
         <section className="mx-auto mt-12 max-w-3xl text-center sm:mt-16">
@@ -75,6 +76,7 @@ export default function LandingShell({
           <ClosingCta />
         </>
       ) : null}
+      </main>
       <SiteFooter />
     </div>
   );

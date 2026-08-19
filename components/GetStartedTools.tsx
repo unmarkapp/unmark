@@ -39,7 +39,7 @@ export default function GetStartedTools() {
                 <h3 className="font-display text-lg font-semibold text-foreground">
                   {tool.title}
                 </h3>
-                <span className="bg-brand/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand">
+                <span className="border-2 border-ink bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
                   {tool.badge}
                 </span>
               </div>

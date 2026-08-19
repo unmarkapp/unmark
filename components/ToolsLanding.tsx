@@ -13,7 +13,7 @@ export default function ToolsLanding() {
     <div className="surface-grain min-h-screen text-foreground">
       <JsonLd data={breadcrumbJsonLd([{ name: "Tools", path: "/tools" }])} />
       <SiteHeader />
-      <div className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-8 sm:px-6">
+      <main className="relative mx-auto w-full max-w-5xl px-4 pb-12 pt-8 sm:px-6">
         <section className="mx-auto mt-10 max-w-3xl text-center sm:mt-14">
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Unmark
@@ -50,7 +50,7 @@ export default function ToolsLanding() {
                     <h2 className="font-display text-lg font-semibold text-foreground">
                       {tool.title}
                     </h2>
-                    <span className="bg-brand/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-brand">
+                    <span className="border-2 border-ink bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
                       {tool.badge}
                     </span>
                   </div>
@@ -118,9 +118,8 @@ export default function ToolsLanding() {
             .
           </p>
         </section>
-
-        <SiteFooter />
-      </div>
+      </main>
+      <SiteFooter />
     </div>
   );
 }

@@ -73,6 +73,7 @@ export default function ExtensionLanding() {
   return (
     <div className="surface-grain min-h-screen text-foreground">
       <SiteHeader />
+      <main>
       <div className="relative mx-auto w-full max-w-5xl px-4 pb-8 pt-8 sm:px-6">
 
         <section className="relative mx-auto mt-14 max-w-3xl text-center sm:mt-20">
@@ -265,7 +266,7 @@ export default function ExtensionLanding() {
           </div>
         </div>
       </section>
-
+      </main>
       <SiteFooter />
     </div>
   );
