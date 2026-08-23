@@ -49,6 +49,7 @@ export default function BeforeAfterSlider({
   objectPosition = "center",
 }: BeforeAfterSliderProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const afterImgRef = useRef<HTMLImageElement | null>(null);
 
   const [position, setPosition] = useState(50);
   const [dragging, setDragging] = useState(false);
@@ -59,6 +60,15 @@ export default function BeforeAfterSlider({
     setAfterReady(false);
     setAfterError(false);
     setPosition(50);
+    // If the browser already has this image cached, onLoad won't fire.
+    // Check .complete after a tick to catch that case.
+    const img = afterImgRef.current;
+    if (!img) return;
+    const tick = requestAnimationFrame(() => {
+      if (img.complete && img.naturalWidth > 0) setAfterReady(true);
+      else if (img.complete && img.naturalWidth === 0) setAfterError(true);
+    });
+    return () => cancelAnimationFrame(tick);
   }, [afterUrl]);
 
   const updatePosition = useCallback((clientX: number) => {
@@ -143,6 +153,7 @@ export default function BeforeAfterSlider({
         {/* AFTER on the right side */}
         {!afterError && (
           <img
+            ref={afterImgRef}
             src={afterUrl}
             alt="After Gemini watermark removal"
             width={768}
