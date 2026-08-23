@@ -666,47 +666,49 @@ export default function LibraryView() {
         )}
       </div>
 
-      {selecting && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
-          <div className="pointer-events-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-border bg-surface-raised px-4 py-3 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_16px_36px_-12px_rgb(var(--shadow-color)/0.4)]">
-            <p className="text-sm font-semibold text-foreground">
-              {selectedIds.size} selected
-            </p>
-            <div className="flex flex-wrap items-center gap-2">
-              {selectedCompleted.length > 0 ? (
+      {selecting &&
+        createPortal(
+          <div className="pointer-events-none fixed inset-x-0 bottom-6 z-[9999] flex justify-center px-4">
+            <div className="pointer-events-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-border bg-surface-raised px-4 py-3 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_16px_36px_-12px_rgb(var(--shadow-color)/0.4)]">
+              <p className="text-sm font-semibold text-foreground">
+                {selectedIds.size} selected
+              </p>
+              <div className="flex flex-wrap items-center gap-2">
+                {selectedCompleted.length > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => void handleDownloadSelected()}
+                    disabled={Boolean(bulkBusy)}
+                    className="rounded-full border border-border bg-surface px-3 py-1.5 text-sm font-semibold text-foreground disabled:opacity-50"
+                  >
+                    {bulkBusy === "download"
+                      ? "Downloading…"
+                      : `Download ${selectedCompleted.length}`}
+                  </button>
+                ) : null}
                 <button
                   type="button"
-                  onClick={() => void handleDownloadSelected()}
+                  onClick={() => void handleDeleteSelected()}
                   disabled={Boolean(bulkBusy)}
-                  className="rounded-full border border-border bg-surface px-3 py-1.5 text-sm font-semibold text-foreground disabled:opacity-50"
+                  className="rounded-full border border-border bg-foreground px-3 py-1.5 text-sm font-semibold text-background disabled:opacity-50"
                 >
-                  {bulkBusy === "download"
-                    ? "Downloading…"
-                    : `Download ${selectedCompleted.length}`}
+                  {bulkBusy === "delete"
+                    ? "Deleting…"
+                    : `Delete ${selectedIds.size}`}
                 </button>
-              ) : null}
-              <button
-                type="button"
-                onClick={() => void handleDeleteSelected()}
-                disabled={Boolean(bulkBusy)}
-                className="rounded-full border border-border bg-foreground px-3 py-1.5 text-sm font-semibold text-background disabled:opacity-50"
-              >
-                {bulkBusy === "delete"
-                  ? "Deleting…"
-                  : `Delete ${selectedIds.size}`}
-              </button>
-              <button
-                type="button"
-                onClick={() => setSelectedIds(new Set())}
-                disabled={Boolean(bulkBusy)}
-                className="text-sm font-medium text-muted hover:text-foreground disabled:opacity-50"
-              >
-                Cancel
-              </button>
+                <button
+                  type="button"
+                  onClick={() => setSelectedIds(new Set())}
+                  disabled={Boolean(bulkBusy)}
+                  className="text-sm font-medium text-muted hover:text-foreground disabled:opacity-50"
+                >
+                  Cancel
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
 
       {toast && !selected && (
         <div className="pointer-events-none fixed bottom-6 left-1/2 z-40 -translate-x-1/2 rounded-full bg-foreground px-4 py-2 text-xs font-semibold text-background shadow">
