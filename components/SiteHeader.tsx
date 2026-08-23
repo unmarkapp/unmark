@@ -7,12 +7,13 @@ import BrandLogo from "@/components/BrandLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
+import { GENERATE_WEB_ENABLED } from "@/lib/generate";
 import { APPS_NAV_BADGE } from "@/lib/seo";
 
 export default function SiteHeader() {
   const router = useRouter();
   const { user, loading, loginWithGoogle, logout } = useAuth();
-  const { fastCredits } = useCredits();
+  const { fastCredits, createCredits } = useCredits();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleLogout = async () => {
@@ -53,9 +54,23 @@ export default function SiteHeader() {
             <>
               <Link
                 href="/account"
-                className="hidden items-center gap-1.5 rounded-full border border-border bg-sand px-3 py-1.5 font-mono text-[11px] font-semibold tabular-nums text-foreground transition hover:bg-cream sm:inline-flex"
+                className="hidden items-center divide-x divide-border overflow-hidden rounded-full border border-border bg-sand font-mono text-[11px] font-semibold tabular-nums transition hover:bg-cream sm:inline-flex"
+                title="Clean credits (daily) · Create credits (purchased)"
               >
-                {fastCredits === null ? "…" : `${fastCredits} credits`}
+                <span className="flex items-center gap-1 px-2.5 py-1.5 text-muted">
+                  <span className="text-foreground">
+                    {fastCredits === null ? "…" : fastCredits}
+                  </span>
+                  Clean
+                </span>
+                {GENERATE_WEB_ENABLED && (
+                  <span className="flex items-center gap-1 px-2.5 py-1.5 text-muted">
+                    <span className="text-foreground">
+                      {createCredits === null ? "…" : createCredits}
+                    </span>
+                    Create
+                  </span>
+                )}
               </Link>
               <Link href="/account" className="flex items-center gap-2">
                 {user.picture ? (
