@@ -1,5 +1,73 @@
 "use client";
 
+import { BRAND, SPARKLE_PATH } from "@/components/brand/logos";
+
+function BananaIcon({ size = 80 }: { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 80 80"
+      fill="none"
+      aria-hidden
+    >
+      {/* Banana body */}
+      <path
+        d="M20 56 C18 42 22 28 32 20 C42 12 58 14 64 24 C68 32 62 44 50 50 C40 56 28 58 20 56Z"
+        fill="#F0C98A"
+      />
+      {/* Banana curve highlight */}
+      <path
+        d="M28 24 C32 18 42 14 52 18"
+        stroke="#FDFBF7"
+        strokeWidth="3"
+        strokeLinecap="round"
+        opacity="0.6"
+      />
+      {/* Banana tip left */}
+      <path
+        d="M20 56 C16 56 14 52 16 48"
+        stroke="#C5401F"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+      {/* Banana tip right */}
+      <path
+        d="M64 24 C66 20 64 16 60 16"
+        stroke="#C5401F"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
+function SparkleDecor({
+  x,
+  y,
+  scale = 1,
+  opacity = 1,
+}: {
+  x: number;
+  y: number;
+  scale?: number;
+  opacity?: number;
+}) {
+  return (
+    <svg
+      width={18 * scale}
+      height={18 * scale}
+      viewBox="-12 -12 24 24"
+      style={{ position: "absolute", left: x, top: y, opacity }}
+      aria-hidden
+    >
+      <path d={SPARKLE_PATH} fill={BRAND.peach} />
+    </svg>
+  );
+}
+
 export default function ClosingCta() {
   const scrollToUpload = () => {
     window.dispatchEvent(new CustomEvent("unmark:set-mode", { detail: "clean" }));
@@ -35,88 +103,54 @@ export default function ClosingCta() {
               Try Instant free
             </button>
             <a
-              href="/tools/background-removal"
+              href="/tools/create"
               className="inline-flex items-center justify-center rounded-[var(--radius-md)] border border-current/20 px-6 py-3.5 text-sm font-semibold opacity-80 transition hover:opacity-100 active:scale-[0.98]"
             >
-              Background cutout
+              Open Create →
             </a>
           </div>
         </div>
 
-        {/* Right: before/after image collage */}
-        <div className="relative hidden lg:block" aria-hidden>
-          {/* Card 1 — top left, tilted left */}
-          <div className="absolute -left-4 top-0 w-[200px] -rotate-3 overflow-hidden rounded-[var(--radius-md)] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/demo/sample-1-before.webp"
-              alt="Before watermark removal"
-              className="block h-auto w-full object-cover"
-            />
-            <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-              Before
-            </span>
-          </div>
+        {/* Right: Nano Banana logo card */}
+        <div className="flex items-center justify-center">
+          <div className="relative flex flex-col items-center justify-center rounded-[var(--radius-xl)] border border-white/10 bg-white/5 px-12 py-14 shadow-[0_24px_64px_rgba(0,0,0,0.5)] backdrop-blur-sm">
 
-          {/* Card 2 — top right, tilted right */}
-          <div className="absolute right-0 top-4 w-[200px] rotate-2 overflow-hidden rounded-[var(--radius-md)] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/demo/sample-1-after.webp"
-              alt="After watermark removal"
-              className="block h-auto w-full object-cover"
-            />
-            <span className="absolute left-2 top-2 rounded-full bg-brand/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-              After
-            </span>
-          </div>
+            {/* Decorative sparkles */}
+            <SparkleDecor x={16} y={18} scale={0.8} opacity={0.5} />
+            <SparkleDecor x={-8} y={80} scale={0.6} opacity={0.35} />
+            <SparkleDecor x={180} y={24} scale={0.7} opacity={0.45} />
+            <SparkleDecor x={170} y={100} scale={1} opacity={0.3} />
+            <SparkleDecor x={90} y={-10} scale={0.5} opacity={0.4} />
 
-          {/* Card 3 — bottom left */}
-          <div className="absolute bottom-0 left-8 w-[190px] rotate-1 overflow-hidden rounded-[var(--radius-md)] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/demo/sample-2-before.webp"
-              alt="Before watermark removal"
-              className="block h-auto w-full object-cover"
-            />
-            <span className="absolute left-2 top-2 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-              Before
-            </span>
-          </div>
-
-          {/* Card 4 — bottom right */}
-          <div className="absolute -right-2 bottom-4 w-[190px] -rotate-2 overflow-hidden rounded-[var(--radius-md)] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/demo/sample-2-after.webp"
-              alt="After watermark removal"
-              className="block h-auto w-full object-cover"
-            />
-            <span className="absolute left-2 top-2 rounded-full bg-brand/90 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm">
-              After
-            </span>
-          </div>
-
-          {/* Spacer to give the absolute cards room */}
-          <div className="h-[340px]" />
-        </div>
-
-        {/* Mobile: simple 2-up grid */}
-        <div className="grid grid-cols-2 gap-3 lg:hidden">
-          {[
-            { src: "/demo/sample-1-before.webp", label: "Before", accent: false },
-            { src: "/demo/sample-1-after.webp",  label: "After",  accent: true  },
-            { src: "/demo/sample-2-before.webp", label: "Before", accent: false },
-            { src: "/demo/sample-2-after.webp",  label: "After",  accent: true  },
-          ].map(({ src, label, accent }) => (
-            <div key={src} className="relative overflow-hidden rounded-[var(--radius-md)] border border-white/10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={src} alt={label} className="block h-auto w-full object-cover" />
-              <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-white backdrop-blur-sm ${accent ? "bg-brand/90" : "bg-black/60"}`}>
-                {label}
-              </span>
+            {/* Banana icon with glow */}
+            <div className="relative flex items-center justify-center rounded-full p-5"
+              style={{ background: "radial-gradient(circle, rgba(240,201,138,0.18) 0%, transparent 70%)" }}
+            >
+              <BananaIcon size={88} />
             </div>
-          ))}
+
+            {/* Label */}
+            <p className="mt-5 font-display text-2xl font-semibold tracking-tight text-background dark:text-foreground">
+              Nano Banana
+            </p>
+            <p className="mt-1.5 text-sm opacity-60">
+              Generate without the sparkle
+            </p>
+
+            {/* Pill badge */}
+            <a
+              href="/tools/create"
+              className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand/40 bg-brand/10 px-4 py-1.5 text-xs font-semibold text-brand transition hover:bg-brand/20"
+            >
+              <svg width="10" height="10" viewBox="-8 -8 16 16" aria-hidden>
+                <path
+                  d="M0 -6.5 C 0.3 -1.8 1.8 -0.3 6.5 0 C 1.8 0.3 0.3 1.8 0 6.5 C -0.3 1.8 -1.8 0.3 -6.5 0 C -1.8 -0.3 -0.3 -1.8 0 -6.5 Z"
+                  fill="currentColor"
+                />
+              </svg>
+              Try Create
+            </a>
+          </div>
         </div>
 
       </div>
