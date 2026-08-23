@@ -136,11 +136,11 @@ export default function SkillsPage() {
 
       <main className="relative">
         <section className="mx-auto w-full max-w-5xl px-4 pb-16 pt-14 sm:px-6 sm:pt-20">
-          <p className="inline-flex items-center gap-2 border-2 border-ink bg-surface px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
+          <p className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
             <span className="h-1.5 w-1.5 rounded-full bg-brand" aria-hidden />
             AI agent workflow
           </p>
-          <h1 className="mt-5 max-w-2xl font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-[3.25rem] md:leading-[1.08]">
+          <h1 className="mt-5 max-w-2xl font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl md:text-[3.25rem] md:leading-[1.08]">
             Agent skill for Gemini image cleanup.
           </h1>
           <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
@@ -158,13 +158,13 @@ export default function SkillsPage() {
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
               href="#install"
-              className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+              className="inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
             >
               Install the skill
             </a>
             <Link
               href="/#upload"
-              className="inline-flex items-center gap-2 border-2 border-ink bg-surface px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+              className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-sand"
             >
               Use the website
             </Link>
@@ -176,7 +176,7 @@ export default function SkillsPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
               What you get
             </p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               Instructions, a runner, and MCP when it is already there.
             </h2>
           </div>
@@ -184,7 +184,7 @@ export default function SkillsPage() {
             {WHAT_YOU_GET.map((item) => (
               <li
                 key={item.title}
-                className="flex h-full flex-col border-2 border-ink bg-surface p-5"
+                className="flex h-full flex-col rounded-[var(--radius-lg)] border border-border bg-surface p-5"
               >
                 <h3 className="font-display text-lg font-semibold text-foreground">
                   {item.title}
@@ -205,7 +205,7 @@ export default function SkillsPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
               Install
             </p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               Add it to the workspace once.
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted">
@@ -245,7 +245,7 @@ export default function SkillsPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
               Workflows
             </p>
-            <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               Where the skill pays off.
             </h2>
           </div>
@@ -253,7 +253,7 @@ export default function SkillsPage() {
             {WORKFLOWS.map((item) => (
               <li
                 key={item.title}
-                className="flex h-full flex-col border-2 border-ink bg-surface p-5"
+                className="flex h-full flex-col rounded-[var(--radius-lg)] border border-border bg-surface p-5"
               >
                 <h3 className="font-display text-lg font-semibold text-foreground">
                   {item.title}
@@ -271,7 +271,7 @@ export default function SkillsPage() {
           className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
         >
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               Skills FAQ
             </h2>
             <p className="mt-4 text-base leading-relaxed text-muted">
@@ -282,8 +282,8 @@ export default function SkillsPage() {
         </section>
 
         <section className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6">
-          <div className="mx-auto max-w-2xl border-2 border-ink bg-surface px-6 py-10 text-center">
-            <p className="font-display text-2xl font-semibold tracking-tight text-foreground">
+          <div className="mx-auto max-w-2xl rounded-[var(--radius-lg)] border border-border bg-surface px-6 py-10 text-center">
+            <p className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
               Install once. The agent does the rest.
             </p>
             <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted">
@@ -292,7 +292,7 @@ export default function SkillsPage() {
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
                 href="#install"
-                className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+                className="inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
               >
                 Install the skill
               </a>
@@ -300,7 +300,7 @@ export default function SkillsPage() {
                 href={SKILLS_GITHUB}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border-2 border-ink bg-surface px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+                className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-border bg-surface px-5 py-2.5 text-sm font-semibold text-foreground transition hover:bg-sand"
               >
                 View on GitHub
               </a>

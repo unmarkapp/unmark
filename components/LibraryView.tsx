@@ -406,7 +406,7 @@ export default function LibraryView() {
       <div className={`mx-auto w-full max-w-7xl px-4 pb-16 pt-8 sm:px-6 lg:px-8 ${selecting ? "pb-32" : ""}`}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h1 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h1 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               Library
             </h1>
             <p className="mt-2 text-sm text-muted">
@@ -437,13 +437,13 @@ export default function LibraryView() {
         </div>
 
         {pendingCount > 0 && (
-          <div className="mt-6 border-2 border-ink bg-surface px-4 py-3 text-sm text-foreground">
+          <div className="mt-6 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-3 text-sm text-foreground">
             {pendingBannerMessage()}
           </div>
         )}
 
         {libraryFull && (
-          <div className="mt-6 border-2 border-ink bg-surface px-4 py-3 text-sm text-foreground">
+          <div className="mt-6 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-3 text-sm text-foreground">
             Library is full. Delete old items or{" "}
             <button
               type="button"
@@ -457,7 +457,7 @@ export default function LibraryView() {
         )}
 
         {error && (
-          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="mt-6 rounded-[var(--radius-md)] border border-danger-border bg-danger-bg px-4 py-3 text-sm text-danger">
             {error}
             <button
               type="button"
@@ -518,7 +518,7 @@ export default function LibraryView() {
                     <button
                       type="button"
                       onClick={() => openOrToggle(job, canOpen)}
-                      className={`group relative block w-full overflow-hidden border-2 border-ink bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand ${
+                      className={`group relative block w-full overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand ${
                         selectedIds.has(job.job_id) ? "ring-2 ring-brand" : ""
                       }`}
                       aria-label={
@@ -570,7 +570,7 @@ export default function LibraryView() {
                         </span>
                       )}
                       {driveFailed && !driveSyncing && (
-                        <span className="pointer-events-none absolute left-3 top-3 rounded-md bg-red-700/90 px-2 py-1 text-[10px] font-semibold text-white">
+                        <span className="pointer-events-none absolute left-3 top-3 rounded-md bg-danger px-2 py-1 text-[10px] font-semibold text-white">
                           Drive sync failed
                         </span>
                       )}
@@ -607,7 +607,7 @@ export default function LibraryView() {
                             }
                           : undefined
                       }
-                      className={`relative flex w-full flex-col items-center justify-center gap-2 border-2 border-ink bg-surface px-4 text-center ${
+                      className={`relative flex w-full flex-col items-center justify-center gap-2 rounded-[var(--radius-md)] border border-border bg-surface px-4 text-center ${
                         isVideo ? "aspect-[9/16]" : "aspect-[3/4]"
                       } ${selectedIds.has(job.job_id) ? "ring-2 ring-brand" : ""}`}
                     >
@@ -643,7 +643,7 @@ export default function LibraryView() {
                         </span>
                       )}
                       {isFailed && job.error && (
-                        <p className="line-clamp-3 text-xs text-red-600">
+                        <p className="line-clamp-3 text-xs text-danger">
                           {job.error}
                         </p>
                       )}
@@ -668,7 +668,7 @@ export default function LibraryView() {
 
       {selecting && (
         <div className="pointer-events-none fixed inset-x-0 bottom-6 z-40 flex justify-center px-4">
-          <div className="pointer-events-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-3 border-2 border-ink bg-surface px-4 py-3 shadow-[4px_4px_0_0_#000]">
+          <div className="pointer-events-auto flex w-full max-w-xl flex-wrap items-center justify-between gap-3 rounded-[var(--radius-lg)] border border-border bg-surface-raised px-4 py-3 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_16px_36px_-12px_rgb(var(--shadow-color)/0.4)]">
             <p className="text-sm font-semibold text-foreground">
               {selectedIds.size} selected
             </p>
@@ -678,7 +678,7 @@ export default function LibraryView() {
                   type="button"
                   onClick={() => void handleDownloadSelected()}
                   disabled={Boolean(bulkBusy)}
-                  className="border-2 border-ink bg-white px-3 py-1.5 text-sm font-semibold text-foreground disabled:opacity-50"
+                  className="rounded-full border border-border bg-surface px-3 py-1.5 text-sm font-semibold text-foreground disabled:opacity-50"
                 >
                   {bulkBusy === "download"
                     ? "Downloading…"
@@ -689,7 +689,7 @@ export default function LibraryView() {
                 type="button"
                 onClick={() => void handleDeleteSelected()}
                 disabled={Boolean(bulkBusy)}
-                className="border-2 border-ink bg-foreground px-3 py-1.5 text-sm font-semibold text-background disabled:opacity-50"
+                className="rounded-full border border-border bg-foreground px-3 py-1.5 text-sm font-semibold text-background disabled:opacity-50"
               >
                 {bulkBusy === "delete"
                   ? "Deleting…"
@@ -860,7 +860,7 @@ export default function LibraryView() {
             </div>
 
             {toast && (
-              <div className="pointer-events-none absolute bottom-full left-1/2 mb-3 -translate-x-1/2 rounded-full bg-white/95 px-3 py-1.5 text-xs font-semibold text-foreground shadow">
+              <div className="pointer-events-none absolute bottom-full left-1/2 mb-3 -translate-x-1/2 rounded-full bg-surface-raised px-3 py-1.5 text-xs font-semibold text-foreground shadow">
                 {toast}
               </div>
             )}
@@ -924,8 +924,8 @@ function SelectionCheck({
         event.stopPropagation();
         onChange();
       }}
-      className={`flex h-7 w-7 items-center justify-center border-2 border-ink shadow-[2px_2px_0_0_#000] ${
-        checked ? "bg-[#E2FF3B]" : "bg-white"
+      className={`flex h-7 w-7 items-center justify-center rounded-full border border-border shadow-[0_2px_6px_-1px_rgb(var(--shadow-color)/0.3)] transition ${
+        checked ? "bg-peach" : "bg-surface"
       }`}
     >
       {checked ? (

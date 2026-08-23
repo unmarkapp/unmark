@@ -119,22 +119,22 @@ export default function ReadyToCleanCard({
     return (
       <div className="unmark-glass p-4 sm:p-5">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <div className="relative mx-auto w-full max-w-[240px] shrink-0 overflow-hidden bg-ink sm:mx-0">
+          <div className="relative mx-auto w-full max-w-[240px] shrink-0 overflow-hidden rounded-[var(--radius-md)] bg-ink sm:mx-0">
             <img
               src={imageUrl}
               alt="Processing"
               className="block h-auto w-full object-contain"
             />
 
-            <div className="absolute inset-0 bg-[#1a1a2e]/15" />
+            <div className="absolute inset-0 bg-[var(--overlay)]" />
             <div className="watermark-scan-line" />
 
             <div className="absolute inset-x-0 top-1/2 z-10 flex -translate-y-1/2 justify-center px-3">
-              <div className="inline-flex items-center gap-2 border-2 border-ink bg-ink px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.08em] text-white">
-                <span className="h-2 w-2 bg-peach" />
+              <div className="inline-flex items-center gap-2 rounded-full bg-ink px-3 py-1.5 text-xs font-semibold text-white shadow-[0_4px_14px_-4px_rgb(var(--shadow-color)/0.5)]">
+                <span className="h-2 w-2 rounded-full bg-peach" />
                 {engine === "instant"
-                  ? "Cleaning in your browser..."
-                  : "Saving to your Library..."}
+                  ? "Cleaning in your browser…"
+                  : "Saving to your Library…"}
               </div>
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function ReadyToCleanCard({
               Processing
             </div>
 
-            <h2 className="mt-3 font-display text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+            <h2 className="mt-3 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
               {engine === "instant"
                 ? "Instant cleanup…"
                 : "Cloud cleanup…"}
@@ -171,7 +171,7 @@ export default function ReadyToCleanCard({
       <div className="unmark-glass p-4 sm:p-5">
       <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="font-display text-sm font-semibold tracking-wide text-brand">
+          <div className="font-display text-sm font-semibold tracking-[-0.01em] text-brand">
             {resultUrl ? "Cleaned" : "Ready to unmark"}
           </div>
 
@@ -194,7 +194,7 @@ export default function ReadyToCleanCard({
           type="button"
           onClick={onReset}
           disabled={processing}
-          className="flex h-9 w-9 shrink-0 items-center justify-center border-2 border-ink bg-surface text-foreground transition hover:bg-cream disabled:opacity-40"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface text-foreground transition hover:bg-sand disabled:opacity-40"
           aria-label="Change image"
           title="Change image"
         >
@@ -226,7 +226,7 @@ export default function ReadyToCleanCard({
         <div className="mb-4 space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div
-              className="inline-flex border-2 border-ink bg-surface p-0.5"
+              className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface p-0.5"
               role="group"
               aria-label="Detection mode"
             >
@@ -234,10 +234,10 @@ export default function ReadyToCleanCard({
                 type="button"
                 onClick={() => onDetectModeChange("auto")}
                 disabled={processing}
-                className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
+                className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition ${
                   detectMode === "auto"
                     ? "bg-brand text-white"
-                    : "text-foreground hover:bg-cream"
+                    : "text-foreground hover:bg-sand"
                 }`}
               >
                 Auto (Gemini)
@@ -246,10 +246,10 @@ export default function ReadyToCleanCard({
                 type="button"
                 onClick={() => onDetectModeChange("manual")}
                 disabled={processing}
-                className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
+                className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition ${
                   detectMode === "manual"
-                    ? "bg-white text-ink"
-                    : "text-foreground hover:bg-cream"
+                    ? "bg-ink text-white"
+                    : "text-foreground hover:bg-sand"
                 }`}
               >
                 Manual
@@ -266,7 +266,7 @@ export default function ReadyToCleanCard({
           {detectMode === "auto" ? (
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div
-                className="inline-flex border-2 border-ink bg-surface p-0.5"
+                className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface p-0.5"
                 role="group"
                 aria-label="Processing mode"
               >
@@ -274,10 +274,10 @@ export default function ReadyToCleanCard({
                   type="button"
                   onClick={() => onEngineChange("instant")}
                   disabled={processing}
-                  className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
+                  className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition ${
                     engine === "instant"
                       ? "bg-ink text-white"
-                      : "text-foreground hover:bg-cream"
+                      : "text-foreground hover:bg-sand"
                   }`}
                 >
                   Instant
@@ -286,10 +286,10 @@ export default function ReadyToCleanCard({
                   type="button"
                   onClick={() => onEngineChange("cloud")}
                   disabled={processing}
-                  className={`px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition ${
+                  className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition ${
                     engine === "cloud"
                       ? "bg-cobalt text-white"
-                      : "text-foreground hover:bg-cream"
+                      : "text-foreground hover:bg-sand"
                   }`}
                 >
                   Cloud
@@ -306,7 +306,7 @@ export default function ReadyToCleanCard({
         </div>
       )}
 
-      <div className="overflow-hidden border-2 border-ink bg-cream">
+      <div className="overflow-hidden rounded-[var(--radius-md)] border border-border bg-cream">
         {resultUrl ? (
           <img
             src={resultUrl}
@@ -330,7 +330,7 @@ export default function ReadyToCleanCard({
       </div>
 
       {error && (
-        <div className="mt-4 border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+        <div className="mt-4 border border-danger-border bg-danger-bg px-3 py-2 text-sm text-danger">
           {error}
         </div>
       )}
@@ -343,7 +343,7 @@ export default function ReadyToCleanCard({
               processing || !canSubmit || blockedByAuth || blockedByCredits
             }
             onClick={onRemove}
-            className="btn-play inline-flex w-full items-center justify-center gap-2 border-2 border-ink bg-cobalt px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
+            className="btn-play inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] bg-cobalt px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {blockedByAuth
               ? "Sign in for Cloud"
@@ -362,7 +362,7 @@ export default function ReadyToCleanCard({
                 onDownloadComplete?.();
               });
             }}
-            className="inline-flex w-full items-center justify-center gap-2 border-2 border-ink bg-brand px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover sm:w-auto"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover sm:w-auto"
           >
             Download cleaned image
             <span aria-hidden>↓</span>

@@ -105,7 +105,7 @@ export default function BeforeAfterSlider({
     <div className="w-full">
       <div
         ref={containerRef}
-        className="relative w-full overflow-hidden bg-ink select-none touch-none"
+        className="relative w-full overflow-hidden rounded-[var(--radius-lg)] bg-ink select-none touch-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -120,7 +120,7 @@ export default function BeforeAfterSlider({
           className="pointer-events-none absolute inset-0 z-0 opacity-40"
           style={{
             background:
-              "radial-gradient(ellipse at 20% 0%, rgba(214,28,13,0.28), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(0,71,171,0.18), transparent 50%)",
+              "radial-gradient(ellipse at 20% 0%, rgba(197,64,31,0.28), transparent 55%), radial-gradient(ellipse at 90% 100%, rgba(79,91,102,0.18), transparent 50%)",
           }}
         />
 
@@ -163,7 +163,7 @@ export default function BeforeAfterSlider({
         )}
 
         {!afterReady && !afterError && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-ink/55 text-sm text-cream">
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-ink/55 text-sm text-white">
             <span className="inline-flex items-center gap-2">
               <SparkleMark fill={BRAND.yellow} />
               Loading cleaned image…
@@ -183,10 +183,10 @@ export default function BeforeAfterSlider({
           style={{ left: `${position}%` }}
         >
           <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-brand to-transparent" />
-          <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-ink" />
+          <div className="absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-white" />
 
           <div
-            className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center border-2 border-ink transition ${
+            className={`absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full shadow-[0_4px_14px_-2px_rgb(var(--shadow-color)/0.5)] transition ${
               aspectRatio ? "h-9 w-9" : "h-12 w-12"
             } ${dragging ? "scale-105" : ""}`}
             style={{
@@ -215,14 +215,14 @@ export default function BeforeAfterSlider({
         </div>
 
         {/* Brand labels */}
-        <div className="pointer-events-none absolute left-3 top-3 z-30 inline-flex items-center gap-1.5 border-2 border-ink bg-surface px-2.5 py-1">
+        <div className="pointer-events-none absolute left-3 top-3 z-30 inline-flex items-center gap-1.5 rounded-full bg-surface px-2.5 py-1 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.1)]">
           <SparkleMark fill={BRAND.red} />
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
+          <span className="text-[11px] font-semibold text-foreground">
             Before
           </span>
         </div>
 
-        <div className="pointer-events-none absolute right-3 top-3 z-30 inline-flex items-center gap-1.5 border-2 border-ink bg-cobalt px-2.5 py-1">
+        <div className="pointer-events-none absolute right-3 top-3 z-30 inline-flex items-center gap-1.5 rounded-full bg-cobalt px-2.5 py-1 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.1)]">
           <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
             <path
               d="M2.5 6.2l2.2 2.2 4.8-4.8"
@@ -232,14 +232,14 @@ export default function BeforeAfterSlider({
               strokeLinejoin="round"
             />
           </svg>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white">
+          <span className="text-[11px] font-semibold text-white">
             After
           </span>
         </div>
 
         {/* Corner frame accents */}
-        <div className="pointer-events-none absolute bottom-3 left-3 z-30 h-5 w-5 border-b border-l border-brand/55" />
-        <div className="pointer-events-none absolute bottom-3 right-3 z-30 h-5 w-5 border-b border-r border-brand/55" />
+        <div className="pointer-events-none absolute bottom-3 left-3 z-30 h-5 w-5 border-b border-l border-brand/45" />
+        <div className="pointer-events-none absolute bottom-3 right-3 z-30 h-5 w-5 border-b border-r border-brand/45" />
       </div>
     </div>
   );

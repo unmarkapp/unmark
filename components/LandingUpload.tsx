@@ -27,14 +27,14 @@ export default function LandingUpload({
 
   return (
     <LandingShell>
-      <div className="unmark-glass mb-4 grid grid-cols-2 p-1">
+      <div className="unmark-glass mb-4 grid grid-cols-2 gap-1 p-1">
         <button
           type="button"
           onClick={() => setMode("clean")}
-          className={`px-3 py-3 text-sm font-semibold uppercase tracking-[0.12em] transition ${
+          className={`rounded-[var(--radius-sm)] px-3 py-3 text-sm font-semibold transition ${
             mode === "clean"
-              ? "bg-ink text-white"
-              : "text-foreground hover:bg-cream"
+              ? "bg-cobalt text-white"
+              : "text-foreground hover:bg-sand"
           }`}
         >
           Clean
@@ -42,10 +42,10 @@ export default function LandingUpload({
         <button
           type="button"
           onClick={() => setMode("create")}
-          className={`px-3 py-3 text-sm font-semibold uppercase tracking-[0.12em] transition ${
+          className={`rounded-[var(--radius-sm)] px-3 py-3 text-sm font-semibold transition ${
             mode === "create"
               ? "bg-brand text-white"
-              : "text-foreground hover:bg-cream"
+              : "text-foreground hover:bg-sand"
           }`}
         >
           Create
@@ -72,12 +72,12 @@ export default function LandingUpload({
                 inputRef.current?.click();
               }
             }}
-            className={`group relative flex min-h-[280px] cursor-pointer flex-col items-center justify-center overflow-hidden border-2 border-dashed border-ink bg-surface px-6 py-14 text-center transition duration-300 ${
+            className={`group relative flex min-h-[280px] cursor-pointer flex-col items-center justify-center overflow-hidden border-2 border-dashed border-border-strong rounded-[var(--radius-lg)] bg-surface px-6 py-14 text-center transition duration-300 ${
               isDragging ? "bg-peach/30" : "hover:bg-cream"
             }`}
           >
             <div
-              className={`mb-6 flex h-16 w-16 items-center justify-center bg-cobalt text-white transition duration-500 ${
+              className={`mb-6 flex h-16 w-16 items-center justify-center rounded-[var(--radius-md)] bg-cobalt text-white transition duration-500 ${
                 isDragging ? "animate-soft-pulse" : "group-hover:scale-105"
               }`}
             >
@@ -98,7 +98,7 @@ export default function LandingUpload({
               </svg>
             </div>
 
-            <h2 className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.01em] text-foreground sm:text-3xl">
               Drop Gemini images or video
             </h2>
 
@@ -115,7 +115,7 @@ export default function LandingUpload({
                 onTrySample();
               }}
               disabled={sampleBusy}
-              className="btn-play mt-6 inline-flex min-h-11 items-center justify-center gap-2.5 border-2 border-ink bg-peach px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition hover:brightness-95 disabled:opacity-60"
+              className="btn-play mt-6 inline-flex min-h-11 items-center justify-center gap-2.5 rounded-[var(--radius-md)] bg-peach px-5 py-3 text-sm font-semibold text-ink shadow-[0_1px_2px_rgb(var(--shadow-color)/0.04)] transition hover:brightness-95 disabled:opacity-60"
             >
               {sampleBusy ? "Loading sample…" : "Try a sample"}
             </button>

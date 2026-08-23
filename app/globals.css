@@ -3,66 +3,76 @@
 /* Class-based dark mode (ThemeProvider toggles .dark on <html>) */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light — Bauhaus (paper / ink / red / blue / yellow) */
+/* Light — Darkroom (warm paper / rust accent / soft elevation) */
 :root {
-  --red: #d61c0d;
-  --blue: #0047ab;
-  --yellow: #ffcc00;
-  --paper: #f4f0e6;
-  --background: #f4f0e6;
-  --foreground: #111111;
-  --brand: #d61c0d;
-  --brand-hover: #b0160b;
-  --brand-soft: #ffe4df;
-  --brand-line: #d61c0d;
-  --muted: #5c5c5c;
-  --muted-strong: #2e2e2e;
-  --surface: rgba(255, 255, 255, 0.95);
-  --ink: #111111;
-  --sand: #f4f0e6;
-  --cream: #faf6ec;
-  --peach: #ffcc00;
-  --cobalt: #0047ab;
-  --border: #111111;
-  --border-strong: rgba(17, 17, 17, 0.85);
-  --danger: #d61c0d;
-  --danger-bg: #ffe8e5;
-  --danger-border: #d61c0d;
-  --success: #0047ab;
-  --overlay: rgba(17, 17, 17, 0.35);
-  --grain-a: rgba(214, 28, 13, 0.45);
-  --grain-b: rgba(0, 71, 171, 0.4);
-  --grain-c: rgba(255, 204, 0, 0.45);
+  --paper: #faf7f2;
+  --background: #faf7f2;
+  --foreground: #1c1a17;
+  --brand: #c5401f;
+  --brand-hover: #a63419;
+  --brand-soft: #fbe4da;
+  --brand-line: #c5401f;
+  --muted: #6b6459;
+  --muted-strong: #35322c;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  /* --ink and --peach are fixed accent/media colors — deliberately do NOT
+     flip with theme (paired with bg-ink+text-white media backdrops, and
+     bg-peach+text-ink badges, in both light and dark mode). */
+  --ink: #1c1a17;
+  --sand: #f0ebe2;
+  --cream: #fdfbf7;
+  --peach: #f0c98a;
+  --cobalt: #4f5b66;
+  --border: #e7e1d6;
+  --border-strong: #d8cfc0;
+  --danger: #c0362b;
+  --danger-bg: #fbe9e6;
+  --danger-border: #e3b3a9;
+  --success: #3f7a52;
+  --success-bg: #e9f2eb;
+  --warning: #b8862e;
+  --warning-bg: #f7edda;
+  --overlay: rgba(28, 26, 23, 0.4);
+  --shadow-color: 28 26 23;
+  --grain-a: rgba(197, 64, 31, 0.1);
+  --grain-b: rgba(197, 64, 31, 0.05);
+  --grain-c: rgba(197, 64, 31, 0.07);
   color-scheme: light;
 }
 
-/* Dark — same primaries on near-ink paper */
+/* Dark — warm near-black, brightened accent */
 .dark {
-  --paper: #161410;
-  --background: #161410;
-  --foreground: #f4f0e6;
-  --brand: #d61c0d;
-  --brand-hover: #ff4a3a;
-  --brand-soft: #3a1814;
-  --brand-line: #d61c0d;
-  --muted: #a8a29e;
-  --muted-strong: #e7e0d4;
-  --surface: rgba(255, 255, 255, 0.08);
-  --ink: #111111;
-  --sand: #161410;
-  --cream: #241f18;
-  --peach: #ffcc00;
-  --cobalt: #3d7ad6;
-  --border: #f4f0e6;
-  --border-strong: rgba(244, 240, 230, 0.7);
-  --danger: #ff6b5e;
-  --danger-bg: #3f1d1d;
-  --danger-border: #d61c0d;
-  --success: #7eb0ff;
-  --overlay: rgba(0, 0, 0, 0.65);
-  --grain-a: rgba(214, 28, 13, 0.35);
-  --grain-b: rgba(0, 71, 171, 0.32);
-  --grain-c: rgba(255, 204, 0, 0.28);
+  --paper: #17140f;
+  --background: #17140f;
+  --foreground: #f3ede1;
+  --brand: #e8623f;
+  --brand-hover: #ff8360;
+  --brand-soft: #3a2018;
+  --brand-line: #e8623f;
+  --muted: #a89e8e;
+  --muted-strong: #e3dac9;
+  --surface: #211d17;
+  --surface-raised: #2a251d;
+  --ink: #1c1a17;
+  --sand: #241f18;
+  --cream: #2a251d;
+  --peach: #f0c98a;
+  --cobalt: #5b6975;
+  --border: rgba(243, 237, 225, 0.1);
+  --border-strong: rgba(243, 237, 225, 0.18);
+  --danger: #e08277;
+  --danger-bg: #3a201c;
+  --danger-border: #5c352d;
+  --success: #7fb98f;
+  --success-bg: #1f2b22;
+  --warning: #d1a869;
+  --warning-bg: #362a17;
+  --overlay: rgba(0, 0, 0, 0.6);
+  --shadow-color: 0 0 0;
+  --grain-a: rgba(232, 98, 63, 0.08);
+  --grain-b: rgba(232, 98, 63, 0.04);
+  --grain-c: rgba(232, 98, 63, 0.06);
   color-scheme: dark;
 }
 
@@ -76,6 +86,7 @@
   --color-muted: var(--muted);
   --color-muted-strong: var(--muted-strong);
   --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-ink: var(--ink);
   --color-sand: var(--sand);
   --color-cream: var(--cream);
@@ -87,9 +98,16 @@
   --color-danger-bg: var(--danger-bg);
   --color-danger-border: var(--danger-border);
   --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
   --font-sans: var(--font-figtree);
-  --font-display: var(--font-figtree);
+  --font-display: var(--font-space-grotesk);
   --font-mono: var(--font-geist-mono);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+  --radius-full: 999px;
 }
 
 body {
@@ -99,7 +117,12 @@ body {
 }
 
 .font-display {
-  font-family: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  font-family:
+    var(--font-space-grotesk),
+    var(--font-figtree),
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 }
 
 .surface-grain {
@@ -108,33 +131,16 @@ body {
   isolation: isolate;
 }
 
-.surface-grain::before,
-.surface-grain::after {
+.surface-grain::before {
   content: "";
   position: fixed;
   pointer-events: none;
   z-index: 0;
-}
-
-.surface-grain::before {
   inset: 0;
-  background-color: transparent;
   background-image:
-    radial-gradient(circle at 102% -2%, var(--grain-a), transparent 32%),
-    radial-gradient(circle at 2% 104%, var(--grain-c), transparent 28%),
-    linear-gradient(var(--grain-b), var(--grain-b));
-  background-size: auto, auto, 18vw 9vh;
-  background-position: 0 0, 0 0, -6% 6.75rem;
+    radial-gradient(circle at 100% 0%, var(--grain-a), transparent 42%),
+    radial-gradient(circle at 0% 100%, var(--grain-b), transparent 38%);
   background-repeat: no-repeat;
-}
-
-.surface-grain::after {
-  right: 0;
-  bottom: 0;
-  width: min(28vw, 280px);
-  height: min(28vw, 280px);
-  background: var(--grain-a);
-  clip-path: polygon(20% 55%, 100% 0, 100% 100%, 0 100%);
 }
 
 .surface-grain > * {
@@ -148,7 +154,11 @@ body {
 
 .unmark-glass {
   background: var(--surface);
-  border: 2px solid var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 1px 2px rgb(var(--shadow-color) / 0.04),
+    0 8px 24px -8px rgb(var(--shadow-color) / 0.12);
 }
 
 .btn-play::before {
@@ -214,14 +224,12 @@ body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    #ffcc00 20%,
-    #d61c0d 50%,
-    #0047ab 80%,
+    var(--brand-soft) 25%,
+    var(--brand) 50%,
+    var(--brand-soft) 75%,
     transparent 100%
   );
-  box-shadow:
-    0 0 12px 2px rgba(214, 28, 13, 0.45),
-    0 0 28px 6px rgba(0, 71, 171, 0.2);
+  box-shadow: 0 0 16px 3px rgb(var(--shadow-color) / 0.18);
   animation: watermark-scan 2.2s linear infinite;
   pointer-events: none;
 }
@@ -233,7 +241,8 @@ body {
   right: 0;
   top: -28px;
   height: 28px;
-  background: linear-gradient(to bottom, transparent, rgba(214, 28, 13, 0.16));
+  background: linear-gradient(to bottom, transparent, var(--brand-soft));
+  opacity: 0.5;
 }
 
 /* Library — Pinterest-style masonry */
@@ -270,23 +279,23 @@ body {
 }
 
 .checkerboard {
-  background-color: #f4f0e6;
+  background-color: #faf7f2;
   background-image:
-    linear-gradient(45deg, #e8e2d4 25%, transparent 25%),
-    linear-gradient(-45deg, #e8e2d4 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #e8e2d4 75%),
-    linear-gradient(-45deg, transparent 75%, #e8e2d4 75%);
+    linear-gradient(45deg, #ece5d8 25%, transparent 25%),
+    linear-gradient(-45deg, #ece5d8 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #ece5d8 75%),
+    linear-gradient(-45deg, transparent 75%, #ece5d8 75%);
   background-size: 20px 20px;
   background-position: 0 0, 0 10px, 10px -10px, -10px 0;
 }
 
 .dark .checkerboard {
-  background-color: #161410;
+  background-color: #17140f;
   background-image:
-    linear-gradient(45deg, #2a2825 25%, transparent 25%),
-    linear-gradient(-45deg, #2a2825 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, #2a2825 75%),
-    linear-gradient(-45deg, transparent 75%, #2a2825 75%);
+    linear-gradient(45deg, #241f18 25%, transparent 25%),
+    linear-gradient(-45deg, #241f18 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, #241f18 75%),
+    linear-gradient(-45deg, transparent 75%, #241f18 75%);
 }
 
 @media (min-width: 640px) {

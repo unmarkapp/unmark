@@ -108,15 +108,15 @@ function toLines(tokens: Token[]): Token[][] {
 }
 
 const TOKEN_CLASS: Record<TokenType, string> = {
-  plain: "text-[#f4f0e6]",
-  comment: "text-[#7d7768] italic",
+  plain: "text-[#f3ede1]",
+  comment: "text-[#8a8172] italic",
   string: "text-[#7ee7c7]",
   keyword: "text-[#ff8a7a] font-medium",
-  number: "text-[#ffcc00]",
+  number: "text-[#f0c98a]",
   function: "text-[#7eb0ff]",
   property: "text-[#c9a8ff]",
   flag: "text-[#7eb0ff]",
-  variable: "text-[#ffcc00]",
+  variable: "text-[#f0c98a]",
 };
 
 function Highlighted({ code, lang }: { code: string; lang: Lang }) {
@@ -125,7 +125,7 @@ function Highlighted({ code, lang }: { code: string; lang: Lang }) {
     <>
       {lines.map((line, i) => (
         <div key={i} className="flex">
-          <span className="w-7 shrink-0 select-none text-right text-[#5c584c] sm:w-8">
+          <span className="w-7 shrink-0 select-none text-right text-[#6f6656] sm:w-8">
             {i + 1}
           </span>
           <span className="ml-4 min-w-0 flex-1 whitespace-pre-wrap break-words">
@@ -167,8 +167,8 @@ export default function CodeBlock({
   };
 
   return (
-    <div className="overflow-hidden border-2 border-ink bg-[#161410] shadow-[0_18px_50px_-28px_rgba(0,0,0,0.6)]">
-      <div className="flex items-center justify-between border-b-2 border-ink bg-[#0f0d0a]">
+    <div className="overflow-hidden rounded-[var(--radius-lg)] border border-border bg-[#1c1a17] shadow-[0_18px_50px_-28px_rgb(var(--shadow-color)/0.5)]">
+      <div className="flex items-center justify-between border-b border-border bg-[#141210]">
         <div className="flex flex-1 overflow-x-auto">
           {snippets.map((s) => (
             <button
@@ -177,8 +177,8 @@ export default function CodeBlock({
               onClick={() => setActiveId(s.id)}
               className={`shrink-0 border-r border-white/10 px-4 py-2.5 text-[12px] font-semibold uppercase tracking-[0.08em] transition ${
                 s.id === active.id
-                  ? "bg-[#161410] text-[#f4f0e6]"
-                  : "text-[#8b8578] hover:text-[#f4f0e6]"
+                  ? "bg-[#1c1a17] text-[#f3ede1]"
+                  : "text-[#a89e8e] hover:text-[#f3ede1]"
               }`}
             >
               {s.label}
@@ -188,13 +188,13 @@ export default function CodeBlock({
         <button
           type="button"
           onClick={handleCopy}
-          className="shrink-0 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#8b8578] transition hover:text-[#f4f0e6]"
+          className="shrink-0 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-[#a89e8e] transition hover:text-[#f3ede1]"
         >
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
       {active.filename ? (
-        <div className="border-b border-white/10 px-4 py-1.5 font-mono text-[11px] text-[#8b8578]">
+        <div className="border-b border-white/10 px-4 py-1.5 font-mono text-[11px] text-[#a89e8e]">
           {active.filename}
         </div>
       ) : null}

@@ -7,7 +7,7 @@ const INTEGRATIONS = [
 
 function Monogram({ letter }: { letter: string }) {
   return (
-    <span className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-ink bg-ink font-display text-lg font-bold text-white">
+    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-ink font-display text-lg font-bold text-white">
       {letter}
     </span>
   );
@@ -20,7 +20,7 @@ export default function DevIntegrations() {
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
           Integrations
         </p>
-        <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           Works with the tools you already have open.
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
@@ -35,7 +35,7 @@ export default function DevIntegrations() {
         {INTEGRATIONS.map((item) => (
           <li
             key={item.id}
-            className="flex h-full items-center gap-4 border-2 border-ink bg-surface px-5 py-4"
+            className="flex h-full items-center gap-4 rounded-[var(--radius-lg)] border border-border bg-surface px-5 py-4"
           >
             <Monogram letter={item.name[0]} />
             <span className="min-w-0 flex-1">

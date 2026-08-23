@@ -4,6 +4,7 @@ import Link from "next/link";
 import InstantCleanEmbed from "@/components/InstantCleanEmbed";
 import JsonLd from "@/components/JsonLd";
 import PrivacyNote from "@/components/PrivacyNote";
+import ProductToolCard from "@/components/ProductToolCard";
 import AppsSection from "@/components/AppsSection";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
@@ -40,7 +41,7 @@ export default function ProductPage() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Product
           </p>
-          <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-5xl">
+          <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-5xl">
             Unmark — Gemini watermark remover
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
@@ -56,7 +57,7 @@ export default function ProductPage() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
               href="#try"
-              className="inline-flex bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-hover"
+              className="inline-flex rounded-[var(--radius-md)] bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover"
             >
               Try Instant free
             </a>
@@ -64,13 +65,13 @@ export default function ProductPage() {
               href={CHROME_WEB_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition hover:border-brand"
+              className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition hover:border-brand-line"
             >
               Chrome extension
             </a>
             <Link
               href="/about"
-              className="inline-flex border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition hover:border-brand"
+              className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition hover:border-brand-line"
             >
               About Unmark
             </Link>
@@ -83,31 +84,11 @@ export default function ProductPage() {
         </div>
 
         <ul className="mx-auto mt-14 grid max-w-3xl gap-4 sm:grid-cols-2">
-          {PRODUCT_TOOLS.map((tool) => {
-            const isExtension = tool.id === "extension";
-            const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
-            return (
-              <li key={tool.id}>
-                {isExtension ? (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex h-full flex-col border border-border bg-surface/90 p-5 transition hover:border-brand"
-                  >
-                    <ProductCard tool={tool} />
-                  </a>
-                ) : (
-                  <Link
-                    href={href}
-                    className="flex h-full flex-col border border-border bg-surface/90 p-5 transition hover:border-brand"
-                  >
-                    <ProductCard tool={tool} />
-                  </Link>
-                )}
-              </li>
-            );
-          })}
+          {PRODUCT_TOOLS.map((tool) => (
+            <li key={tool.id}>
+              <ProductToolCard tool={tool} layout="grid" />
+            </li>
+          ))}
         </ul>
 
         <section className="mx-auto mt-16 max-w-3xl space-y-4 text-[15px] leading-relaxed text-muted-strong">
@@ -162,24 +143,5 @@ export default function ProductPage() {
       </main>
       <SiteFooter />
     </div>
-  );
-}
-
-function ProductCard({
-  tool,
-}: {
-  tool: (typeof PRODUCT_TOOLS)[number];
-}) {
-  return (
-    <>
-      <div className="flex items-center gap-2">
-        <h2 className="font-display text-lg font-semibold">{tool.title}</h2>
-        <span className="border-2 border-ink bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
-          {tool.badge}
-        </span>
-      </div>
-      <p className="mt-2 flex-1 text-sm text-muted">{tool.description}</p>
-      <span className="mt-4 text-sm font-semibold text-brand">{tool.cta} →</span>
-    </>
   );
 }

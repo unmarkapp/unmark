@@ -156,7 +156,7 @@ export default function McpServerGuidePage() {
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">Guide</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           Unmark MCP Server
         </h1>
         <p className="mt-3 text-sm text-muted">
@@ -182,20 +182,20 @@ export default function McpServerGuidePage() {
         </p>
 
         <section className="mt-12 rounded-2xl border border-border bg-cream/50 p-6">
-          <h2 className="font-display text-xl font-semibold tracking-tight">
+          <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
             Server URL
           </h2>
           <p className="mt-2 text-sm text-muted">
             Use this URL when adding a custom connector in Claude or other hosted MCP
             clients:
           </p>
-          <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-white/80 p-4 text-sm">
+          <pre className="mt-4 overflow-x-auto rounded-xl border border-border bg-surface p-4 text-sm">
             <code>{MCP_SERVER_URL}</code>
           </pre>
         </section>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Claude Connectors
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
@@ -214,7 +214,7 @@ export default function McpServerGuidePage() {
         </section>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Example prompts
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
@@ -234,7 +234,7 @@ export default function McpServerGuidePage() {
         </section>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">Tools</h2>
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">Tools</h2>
           <ul className="mt-5 space-y-4">
             {tools.map((tool) => (
               <li key={tool.name} className="rounded-xl border border-border p-4">
@@ -248,7 +248,7 @@ export default function McpServerGuidePage() {
         </section>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Image URLs & share links
           </h2>
           <ul className="mt-5 list-disc space-y-2 pl-5 text-[15px] leading-relaxed text-muted-strong">
@@ -273,7 +273,7 @@ export default function McpServerGuidePage() {
         </section>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             MCP vs Instant vs the agent skill
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
@@ -292,7 +292,7 @@ export default function McpServerGuidePage() {
         </section>
 
         <section className="mt-12 rounded-2xl border border-border bg-cream/50 p-6">
-          <h2 className="font-display text-xl font-semibold tracking-tight">
+          <h2 className="font-display text-xl font-semibold tracking-[-0.02em]">
             Cursor (local stdio)
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-muted-strong">
@@ -308,7 +308,7 @@ export default function McpServerGuidePage() {
           <p className="mt-4 text-sm text-muted">
             Example <code className="text-sm">.cursor/mcp.json</code>:
           </p>
-          <pre className="mt-3 overflow-x-auto rounded-xl border border-border bg-white/80 p-4 text-xs sm:text-sm">
+          <pre className="mt-3 overflow-x-auto rounded-xl border border-border bg-surface p-4 text-xs sm:text-sm">
             <code>{`{
   "mcpServers": {
     "unmark": {
@@ -325,7 +325,7 @@ export default function McpServerGuidePage() {
         </section>
 
         <div className="mt-14 rounded-2xl border border-border bg-cream/50 px-6 py-8 text-center">
-          <p className="font-display text-2xl font-semibold tracking-tight">
+          <p className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Connect Claude to Unmark
           </p>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted">
@@ -336,7 +336,7 @@ export default function McpServerGuidePage() {
         </div>
 
         <section className="mt-16 border-t border-border pt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Common questions
           </h2>
           <div className="mt-8 space-y-8">

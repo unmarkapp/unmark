@@ -79,9 +79,9 @@ function statusClass(status: BulkItemStatus): string {
     case "processing":
       return "text-brand";
     case "completed":
-      return "text-emerald-700";
+      return "text-success";
     case "failed":
-      return "text-red-600";
+      return "text-danger";
   }
 }
 
@@ -106,9 +106,9 @@ export default function BulkQueueCard({
   const canZip = completed > 0;
 
   return (
-    <div className="border border-border bg-surface p-4 sm:p-6">
+    <div className="unmark-glass p-4 sm:p-6">
       <div className="flex items-start gap-3">
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center bg-cream text-brand">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-cream text-brand">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden>
             <rect
               x="3"
@@ -132,7 +132,7 @@ export default function BulkQueueCard({
           <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
             Cloud bulk
           </div>
-          <h2 className="mt-1 font-display text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+          <h2 className="mt-1 font-display text-xl font-semibold tracking-[-0.01em] text-foreground sm:text-2xl">
             {allDone
               ? completed === count
                 ? "All images cleaned"
@@ -161,13 +161,13 @@ export default function BulkQueueCard({
         {items.map((item) => (
           <li
             key={item.id}
-            className="flex items-center gap-3 border border-border bg-white px-3 py-2.5"
+            className="flex items-center gap-3 rounded-[var(--radius-md)] border border-border bg-surface px-3 py-2.5"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={item.previewUrl}
               alt=""
-              className="h-12 w-12 shrink-0 object-cover"
+              className="h-12 w-12 shrink-0 rounded-[var(--radius-sm)] object-cover"
             />
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-medium text-foreground">
@@ -185,7 +185,7 @@ export default function BulkQueueCard({
       </ul>
 
       {error ? (
-        <div className="mt-4 border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+        <div className="mt-4 border border-danger-border bg-danger-bg px-3 py-2.5 text-sm text-danger">
           {error}
         </div>
       ) : null}
@@ -196,7 +196,7 @@ export default function BulkQueueCard({
             type="button"
             disabled={!isAuthenticated || !hasCredits || count === 0}
             onClick={onRemoveAll}
-            className="inline-flex flex-1 items-center justify-center border-2 border-ink bg-cobalt px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex flex-1 items-center justify-center rounded-[var(--radius-md)] bg-cobalt px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.08)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {!isAuthenticated
               ? "Sign in for cloud bulk"
@@ -209,7 +209,7 @@ export default function BulkQueueCard({
             type="button"
             disabled={!canZip || zipping}
             onClick={onDownloadZip}
-            className="inline-flex flex-1 items-center justify-center gap-2 border-2 border-ink bg-brand px-5 py-3.5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex flex-1 items-center justify-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {zipping ? (
               <>
@@ -221,7 +221,7 @@ export default function BulkQueueCard({
             )}
           </button>
         ) : (
-          <div className="flex flex-1 items-center gap-2 bg-brand px-4 py-3.5 text-sm font-semibold text-white">
+          <div className="flex flex-1 items-center gap-2 rounded-[var(--radius-md)] bg-brand px-4 py-3.5 text-sm font-semibold text-white">
             <Spinner className="text-white" />
             <span>
               {completed} of {count} complete
@@ -233,7 +233,7 @@ export default function BulkQueueCard({
           type="button"
           onClick={onReset}
           disabled={processing || zipping}
-          className="flex h-[50px] w-[50px] shrink-0 items-center justify-center border border-border bg-white text-foreground transition hover:bg-cream disabled:opacity-40"
+          className="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface text-foreground transition hover:bg-sand disabled:opacity-40"
           title="Clear selection"
           aria-label="Clear selection"
         >

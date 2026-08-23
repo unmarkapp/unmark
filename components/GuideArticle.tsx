@@ -132,7 +132,7 @@ export default function GuideArticle({
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">Guide</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           {title}
         </h1>
         <p className="mt-3 text-sm text-muted">
@@ -169,7 +169,7 @@ export default function GuideArticle({
                 <p className="font-display text-3xl font-semibold text-brand/80">
                   {String(i + 1).padStart(2, "0")}
                 </p>
-                <h2 className="mt-2 text-xl font-semibold tracking-tight">
+                <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
                   {step.title}
                 </h2>
                 <p className="mt-2 text-[15px] leading-relaxed text-muted-strong">
@@ -182,7 +182,7 @@ export default function GuideArticle({
 
         {sections?.map((section) => (
           <section key={section.heading} className="mt-12">
-            <h2 className="font-display text-2xl font-semibold tracking-tight">
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
               {section.heading}
             </h2>
             <div className="mt-3 space-y-3 text-[15px] leading-relaxed text-muted-strong">
@@ -192,7 +192,7 @@ export default function GuideArticle({
         ))}
 
         <div className="mt-14 rounded-2xl border border-border bg-cream/50 px-6 py-8 text-center">
-          <p className="font-display text-2xl font-semibold tracking-tight">
+          <p className="font-display text-2xl font-semibold tracking-[-0.02em]">
             {ctaHeading}
           </p>
           <p className="mx-auto mt-2 max-w-md text-sm text-muted">{ctaBody}</p>
@@ -206,7 +206,7 @@ export default function GuideArticle({
 
         {faqs?.length ? (
           <section className="mt-16 border-t border-border pt-12">
-            <h2 className="font-display text-2xl font-semibold tracking-tight">
+            <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
               Common questions
             </h2>
             <div className="mt-8 space-y-8">

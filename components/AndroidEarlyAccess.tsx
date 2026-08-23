@@ -31,7 +31,7 @@ export default function AndroidEarlyAccess() {
         <section className="relative mx-auto mt-14 max-w-3xl text-center sm:mt-20">
           <div className="animate-rise inline-flex items-center gap-2.5">
             <BrandLogo size={40} />
-            <span className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            <span className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground sm:text-3xl">
               Unmark
             </span>
           </div>
@@ -39,7 +39,7 @@ export default function AndroidEarlyAccess() {
           <p className="animate-rise-delay mt-6 text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Android · Closed testing
           </p>
-          <h1 className="animate-rise-delay mt-3 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:leading-[1.1]">
+          <h1 className="animate-rise-delay mt-3 font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl md:leading-[1.1]">
             Join Android early access
           </h1>
           <p className="animate-rise-delay mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
@@ -53,13 +53,13 @@ export default function AndroidEarlyAccess() {
               href={ANDROID_EARLY_ACCESS_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+              className="inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
             >
               Become a tester on Play
             </a>
             <Link
               href="/#apps"
-              className="inline-flex border-2 border-ink bg-surface px-5 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+              className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-sand"
             >
               iOS & Android
             </Link>
@@ -70,7 +70,7 @@ export default function AndroidEarlyAccess() {
           {steps.map((step) => (
             <li
               key={step.n}
-              className="border-2 border-ink bg-surface px-4 py-5 text-left"
+              className="rounded-[var(--radius-lg)] border border-border bg-surface px-4 py-5 text-left"
             >
               <p className="font-display text-2xl font-semibold text-brand">
                 {step.n}

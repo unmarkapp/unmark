@@ -26,7 +26,7 @@ export default function TermsPage() {
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">Legal</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           Terms of Service
         </h1>
         <p className="mt-3 text-sm text-muted">Last updated: {updated}</p>

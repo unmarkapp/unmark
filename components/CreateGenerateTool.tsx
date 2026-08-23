@@ -14,7 +14,7 @@ export default function CreateGenerateTool() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Unmark Tools
           </p>
-          <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
             Create with Nano Banana
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">

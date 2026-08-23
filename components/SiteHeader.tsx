@@ -24,7 +24,7 @@ export default function SiteHeader() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b-2 border-ink bg-background">
+    <header className="sticky top-0 z-40 border-b border-border bg-background">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 xl:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" onClick={closeMenu}>
           <BrandLogo size={34} />
@@ -33,7 +33,7 @@ export default function SiteHeader() {
           </span>
         </Link>
 
-        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-4 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted lg:flex">
+        <nav className="hidden min-w-0 flex-1 items-center justify-center gap-6 text-sm font-medium text-muted lg:flex">
           <NavLinks user={user} loading={loading} />
         </nav>
 
@@ -41,7 +41,7 @@ export default function SiteHeader() {
           <ThemeToggle />
           <button
             type="button"
-            className="inline-flex h-12 w-12 items-center justify-center border-2 border-ink bg-surface text-foreground lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface text-foreground transition hover:bg-sand lg:hidden"
             aria-expanded={menuOpen}
             aria-controls="mobile-nav"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
@@ -53,7 +53,7 @@ export default function SiteHeader() {
             <>
               <Link
                 href="/account"
-                className="hidden items-center gap-1.5 border-2 border-ink bg-surface px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground sm:inline-flex"
+                className="hidden items-center gap-1.5 rounded-full border border-border bg-sand px-3 py-1.5 font-mono text-[11px] font-semibold tabular-nums text-foreground transition hover:bg-cream sm:inline-flex"
               >
                 {fastCredits === null ? "…" : `${fastCredits} credits`}
               </Link>
@@ -63,10 +63,10 @@ export default function SiteHeader() {
                   <img
                     src={user.picture}
                     alt={user.name}
-                    className="h-8 w-8 object-cover ring-2 ring-ink"
+                    className="h-8 w-8 rounded-full object-cover ring-1 ring-border"
                   />
                 ) : (
-                  <div className="flex h-8 w-8 items-center justify-center bg-cobalt text-xs font-bold text-white">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-cobalt text-xs font-bold text-white">
                     {(user.name || user.email || "U")[0].toUpperCase()}
                   </div>
                 )}
@@ -84,7 +84,7 @@ export default function SiteHeader() {
               type="button"
               onClick={loginWithGoogle}
               disabled={loading}
-              className="inline-flex items-center gap-2 border-2 border-ink bg-brand px-3.5 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover disabled:opacity-50"
+              className="inline-flex h-11 items-center gap-2 rounded-[var(--radius-md)] bg-brand px-4 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.35)] transition hover:bg-brand-hover disabled:opacity-50"
             >
               <GoogleIcon />
               Sign in
@@ -96,7 +96,7 @@ export default function SiteHeader() {
       {menuOpen ? (
         <nav
           id="mobile-nav"
-          className="border-t-2 border-ink bg-background px-4 py-4 text-sm font-semibold uppercase tracking-[0.08em] text-muted lg:hidden sm:px-6"
+          className="border-t border-border bg-background px-4 py-4 text-sm font-medium text-muted lg:hidden sm:px-6"
         >
           <div className="mx-auto flex max-w-7xl flex-col gap-3">
             <NavLinks user={user} loading={loading} onNavigate={closeMenu} />
@@ -104,7 +104,7 @@ export default function SiteHeader() {
               <button
                 type="button"
                 onClick={() => void handleLogout()}
-                className="text-left text-sm font-medium normal-case tracking-normal text-muted"
+                className="text-left text-sm font-medium text-muted"
               >
                 Sign out
               </button>
@@ -153,7 +153,7 @@ function NavLinks({
       >
         Apps
         {APPS_NAV_BADGE ? (
-          <span className="border-2 border-ink bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
+          <span className="rounded-full bg-peach px-1.5 py-px text-[9px] font-bold uppercase tracking-wider text-ink">
             {APPS_NAV_BADGE}
           </span>
         ) : null}

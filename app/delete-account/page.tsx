@@ -28,7 +28,7 @@ export default function DeleteAccountPage() {
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">Unmark</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           Delete your Unmark account
         </h1>
         <p className="mt-3 text-sm text-muted">Last updated: {updated}</p>
@@ -44,7 +44,7 @@ export default function DeleteAccountPage() {
           tied to it.
         </p>
 
-        <div className="mt-10 border border-border bg-surface p-5 sm:p-6">
+        <div className="mt-10 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
             How to request deletion
           </p>
@@ -74,7 +74,7 @@ export default function DeleteAccountPage() {
           </p>
           <a
             href={MAIL_HREF}
-            className="mt-5 inline-flex bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-hover"
+            className="mt-5 inline-flex rounded-[var(--radius-md)] bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
           >
             Email a deletion request
           </a>

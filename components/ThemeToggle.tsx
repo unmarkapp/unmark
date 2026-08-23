@@ -49,7 +49,7 @@ export default function ThemeToggle() {
         aria-label={`Theme: ${active.label}`}
         title="Theme"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-12 w-12 items-center justify-center border-2 border-ink bg-surface text-foreground transition hover:bg-cream"
+        className="inline-flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface text-foreground transition hover:bg-sand"
       >
         <ThemeIcon name={active.icon} />
       </button>
@@ -59,7 +59,7 @@ export default function ThemeToggle() {
           id={listId}
           role="listbox"
           aria-label="Color theme"
-          className="absolute right-0 z-50 mt-2 min-w-[9.5rem] border-2 border-ink bg-surface py-1"
+          className="absolute right-0 z-50 mt-2 min-w-[9.5rem] rounded-[var(--radius-md)] border border-border bg-surface-raised py-1 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.04),0_8px_24px_-8px_rgb(var(--shadow-color)/0.16)]"
         >
           {OPTIONS.map((option) => {
             const selected = option.value === preference;
@@ -69,8 +69,8 @@ export default function ThemeToggle() {
                   type="button"
                   className={`flex w-full items-center gap-2.5 px-3 py-2 text-left text-sm transition ${
                     selected
-                      ? "bg-cream font-semibold text-brand"
-                      : "text-muted hover:bg-cream hover:text-foreground"
+                      ? "bg-sand font-semibold text-brand"
+                      : "text-muted hover:bg-sand hover:text-foreground"
                   }`}
                   onClick={() => {
                     setPreference(option.value);

@@ -1019,11 +1019,11 @@ export default function Home() {
       />
 
       {resultUrl && (
-        <div className="mt-6 overflow-hidden border border-border bg-surface">
+        <div className="unmark-glass mt-6 overflow-hidden">
           <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3.5">
             <div className="flex min-w-0 items-center gap-3">
               <div
-                className="flex h-9 w-9 shrink-0 items-center justify-center"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--radius-sm)]"
                 style={{ background: "var(--brand)" }}
                 aria-hidden
               >

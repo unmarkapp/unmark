@@ -29,7 +29,7 @@ export default function AboutPage() {
       <SiteHeader />
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">About</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           About Unmark
         </h1>
         <p className="mt-5 text-base leading-relaxed text-muted-strong sm:text-lg">
@@ -40,7 +40,7 @@ export default function AboutPage() {
         </p>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Who writes these guides
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
@@ -58,7 +58,7 @@ export default function AboutPage() {
         </section>
 
         <section className="mt-12">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             What we will not claim
           </h2>
           <p className="mt-3 text-[15px] leading-relaxed text-muted-strong">
@@ -73,7 +73,7 @@ export default function AboutPage() {
         </section>
 
         <div className="mt-14 rounded-2xl border border-border bg-cream/50 px-6 py-8 text-center">
-          <p className="font-display text-2xl font-semibold tracking-tight">
+          <p className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Try Instant on a Gemini still
           </p>
           <Link

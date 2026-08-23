@@ -23,7 +23,7 @@ export default function HowItWorks() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           How Unmark works
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
@@ -36,7 +36,7 @@ export default function HowItWorks() {
         {steps.map((step) => (
           <li key={step.num} className="text-center sm:text-left">
             <div
-              className={`inline-flex h-12 w-12 items-center justify-center text-sm font-semibold ${
+              className={`inline-flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] font-mono text-sm font-semibold tabular-nums ${
                 step.num === "01"
                   ? "bg-cobalt text-white"
                   : step.num === "02"

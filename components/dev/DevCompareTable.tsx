@@ -70,7 +70,7 @@ export default function DevCompareTable() {
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
           Why MCP
         </p>
-        <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
+        <h2 className="mt-5 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
           Skip the glue code
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
@@ -79,7 +79,7 @@ export default function DevCompareTable() {
         </p>
       </div>
 
-      <div className="mx-auto mt-12 max-w-3xl overflow-hidden border border-border bg-surface shadow-[0_18px_50px_-28px_rgba(26,26,23,0.45)]">
+      <div className="mx-auto mt-12 max-w-3xl overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface shadow-[0_18px_50px_-28px_rgb(var(--shadow-color)/0.35)]">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="sr-only">
             Comparison of building your own watermark removal glue code versus the

@@ -312,10 +312,10 @@ export default function AccountView() {
             <img
               src={user.picture}
               alt={displayName}
-              className="h-16 w-16 object-cover border-2 border-ink"
+              className="h-16 w-16 rounded-full object-cover ring-1 ring-border"
             />
           ) : (
-            <div className="flex h-16 w-16 items-center justify-center bg-cobalt text-lg font-bold text-white border-2 border-ink">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-cobalt text-lg font-bold text-white ring-1 ring-border">
               {initials}
             </div>
           )}
@@ -333,7 +333,7 @@ export default function AccountView() {
         </div>
 
         {billingError && (
-          <div className="mt-6 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="mt-6 rounded-[var(--radius-lg)] border border-danger-border bg-danger-bg px-4 py-3 text-sm text-danger">
             {billingError}
             <button
               type="button"
@@ -346,13 +346,13 @@ export default function AccountView() {
         )}
 
         {purchaseMessage && (
-          <div className="mt-6 border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+          <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-success-bg px-4 py-3 text-sm text-success">
             {purchaseMessage}
           </div>
         )}
 
         {tab === "profile" && (
-          <div className="mt-8 border border-border bg-surface p-6 ">
+          <div className="mt-8 rounded-[var(--radius-lg)] border border-border bg-surface p-6">
             <h2 className="text-lg font-semibold text-foreground">Profile</h2>
             <dl className="mt-5 space-y-4 text-sm">
               <div>
@@ -406,7 +406,7 @@ export default function AccountView() {
         )}
 
         {tab === "history" && (
-          <div className="mt-8 overflow-hidden border border-border bg-surface ">
+          <div className="mt-8 overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface">
             <div className="border-b border-border px-5 py-4 sm:px-6">
               <h2 className="text-base font-semibold text-foreground">
                 Credit History
@@ -437,7 +437,7 @@ export default function AccountView() {
                       <th className="px-5 py-3 sm:px-6">Description</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#f5f0e8]">
+                  <tbody className="divide-y divide-border">
                     {transactions.map((tx) => (
                       <tr key={tx.id} className="text-foreground">
                         <td className="whitespace-nowrap px-5 py-3.5 text-muted sm:px-6">
@@ -477,7 +477,7 @@ export default function AccountView() {
 
         {tab === "billing" && (
           <>
-            <div className="mt-8 border border-border bg-surface p-5  sm:p-6">
+            <div className="mt-8 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h2 className="text-base font-semibold text-foreground">
@@ -534,7 +534,7 @@ export default function AccountView() {
             <LibraryStorageSettings />
 
             {!paymentsEnabled && (
-              <div className="mt-6 border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">
+              <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">
                 <p className="font-medium">Unmark is free while we launch</p>
                 <p className="mt-1 text-muted">
                   You get {dailyFreeCredits} Cloud credits per day — enough for
@@ -547,7 +547,7 @@ export default function AccountView() {
 
             {paymentsEnabled && (
               <>
-            <div className="mt-6 border border-border bg-surface p-5  sm:p-6">
+            <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
               <h2 className="text-base font-semibold text-foreground">
                 Buy more credits
               </h2>
@@ -582,7 +582,7 @@ export default function AccountView() {
               </div>
             </div>
 
-            <div className="mt-6 border border-border bg-surface p-5  sm:p-6">
+            <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
               <h2 className="text-base font-semibold text-foreground">
                 Library storage
               </h2>
@@ -650,7 +650,7 @@ function TypeBadge({ type }: { type: CreditTransaction["type"] }) {
 
   return (
     <span
-      className={`inline-flex px-2 py-0.5 text-[11px] font-semibold ${styles}`}
+      className={`inline-flex rounded-full px-2 py-0.5 text-[11px] font-semibold ${styles}`}
     >
       {label}
     </span>
@@ -667,7 +667,7 @@ function CreditStat({
   hint: string;
 }) {
   return (
-    <div className="border border-border bg-surface px-4 py-4">
+    <div className="rounded-[var(--radius-md)] border border-border bg-surface px-4 py-4">
       <div className="text-[11px] font-semibold uppercase tracking-wide text-muted">
         {label}
       </div>
@@ -700,7 +700,7 @@ function PackOption({
   if (pack.high_credits > 0) parts.push(`${pack.high_credits} HQ`);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-3 border border-border bg-surface p-4">
+    <div className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-md)] border border-border bg-surface p-4">
       <div>
         <div className="font-semibold text-foreground">{pack.name}</div>
         <div className="mt-0.5 text-sm text-muted">
@@ -715,7 +715,7 @@ function PackOption({
           type="button"
           onClick={onBuy}
           disabled={disabled}
-          className="bg-brand border-2 border-ink px-4 py-2 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
+          className="rounded-[var(--radius-md)] bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
           {busy ? "Redirecting…" : "Buy"}
         </button>
@@ -742,7 +742,7 @@ function SidebarButton({
       className={`flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition ${
         active
           ? "bg-cream text-brand"
-          : "text-muted hover:bg-cream hover:text-foreground"
+          : "text-muted hover:bg-sand hover:text-foreground"
       }`}
     >
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>

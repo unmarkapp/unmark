@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Geist_Mono } from "next/font/google";
+import { Figtree, Geist_Mono, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import { AuthProvider } from "@/lib/auth";
 import { CreditsProvider } from "@/lib/credits";
@@ -30,6 +30,12 @@ const figtree = Figtree({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -151,7 +157,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${figtree.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${figtree.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <head>
         <link rel="preconnect" href="https://auth.unmark.ink" />

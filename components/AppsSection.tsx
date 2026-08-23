@@ -42,7 +42,7 @@ export default function AppsSection() {
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
           Apps
         </p>
-        <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           Unmark on your phone.
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
@@ -79,11 +79,11 @@ function StoreCard({
   const icon = kind === "apple" ? <AppleIcon /> : <PlayIcon />;
   const soon = !href;
   const className =
-    "flex h-full items-center gap-4 border-2 border-ink bg-surface px-5 py-4 text-left";
+    "flex h-full items-center gap-4 rounded-[var(--radius-lg)] border border-border bg-surface px-5 py-4 text-left";
 
   const body = (
     <>
-      <span className="flex h-12 w-12 shrink-0 items-center justify-center border-2 border-ink bg-ink text-white">
+      <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-[var(--radius-md)] bg-ink text-white">
         {icon}
       </span>
       <span className="min-w-0 flex-1">
@@ -92,7 +92,7 @@ function StoreCard({
             {name}
           </span>
           {badge ? (
-            <span className="border-2 border-ink bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
+            <span className="rounded-full bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
               {badge}
             </span>
           ) : null}
@@ -110,7 +110,7 @@ function StoreCard({
     );
   }
 
-  const linkClass = `${className} transition hover:bg-cream`;
+  const linkClass = `${className} transition hover:bg-sand`;
   const external = href.startsWith("http");
 
   if (external) {

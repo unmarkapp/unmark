@@ -21,7 +21,7 @@ export default function LandingSeoContent() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           Image, video &amp; background tools
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
@@ -46,7 +46,7 @@ export default function LandingSeoContent() {
         {FORMATS.map((group) => (
           <div
             key={group.kind}
-            className="rounded-[2px] border-2 border-ink bg-surface/90 px-5 py-6"
+            className="rounded-[var(--radius-lg)] border border-border bg-surface/90 px-5 py-6"
           >
             <h3 className="text-sm font-semibold uppercase tracking-wide text-brand">
               {group.kind} formats

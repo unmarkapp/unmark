@@ -30,7 +30,7 @@ export default function SupportPage() {
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">Help</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           Contact support
         </h1>
         <p className="mt-3 text-sm text-muted">Last updated: {updated}</p>
@@ -46,13 +46,13 @@ export default function SupportPage() {
           the product.
         </p>
 
-        <div className="mt-10 border border-border bg-surface p-5 sm:p-6">
+        <div className="mt-10 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
             Email us
           </p>
           <a
             href={`mailto:${SUPPORT_EMAIL}?subject=Unmark%20support`}
-            className="mt-2 block font-display text-2xl font-semibold tracking-tight text-foreground hover:text-brand"
+            className="mt-2 block font-display text-2xl font-semibold tracking-[-0.02em] text-foreground hover:text-brand"
           >
             {SUPPORT_EMAIL}
           </a>
@@ -63,7 +63,7 @@ export default function SupportPage() {
           </p>
           <a
             href={`mailto:${SUPPORT_EMAIL}?subject=Unmark%20support`}
-            className="mt-5 inline-flex bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-hover"
+            className="mt-5 inline-flex rounded-[var(--radius-md)] bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
           >
             Send an email
           </a>

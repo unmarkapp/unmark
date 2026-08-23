@@ -46,7 +46,7 @@ export default function GuidesIndexPage() {
 
       <main className="relative mx-auto w-full max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-brand">Guides</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           Gemini watermark remover guides
         </h1>
         <p className="mt-4 text-base leading-relaxed text-muted-strong sm:text-lg">
@@ -66,7 +66,7 @@ export default function GuidesIndexPage() {
                 href={guide.href}
                 className="group block"
               >
-                <h2 className="text-lg font-semibold tracking-tight transition group-hover:text-brand">
+                <h2 className="text-lg font-semibold tracking-[-0.02em] transition group-hover:text-brand">
                   {guide.title}
                 </h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-strong">
@@ -78,7 +78,7 @@ export default function GuidesIndexPage() {
         </ul>
 
         <div className="mt-14 rounded-2xl border border-border bg-cream/50 px-6 py-8 text-center">
-          <p className="font-display text-2xl font-semibold tracking-tight">
+          <p className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Start removing watermarks now
           </p>
           <Link

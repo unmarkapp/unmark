@@ -64,12 +64,12 @@ export default function InstantCleanEmbed() {
   return (
     <section
       id="try"
-      className="mt-12 border-2 border-ink bg-surface px-4 py-6 sm:px-6"
+      className="unmark-glass mt-12 px-4 py-6 sm:px-6"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
         Instant · no account
       </p>
-      <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground">
+      <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
         Remove the sparkle on this page
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">
@@ -93,7 +93,7 @@ export default function InstantCleanEmbed() {
             event.preventDefault();
             onFiles(event.dataTransfer.files);
           }}
-          className={`mt-5 flex min-h-[200px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-ink px-4 py-10 text-center transition ${
+          className={`mt-5 flex min-h-[200px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-border-strong rounded-[var(--radius-lg)] px-4 py-10 text-center transition ${
             isDragging || busy ? "bg-peach/30" : "hover:bg-cream"
           }`}
         >
@@ -109,14 +109,14 @@ export default function InstantCleanEmbed() {
             <img
               src={originalUrl}
               alt="Original Gemini export"
-              className="max-h-64 w-full border-2 border-ink object-contain bg-cream"
+              className="max-h-64 w-full rounded-[var(--radius-md)] border border-border object-contain bg-cream"
             />
           ) : null}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={resultUrl}
             alt="Sparkle removed"
-            className="max-h-64 w-full border-2 border-ink object-contain bg-cream"
+            className="max-h-64 w-full rounded-[var(--radius-md)] border border-border object-contain bg-cream"
           />
         </div>
       )}
@@ -133,7 +133,7 @@ export default function InstantCleanEmbed() {
       />
 
       {error ? (
-        <p className="mt-3 text-sm text-red-700" role="alert">
+        <p className="mt-3 text-sm text-danger" role="alert">
           {error}
         </p>
       ) : null}
@@ -143,14 +143,14 @@ export default function InstantCleanEmbed() {
           <a
             href={resultUrl}
             download={fileName}
-            className="inline-flex border-2 border-ink bg-brand px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+            className="inline-flex rounded-[var(--radius-md)] bg-brand px-4 py-2.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
           >
             Download PNG
           </a>
           <button
             type="button"
             onClick={reset}
-            className="inline-flex border-2 border-ink bg-surface px-4 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+            className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface px-4 py-2.5 text-sm font-semibold text-foreground transition hover:bg-sand"
           >
             Try another
           </button>

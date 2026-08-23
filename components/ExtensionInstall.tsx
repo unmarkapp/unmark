@@ -28,7 +28,7 @@ export default function ExtensionInstall() {
     >
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">Chrome extension</p>
-        <h2 className="mt-2 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           Unmark while you generate.
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
@@ -49,7 +49,7 @@ export default function ExtensionInstall() {
         {steps.map((step) => (
           <li key={step.num} className="text-center sm:text-left">
             <div
-              className={`inline-flex h-12 w-12 items-center justify-center text-sm font-semibold ${
+              className={`inline-flex h-12 w-12 items-center justify-center rounded-[var(--radius-md)] font-mono text-sm font-semibold tabular-nums ${
                 step.num === "01"
                   ? "bg-cobalt text-white"
                   : step.num === "02"
@@ -74,7 +74,7 @@ export default function ExtensionInstall() {
           href={CHROME_WEB_STORE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center gap-2.5 border-2 border-ink bg-cobalt px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:brightness-110"
+          className="inline-flex items-center justify-center gap-2.5 rounded-[var(--radius-md)] bg-cobalt px-6 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.08)] transition hover:brightness-110"
         >
           <ChromeIcon />
           Add to Chrome

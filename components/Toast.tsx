@@ -72,13 +72,13 @@ function ToastBubble({
     item.tone === "error"
       ? "border-danger-border bg-danger-bg text-danger"
       : item.tone === "success"
-        ? "border-brand-line bg-cream text-success"
-        : "border-brand-line bg-cream text-brand-hover";
+        ? "border-border bg-surface-raised text-success"
+        : "border-border bg-surface-raised text-foreground";
 
   return (
     <div
       role="status"
-      className={`pointer-events-auto max-w-sm border px-4 py-3 text-sm font-medium shadow-lg shadow-black/10 ${toneClass}`}
+      className={`pointer-events-auto max-w-sm rounded-[var(--radius-md)] border px-4 py-3 text-sm font-medium shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_12px_28px_-10px_rgb(var(--shadow-color)/0.35)] ${toneClass}`}
     >
       {item.message}
     </div>

@@ -93,7 +93,7 @@ export default function LibraryStorageSettings() {
   const current = status?.default_provider ?? "unmark";
 
   return (
-    <div className="mt-6 border border-border bg-surface p-5 sm:p-6">
+    <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
       <h2 className="text-base font-semibold text-foreground">
         Library storage
       </h2>
@@ -145,7 +145,7 @@ export default function LibraryStorageSettings() {
                   type="button"
                   disabled={busy !== null}
                   onClick={() => void handleConnect()}
-                  className="bg-brand px-4 py-2 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:opacity-60"
+                  className="rounded-[var(--radius-md)] bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover disabled:opacity-60"
                 >
                   {busy === "connect" ? "Connecting…" : "Connect Google Drive"}
                 </button>
@@ -156,7 +156,7 @@ export default function LibraryStorageSettings() {
       )}
 
       {message && <p className="mt-4 text-sm text-success">{message}</p>}
-      {error && <p className="mt-4 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-4 text-sm text-danger">{error}</p>}
     </div>
   );
 }
@@ -175,7 +175,7 @@ function StorageOption({
   onSelect: () => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 border border-border bg-surface px-4 py-4">
+    <label className="flex cursor-pointer items-start gap-3 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-4 has-[:checked]:border-brand">
       <input
         type="radio"
         name="library-storage"

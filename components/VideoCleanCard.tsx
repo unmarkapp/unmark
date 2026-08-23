@@ -75,9 +75,9 @@ export default function VideoCleanCard({
 
   if (processing && !resultUrl) {
     return (
-      <div className="border border-border bg-surface p-4 sm:p-5">
+      <div className="unmark-glass p-4 sm:p-5">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <div className="relative mx-auto w-full max-w-[320px] shrink-0 overflow-hidden bg-ink sm:mx-0">
+          <div className="relative mx-auto w-full max-w-[320px] shrink-0 overflow-hidden rounded-[var(--radius-md)] bg-ink sm:mx-0">
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video
               src={videoUrl}
@@ -101,7 +101,7 @@ export default function VideoCleanCard({
   }
 
   return (
-    <div className="border border-border bg-surface">
+    <div className="unmark-glass overflow-hidden">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3.5">
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-semibold text-foreground">
@@ -146,7 +146,7 @@ export default function VideoCleanCard({
           </div>
 
           {error && (
-            <p className="text-sm text-red-600" role="alert">
+            <p className="text-sm text-danger" role="alert">
               {error}
             </p>
           )}
@@ -160,7 +160,7 @@ export default function VideoCleanCard({
                   `${fileName.replace(/\.[^.]+$/, "") || "cleaned"}-cleaned.mp4`,
                 )
               }
-              className="inline-flex h-11 items-center justify-center border-2 border-ink bg-cobalt px-5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:brightness-110"
+              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-md)] bg-cobalt px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.08)] transition hover:brightness-110"
             >
               Download MP4
             </button>
@@ -169,7 +169,7 @@ export default function VideoCleanCard({
               type="button"
               onClick={onRemove}
               disabled={blockedByAuth || blockedByCredits}
-              className="inline-flex h-11 items-center justify-center border-2 border-ink bg-brand px-5 text-sm font-semibold uppercase tracking-[0.06em] text-white transition hover:brightness-95 disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-md)] bg-brand px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
             >
               {blockedByAuth
                 ? "Sign in to clean video"

@@ -20,13 +20,13 @@ export default function CreateGenerateCard() {
           rows={5}
           defaultValue=""
           placeholder="A cinematic still of a copper teapot on sand linen, soft window light…"
-          className="w-full resize-none border border-border bg-surface px-3.5 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted"
+          className="w-full resize-none rounded-[var(--radius-md)] border border-border bg-surface px-3.5 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted"
         />
 
         <p className="mt-4 text-[13px] font-semibold text-muted-strong">
           Model
         </p>
-        <div className="mt-2 border border-border bg-surface">
+        <div className="mt-2 overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface">
           {GENERATE_MODELS.map((option, index) => (
             <div
               key={option.id}
@@ -54,10 +54,10 @@ export default function CreateGenerateCard() {
           {GENERATE_ASPECTS.map((ratio, index) => (
             <span
               key={ratio}
-              className={`border px-2.5 py-1.5 text-[13px] font-medium ${
+              className={`rounded-full border px-2.5 py-1.5 text-[13px] font-medium ${
                 index === 0
-                  ? "border-ink bg-brand text-white"
-                  : "border-ink bg-surface text-foreground"
+                  ? "border-brand bg-brand text-white"
+                  : "border-border bg-surface text-foreground"
               }`}
             >
               {ratio}
@@ -65,7 +65,7 @@ export default function CreateGenerateCard() {
           ))}
         </div>
 
-        <div className="btn-play mt-5 flex items-center justify-center gap-2.5 border-2 border-ink bg-brand px-4 py-3.5 text-center text-[15px] font-semibold uppercase tracking-[0.08em] text-white">
+        <div className="btn-play mt-5 flex items-center justify-center gap-2.5 rounded-[var(--radius-md)] bg-brand px-4 py-3.5 text-center text-[15px] font-semibold text-white">
           Generate
         </div>
         <p className="mt-2.5 text-center text-xs text-muted">

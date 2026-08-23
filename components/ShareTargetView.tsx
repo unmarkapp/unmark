@@ -129,7 +129,7 @@ export default function ShareTargetView() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Open with Unmark
           </p>
-          <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
             What should we do?
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-base">
@@ -148,7 +148,7 @@ export default function ShareTargetView() {
           {loading ? (
             <p className="text-center text-sm text-muted">Loading shared image…</p>
           ) : files.length === 0 ? (
-            <div className="border border-border bg-surface/90 p-6 text-center">
+            <div className="rounded-[var(--radius-lg)] border border-border bg-surface/90 p-6 text-center">
               <p className="text-sm text-muted">
                 No image yet. On Android Chrome, install Unmark, then use Share
                 → Unmark from Photos, WhatsApp, Files, or Gemini.
@@ -157,7 +157,7 @@ export default function ShareTargetView() {
                 <button
                   type="button"
                   onClick={() => inputRef.current?.click()}
-                  className="border-2 border-ink bg-brand px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+                  className="rounded-[var(--radius-md)] bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
                 >
                   Choose a photo
                 </button>
@@ -166,7 +166,7 @@ export default function ShareTargetView() {
                     type="button"
                     onClick={() => void installApp()}
                     disabled={installing}
-                    className="border-2 border-ink bg-peach px-5 py-2.5 text-sm font-semibold uppercase tracking-[0.08em] text-ink transition hover:brightness-95 disabled:opacity-60"
+                    className="rounded-[var(--radius-md)] bg-peach px-5 py-2.5 text-sm font-semibold text-ink transition hover:brightness-95 disabled:opacity-60"
                   >
                     {installing ? "Installing…" : "Install Unmark"}
                   </button>
@@ -179,7 +179,7 @@ export default function ShareTargetView() {
             </div>
           ) : (
             <>
-              <div className="overflow-hidden border border-border bg-surface">
+              <div className="overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface">
                 {previewUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -203,7 +203,7 @@ export default function ShareTargetView() {
                 <button
                   type="button"
                   onClick={() => void chooseClean()}
-                  className="border-2 border-ink bg-cobalt px-4 py-4 text-left text-white transition hover:brightness-110"
+                  className="rounded-[var(--radius-lg)] border border-border bg-cobalt px-4 py-4 text-left text-white transition hover:brightness-110"
                 >
                   <span className="block text-sm font-semibold">Clean</span>
                   <span className="mt-1 block text-xs text-white/80">
@@ -215,7 +215,7 @@ export default function ShareTargetView() {
                   type="button"
                   onClick={() => void chooseBgRemove()}
                   disabled={!hasImage}
-                  className="border-2 border-ink bg-surface px-4 py-4 text-left transition hover:bg-cream disabled:cursor-not-allowed disabled:opacity-50"
+                  className="rounded-[var(--radius-lg)] border border-border bg-surface px-4 py-4 text-left transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <span className="block text-sm font-semibold text-foreground">
                     Remove background

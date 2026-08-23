@@ -76,11 +76,11 @@ export default function LandingCompare() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="inline-flex items-center gap-2 bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
+        <p className="inline-flex items-center gap-2 rounded-full bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
           <span className="h-1.5 w-1.5 rounded-full bg-cream" aria-hidden />
           Why Unmark
         </p>
-        <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
+        <h2 className="mt-5 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
           Video cleanup that you can actually keep
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
@@ -89,7 +89,7 @@ export default function LandingCompare() {
         </p>
       </div>
 
-      <div className="mx-auto mt-12 max-w-3xl overflow-hidden border border-border bg-surface shadow-[0_18px_50px_-28px_rgba(26,26,23,0.45)]">
+      <div className="mx-auto mt-12 max-w-3xl overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface shadow-[0_18px_50px_-28px_rgb(var(--shadow-color)/0.35)]">
         <table className="w-full border-collapse text-left text-sm">
           <caption className="sr-only">
             Comparison of Unmark versus other Gemini watermark removers

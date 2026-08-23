@@ -81,19 +81,19 @@ export default function ExtensionLanding() {
             aria-hidden
             className="pointer-events-none absolute inset-x-0 -top-16 -z-10 mx-auto h-56 max-w-2xl opacity-80"
           >
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(199,123,54,0.22),transparent_68%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(197,64,31,0.18),transparent_68%)]" />
             <div className="absolute left-1/2 top-1/2 h-px w-[120%] -translate-x-1/2 -translate-y-1/2 rotate-[-8deg] bg-gradient-to-r from-transparent via-brand/50 to-transparent" />
             <div className="absolute left-1/2 top-[58%] h-px w-[100%] -translate-x-1/2 bg-gradient-to-r from-transparent via-brand-line/40 to-transparent" />
           </div>
 
           <div className="animate-rise inline-flex items-center gap-2.5">
             <BrandLogo size={40} />
-            <span className="font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            <span className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground sm:text-3xl">
               Unmark
             </span>
           </div>
 
-          <h1 className="animate-rise-delay mt-6 font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-[3.25rem] md:leading-[1.1]">
+          <h1 className="animate-rise-delay mt-6 font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl md:text-[3.25rem] md:leading-[1.1]">
             Chrome extension for Gemini
           </h1>
           <p className="animate-rise-delay mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
@@ -106,14 +106,14 @@ export default function ExtensionLanding() {
               href={CHROME_WEB_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2.5 bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
+              className="inline-flex items-center justify-center gap-2.5 rounded-[var(--radius-md)] bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover"
             >
               <ChromeIcon />
               Add to Chrome
             </a>
             <Link
               href="/"
-              className="inline-flex items-center justify-center gap-2 border border-border bg-surface/80 px-6 py-3.5 text-sm font-semibold text-foreground transition hover:border-brand-line hover:text-brand"
+              className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] border border-border bg-surface/80 px-6 py-3.5 text-sm font-semibold text-foreground transition hover:border-brand-line hover:text-brand"
             >
               <DownloadIcon />
               Use online remover
@@ -131,7 +131,7 @@ export default function ExtensionLanding() {
               className="text-center sm:text-left"
               style={{ animationDelay: `${0.05 * i}s` }}
             >
-              <div className="mx-auto flex h-11 w-11 items-center justify-center border border-border bg-cream text-foreground sm:mx-0">
+              <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-[var(--radius-md)] border border-border bg-cream text-foreground sm:mx-0">
                 <FeatureIcon name={item.icon} />
               </div>
               <h2 className="mt-4 text-base font-semibold text-foreground">
@@ -151,7 +151,7 @@ export default function ExtensionLanding() {
       >
         <div className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               Installation
             </h2>
             <p className="mt-3 text-base text-muted">
@@ -178,7 +178,7 @@ export default function ExtensionLanding() {
             ))}
           </ol>
 
-          <div className="mx-auto mt-12 flex max-w-2xl items-start gap-3 border border-border bg-cream/80 px-4 py-3.5 text-left sm:px-5">
+          <div className="mx-auto mt-12 flex max-w-2xl items-start gap-3 rounded-[var(--radius-lg)] border border-border bg-cream/80 px-4 py-3.5 text-left sm:px-5">
             <span className="mt-0.5 shrink-0 text-brand">
               <FeatureIcon name="shield" />
             </span>
@@ -202,7 +202,7 @@ export default function ExtensionLanding() {
       <section className="border-t border-border/80">
         <div className="mx-auto w-full max-w-5xl px-4 py-20 sm:px-6 sm:py-24">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
               What changes on Gemini
             </h2>
             <p className="mt-3 text-base text-muted">
@@ -235,12 +235,12 @@ export default function ExtensionLanding() {
           aria-hidden
           className="pointer-events-none absolute inset-0 flex items-center justify-center overflow-hidden"
         >
-          <span className="select-none font-display text-[16vw] font-semibold leading-none tracking-tight text-brand/[0.07] sm:text-[12vw]">
+          <span className="select-none font-display text-[16vw] font-semibold leading-none tracking-[-0.02em] text-brand/[0.07] sm:text-[12vw]">
             EXTEND
           </span>
         </div>
         <div className="relative mx-auto flex w-full max-w-2xl flex-col items-center px-4 py-20 text-center sm:px-6 sm:py-24">
-          <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
             Clean while you generate.
           </h2>
           <p className="mt-4 max-w-md text-base leading-relaxed text-muted">
@@ -252,7 +252,7 @@ export default function ExtensionLanding() {
               href={CHROME_WEB_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-brand px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
+              className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover"
             >
               <ChromeIcon />
               Add to Chrome

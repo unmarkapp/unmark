@@ -1,14 +1,14 @@
 /** Unmark brand marks — four-point sparkle motif from the brand sheet. */
 
 export const BRAND = {
-  ink: "#111111",
-  copper: "#D61C0D",
-  peach: "#FFCC00",
-  cream: "#FAF6EC",
-  sand: "#F4F0E6",
-  red: "#D61C0D",
-  blue: "#0047AB",
-  yellow: "#FFCC00",
+  ink: "#1C1A17",
+  copper: "#C5401F",
+  peach: "#F0C98A",
+  cream: "#FDFBF7",
+  sand: "#F0EBE2",
+  red: "#C5401F",
+  blue: "#4F5B66",
+  yellow: "#F0C98A",
 } as const;
 
 /** Classic 4-point sparkle path centered on (0, 0). */

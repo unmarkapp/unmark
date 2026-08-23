@@ -175,7 +175,7 @@ export default function Walkthrough() {
       {highlight ? (
         <div
           aria-hidden
-          className="pointer-events-none absolute border-2 border-peach bg-transparent"
+          className="pointer-events-none absolute rounded-[var(--radius-md)] border-2 border-peach bg-transparent"
           style={{
             top: highlight.top,
             left: highlight.left,
@@ -186,7 +186,7 @@ export default function Walkthrough() {
       ) : null}
 
       <div
-        className="absolute z-[81] w-[min(calc(100vw-2rem),22rem)] border-2 border-ink bg-surface p-5 shadow-[6px_6px_0_0_var(--ink)]"
+        className="absolute z-[81] w-[min(calc(100vw-2rem),22rem)] rounded-[var(--radius-lg)] border border-border bg-surface-raised p-5 shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_20px_40px_-16px_rgb(var(--shadow-color)/0.4)]"
         style={tooltipStyle}
       >
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-brand">
@@ -194,7 +194,7 @@ export default function Walkthrough() {
         </p>
         <h2
           id="walkthrough-title"
-          className="mt-1 font-display text-xl font-semibold tracking-tight text-foreground"
+          className="mt-1 font-display text-xl font-semibold tracking-[-0.01em] text-foreground"
         >
           {step.title}
         </h2>
@@ -213,7 +213,7 @@ export default function Walkthrough() {
               <button
                 type="button"
                 onClick={back}
-                className="min-h-11 border-2 border-ink bg-surface px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+                className="min-h-11 rounded-[var(--radius-sm)] border border-border bg-surface px-4 py-2.5 text-xs font-semibold text-foreground transition hover:bg-sand"
               >
                 Back
               </button>
@@ -221,7 +221,7 @@ export default function Walkthrough() {
             <button
               type="button"
               onClick={next}
-              className="min-h-11 border-2 border-ink bg-brand px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+              className="min-h-11 rounded-[var(--radius-sm)] bg-brand px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-brand-hover"
             >
               {isLast ? "Done" : "Next"}
             </button>

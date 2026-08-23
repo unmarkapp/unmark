@@ -182,7 +182,7 @@ export default function BackgroundRemovalTool() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Unmark Tools
           </p>
-          <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
             Unmark background removal — transparent PNG cutouts
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
@@ -198,7 +198,7 @@ export default function BackgroundRemovalTool() {
           <img
             src="/demo/bg-remove-before.jpg"
             alt="Product photo of a ceramic mug on a wooden table before background removal"
-            className="w-full border-2 border-ink object-cover"
+            className="w-full rounded-[var(--radius-lg)] border border-border object-cover"
             width={450}
             height={600}
           />
@@ -206,7 +206,7 @@ export default function BackgroundRemovalTool() {
           <img
             src="/demo/bg-remove-after.jpg"
             alt="Same ceramic mug isolated on a checkerboard after Unmark background removal"
-            className="w-full border-2 border-ink object-cover"
+            className="w-full rounded-[var(--radius-lg)] border border-border object-cover"
             width={450}
             height={600}
           />
@@ -224,7 +224,7 @@ export default function BackgroundRemovalTool() {
             <button
               type="button"
               onClick={loginWithGoogle}
-              className="mt-4 bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-hover"
+              className="mt-4 rounded-[var(--radius-md)] bg-brand px-5 py-2.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
             >
               Sign in with Google
             </button>
@@ -252,11 +252,11 @@ export default function BackgroundRemovalTool() {
                 setDragging(false);
               }}
               onDrop={onDrop}
-              className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-ink bg-surface px-6 py-12 text-center transition ${
+              className={`flex min-h-[260px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-border-strong rounded-[var(--radius-lg)] bg-surface px-6 py-12 text-center transition ${
                 dragging ? "bg-peach/30" : "hover:bg-cream"
               }`}
             >
-              <div className="mb-5 flex h-14 w-14 items-center justify-center bg-cobalt text-white">
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-[var(--radius-md)] bg-cobalt text-white">
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden>
                   <path
                     d="M12 16V6M12 6l-4 4M12 6l4 4"
@@ -300,9 +300,9 @@ export default function BackgroundRemovalTool() {
                     key={m}
                     type="button"
                     onClick={() => setMode(m)}
-                    className={`border px-3 py-1.5 text-xs font-semibold capitalize transition ${
+                    className={`rounded-full border px-3 py-1.5 text-xs font-semibold capitalize transition ${
                       mode === m
-                        ? "border-brand bg-cream text-brand-hover"
+                        ? "border-brand bg-brand-soft text-brand-hover"
                         : "border-border bg-surface text-muted hover:text-foreground"
                     }`}
                   >
@@ -317,7 +317,7 @@ export default function BackgroundRemovalTool() {
                 <button
                   type="button"
                   onClick={reset}
-                  className="border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-muted transition hover:text-foreground"
+                  className="rounded-full border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-muted transition hover:text-foreground"
                 >
                   New image
                 </button>
@@ -325,14 +325,14 @@ export default function BackgroundRemovalTool() {
                   type="button"
                   onClick={download}
                   disabled={!cutoutBlob}
-                  className="bg-brand px-4 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-hover disabled:opacity-50"
+                  className="rounded-full bg-brand px-4 py-1.5 text-xs font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover disabled:opacity-50"
                 >
                   Download PNG
                 </button>
               </div>
             </div>
 
-            <div className="relative overflow-hidden border border-border bg-surface shadow-sm">
+            <div className="relative overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface shadow-[0_1px_2px_rgb(var(--shadow-color)/0.04),0_8px_24px_-8px_rgb(var(--shadow-color)/0.12)]">
               {loading ? (
                 <div className="flex min-h-[420px] flex-col items-center justify-center gap-3">
                   <div className="h-10 w-10 animate-spin rounded-full border-2 border-border border-t-brand" />

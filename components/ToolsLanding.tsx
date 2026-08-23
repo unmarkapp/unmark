@@ -3,10 +3,11 @@ import Link from "next/link";
 import InstantCleanEmbed from "@/components/InstantCleanEmbed";
 import JsonLd from "@/components/JsonLd";
 import PrivacyNote from "@/components/PrivacyNote";
+import ProductToolCard from "@/components/ProductToolCard";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
 import { breadcrumbJsonLd } from "@/lib/jsonld";
-import { CHROME_WEB_STORE_URL, PRODUCT_TOOLS } from "@/lib/seo";
+import { PRODUCT_TOOLS } from "@/lib/seo";
 
 export default function ToolsLanding() {
   return (
@@ -18,7 +19,7 @@ export default function ToolsLanding() {
           <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
             Unmark
           </p>
-          <h1 className="font-display mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
             Unmark tools — watermark, video, and cutouts
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
@@ -35,62 +36,11 @@ export default function ToolsLanding() {
         </div>
 
         <ul className="mx-auto mt-12 grid max-w-2xl gap-4">
-          {PRODUCT_TOOLS.map((tool) => {
-            const isExtension = tool.id === "extension";
-            const comingSoon = "comingSoon" in tool && tool.comingSoon;
-            const href = isExtension ? CHROME_WEB_STORE_URL : tool.href;
-            const className =
-              "group flex flex-col gap-2 border-2 border-ink bg-surface p-5 transition hover:bg-cream sm:flex-row sm:items-center sm:justify-between";
-            const lockedClassName =
-              "flex flex-col gap-2 border-2 border-ink bg-surface p-5 sm:flex-row sm:items-center sm:justify-between";
-            const inner = (
-              <>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="font-display text-lg font-semibold text-foreground">
-                      {tool.title}
-                    </h2>
-                    <span className="border-2 border-ink bg-peach px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-ink">
-                      {tool.badge}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-sm text-muted">{tool.description}</p>
-                </div>
-                <span
-                  className={`text-sm font-semibold ${
-                    comingSoon
-                      ? "text-muted"
-                      : "text-brand group-hover:text-brand-hover"
-                  }`}
-                >
-                  {tool.cta}
-                  {comingSoon ? "" : " →"}
-                </span>
-              </>
-            );
-
-            return (
-              <li key={tool.id}>
-                {isExtension ? (
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={className}
-                  >
-                    {inner}
-                  </a>
-                ) : (
-                  <Link
-                    href={href}
-                    className={comingSoon ? lockedClassName : className}
-                  >
-                    {inner}
-                  </Link>
-                )}
-              </li>
-            );
-          })}
+          {PRODUCT_TOOLS.map((tool) => (
+            <li key={tool.id}>
+              <ProductToolCard tool={tool} layout="row" />
+            </li>
+          ))}
         </ul>
 
         <section className="mx-auto mt-14 max-w-2xl space-y-3 text-sm leading-relaxed text-muted-strong">

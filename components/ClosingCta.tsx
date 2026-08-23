@@ -17,10 +17,10 @@ export default function ClosingCta() {
       </div>
 
       <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center px-4 py-20 text-center sm:px-6 sm:py-28">
-        <h2 className="font-display text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+        <h2 className="font-display text-4xl font-semibold tracking-[-0.02em] text-foreground sm:text-5xl md:text-6xl">
           Your media.
         </h2>
-        <p className="mt-2 inline-block bg-peach px-3 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl md:text-6xl">
+        <p className="mt-2 inline-block rounded-[var(--radius-sm)] bg-peach px-3 font-display text-4xl font-semibold tracking-[-0.02em] text-ink sm:text-5xl md:text-6xl">
           Clean and ready.
         </p>
 
@@ -33,13 +33,13 @@ export default function ClosingCta() {
           <button
             type="button"
             onClick={scrollToUpload}
-            className="btn-play inline-flex items-center justify-center gap-2 border-2 border-ink bg-brand px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-brand-hover"
+            className="btn-play inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] bg-brand px-6 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover"
           >
             Try Instant free
           </button>
           <a
             href="/tools/background-removal"
-            className="inline-flex items-center justify-center border-2 border-ink bg-surface px-6 py-3.5 text-sm font-semibold uppercase tracking-[0.08em] text-foreground transition hover:bg-cream"
+            className="inline-flex items-center justify-center rounded-[var(--radius-md)] border border-border bg-surface px-6 py-3.5 text-sm font-semibold text-foreground transition hover:bg-sand"
           >
             Background cutout
           </a>

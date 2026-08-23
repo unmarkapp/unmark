@@ -14,7 +14,7 @@ export default function LandingFaq() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+        <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
           Gemini watermark FAQ
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">

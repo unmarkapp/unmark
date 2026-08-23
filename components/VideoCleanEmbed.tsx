@@ -31,12 +31,12 @@ export default function VideoCleanEmbed({
   return (
     <section
       id="try"
-      className="mt-12 border-2 border-ink bg-surface px-4 py-6 sm:px-6"
+      className="unmark-glass mt-12 px-4 py-6 sm:px-6"
     >
       <p className="text-xs font-semibold uppercase tracking-[0.14em] text-brand">
         Cloud · Library
       </p>
-      <h2 className="mt-2 font-display text-2xl font-semibold tracking-tight text-foreground">
+      <h2 className="mt-2 font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
         {heading}
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
@@ -56,7 +56,7 @@ export default function VideoCleanEmbed({
           event.preventDefault();
           onFiles(event.dataTransfer.files);
         }}
-        className={`mt-5 flex min-h-[200px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-ink px-4 py-10 text-center transition ${
+        className={`mt-5 flex min-h-[200px] cursor-pointer flex-col items-center justify-center border-2 border-dashed border-border-strong rounded-[var(--radius-lg)] px-4 py-10 text-center transition ${
           isDragging ? "bg-peach/30" : "hover:bg-cream"
         }`}
       >

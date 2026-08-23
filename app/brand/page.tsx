@@ -37,7 +37,7 @@ export default function BrandPage() {
 
       <main className="relative mx-auto w-full max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
         <p className="text-sm font-medium text-[var(--brand)]">Brand system</p>
-        <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+        <h1 className="mt-2 font-display text-4xl font-semibold tracking-[-0.02em] sm:text-5xl">
           Logo themes
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--muted)]">
@@ -53,7 +53,7 @@ export default function BrandPage() {
           {LOGO_THEMES.map((theme) => (
             <article
               key={theme.id}
-              className="flex flex-col items-center rounded-2xl border border-border/80 bg-white px-5 py-8 text-center"
+              className="flex flex-col items-center rounded-2xl border border-border/80 bg-[var(--surface)] px-5 py-8 text-center"
             >
               <div className="flex h-24 w-full items-center justify-center">
                 <LogoByTheme theme={theme.id} size={theme.id === "fade" ? 112 : 72} />
@@ -74,7 +74,7 @@ export default function BrandPage() {
         </section>
 
         <section className="mt-14">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Palette
           </h2>
           <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-5">
@@ -92,7 +92,7 @@ export default function BrandPage() {
         </section>
 
         <section className="mt-14">
-          <h2 className="font-display text-2xl font-semibold tracking-tight">
+          <h2 className="font-display text-2xl font-semibold tracking-[-0.02em]">
             Concept sheet
           </h2>
           <p className="mt-2 text-sm text-[var(--muted)]">

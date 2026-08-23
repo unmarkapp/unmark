@@ -25,11 +25,11 @@ export default function LandingBeforeAfter() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="inline-flex items-center gap-2 bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
+        <p className="inline-flex items-center gap-2 rounded-full bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
           <span className="h-1.5 w-1.5 rounded-full bg-cream" aria-hidden />
           Before / after
         </p>
-        <h2 className="mt-5 font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
+        <h2 className="mt-5 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
           See the watermark removal effect
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
@@ -42,7 +42,7 @@ export default function LandingBeforeAfter() {
         {EXAMPLES.map((example) => (
           <figure
             key={example.id}
-            className="flex h-full flex-col overflow-hidden border border-border bg-surface shadow-[0_18px_50px_-28px_rgba(26,26,23,0.45)]"
+            className="flex h-full flex-col overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface shadow-[0_18px_50px_-28px_rgb(var(--shadow-color)/0.35)]"
           >
             <BeforeAfterSlider
               beforeUrl={example.beforeUrl}
