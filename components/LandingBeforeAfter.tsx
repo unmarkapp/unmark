@@ -25,16 +25,12 @@ export default function LandingBeforeAfter() {
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
       <div className="mx-auto max-w-2xl text-center">
-        <p className="inline-flex items-center gap-2 rounded-full bg-brand px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white">
-          <span className="h-1.5 w-1.5 rounded-full bg-cream" aria-hidden />
-          Before / after
-        </p>
-        <h2 className="mt-5 font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
-          See the watermark removal effect
+        <h2 className="animate-section-reveal font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl md:text-[2.75rem] md:leading-[1.15]">
+          See the difference
         </h2>
-        <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
-          Compare real Gemini image examples before and after cleanup. Drag the
-          handle to inspect the corner sparkle.
+        <p className="animate-section-reveal mt-4 text-base leading-relaxed text-muted sm:text-lg">
+          Drag the handle to inspect real Gemini image cleanup. The sparkle is
+          gone, the rest is untouched.
         </p>
       </div>
 

@@ -3,76 +3,76 @@
 /* Class-based dark mode (ThemeProvider toggles .dark on <html>) */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light — Darkroom (warm paper / rust accent / soft elevation) */
+/* Light — clean zinc / rust accent */
 :root {
-  --paper: #faf7f2;
-  --background: #faf7f2;
-  --foreground: #1c1a17;
+  --paper: #f6f5f2;
+  --background: #f6f5f2;
+  --foreground: #111110;
   --brand: #c5401f;
   --brand-hover: #a63419;
-  --brand-soft: #fbe4da;
+  --brand-soft: #fce5da;
   --brand-line: #c5401f;
-  --muted: #6b6459;
-  --muted-strong: #35322c;
+  --muted: #717069;
+  --muted-strong: #2e2c28;
   --surface: #ffffff;
   --surface-raised: #ffffff;
   /* --ink and --peach are fixed accent/media colors — deliberately do NOT
      flip with theme (paired with bg-ink+text-white media backdrops, and
      bg-peach+text-ink badges, in both light and dark mode). */
-  --ink: #1c1a17;
-  --sand: #f0ebe2;
-  --cream: #fdfbf7;
+  --ink: #111110;
+  --sand: #eeece7;
+  --cream: #f9f8f5;
   --peach: #f0c98a;
-  --cobalt: #4f5b66;
-  --border: #e7e1d6;
-  --border-strong: #d8cfc0;
+  --cobalt: #4a5568;
+  --border: #e4e2dd;
+  --border-strong: #cac7c0;
   --danger: #c0362b;
-  --danger-bg: #fbe9e6;
+  --danger-bg: #fce9e6;
   --danger-border: #e3b3a9;
   --success: #3f7a52;
   --success-bg: #e9f2eb;
   --warning: #b8862e;
   --warning-bg: #f7edda;
-  --overlay: rgba(28, 26, 23, 0.4);
-  --shadow-color: 28 26 23;
-  --grain-a: rgba(197, 64, 31, 0.1);
-  --grain-b: rgba(197, 64, 31, 0.05);
-  --grain-c: rgba(197, 64, 31, 0.07);
+  --overlay: rgba(17, 17, 16, 0.4);
+  --shadow-color: 17 17 16;
+  --grain-a: rgba(197, 64, 31, 0.06);
+  --grain-b: rgba(197, 64, 31, 0.03);
+  --grain-c: rgba(197, 64, 31, 0.04);
   color-scheme: light;
 }
 
-/* Dark — warm near-black, brightened accent */
+/* Dark — deep charcoal, vivid brand accent */
 .dark {
-  --paper: #17140f;
-  --background: #17140f;
-  --foreground: #f3ede1;
+  --paper: #0d0c0a;
+  --background: #0d0c0a;
+  --foreground: #f0e8dc;
   --brand: #e8623f;
-  --brand-hover: #ff8360;
-  --brand-soft: #3a2018;
+  --brand-hover: #ff7a58;
+  --brand-soft: #2a160c;
   --brand-line: #e8623f;
-  --muted: #a89e8e;
-  --muted-strong: #e3dac9;
-  --surface: #211d17;
-  --surface-raised: #2a251d;
-  --ink: #1c1a17;
-  --sand: #241f18;
-  --cream: #2a251d;
+  --muted: #7d7268;
+  --muted-strong: #c8bfb0;
+  --surface: #161411;
+  --surface-raised: #1e1b16;
+  --ink: #111110;
+  --sand: #181511;
+  --cream: #1e1b16;
   --peach: #f0c98a;
-  --cobalt: #5b6975;
-  --border: rgba(243, 237, 225, 0.1);
-  --border-strong: rgba(243, 237, 225, 0.18);
+  --cobalt: #5a6978;
+  --border: rgba(240, 232, 220, 0.09);
+  --border-strong: rgba(240, 232, 220, 0.16);
   --danger: #e08277;
   --danger-bg: #3a201c;
   --danger-border: #5c352d;
   --success: #7fb98f;
-  --success-bg: #1f2b22;
+  --success-bg: #1a2b1e;
   --warning: #d1a869;
-  --warning-bg: #362a17;
-  --overlay: rgba(0, 0, 0, 0.6);
+  --warning-bg: #2e2111;
+  --overlay: rgba(0, 0, 0, 0.65);
   --shadow-color: 0 0 0;
-  --grain-a: rgba(232, 98, 63, 0.08);
-  --grain-b: rgba(232, 98, 63, 0.04);
-  --grain-c: rgba(232, 98, 63, 0.06);
+  --grain-a: rgba(232, 98, 63, 0.05);
+  --grain-b: rgba(232, 98, 63, 0.025);
+  --grain-c: rgba(232, 98, 63, 0.035);
   color-scheme: dark;
 }
 
@@ -213,6 +213,30 @@ body {
   }
   100% {
     top: 100%;
+  }
+}
+
+/* Scroll-driven reveal for marketing sections */
+@keyframes section-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-section-reveal {
+  animation: section-reveal 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-timeline: view();
+  animation-range: entry 0% entry 35%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-section-reveal {
+    animation: none;
   }
 }
 

@@ -24,7 +24,7 @@ export default function SiteHeader() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-background">
+    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-md">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-3 sm:px-6 xl:px-8">
         <Link href="/" className="flex shrink-0 items-center gap-2.5" onClick={closeMenu}>
           <BrandLogo size={34} />

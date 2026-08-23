@@ -4,119 +4,111 @@ import BrandLogo from "@/components/BrandLogo";
 import ProductHuntBadge from "@/components/ProductHuntBadge";
 import { GUIDE_LINKS } from "@/lib/seo";
 
+const PRODUCT_LINKS = [
+  { href: "/product", label: "Product" },
+  { href: "/extension", label: "Chrome extension" },
+  { href: "/tools", label: "Tools" },
+  { href: "/tools/background-removal", label: "Background removal" },
+  { href: "/android", label: "Android early access" },
+  { href: "/guides/mcp-server", label: "MCP server" },
+  { href: "/skills", label: "Agent skill" },
+];
+
+const ACCOUNT_LINKS = [
+  { href: "/library", label: "Library" },
+  { href: "/account", label: "Credits" },
+  { href: "/about", label: "About" },
+  { href: "/support", label: "Support" },
+  { href: "/privacy", label: "Privacy" },
+  { href: "/terms", label: "Terms" },
+];
+
 export default function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
     <footer className="border-t border-border/80">
-      <div className="mx-auto w-full max-w-5xl px-4 py-10 sm:px-6">
-        <div className="flex flex-col gap-10 lg:flex-row lg:justify-between">
-          <div className="flex max-w-md flex-col gap-4">
-            <div className="flex items-start gap-3">
-              <Link href="/" className="flex shrink-0 items-center gap-2.5">
-                <BrandLogo size={28} />
-                <span className="font-display text-base font-semibold tracking-tight text-foreground">
-                  Unmark
-                </span>
-              </Link>
-              <p className="pt-0.5 text-sm leading-relaxed text-muted">
-                Unmark cleans AI media — Gemini watermark removal for images and
-                video, plus background cutouts. Free Instant on the web; Cloud for
-                Library and the Chrome extension.
-              </p>
-            </div>
+      <div className="mx-auto w-full max-w-5xl px-4 py-12 sm:px-6">
+        <div className="grid gap-10 sm:grid-cols-[1fr_auto_auto_auto] sm:gap-8">
+          {/* Brand */}
+          <div className="flex flex-col gap-4">
+            <Link href="/" className="flex items-center gap-2.5">
+              <BrandLogo size={28} />
+              <span className="font-display text-base font-semibold tracking-tight text-foreground">
+                Unmark
+              </span>
+            </Link>
+            <p className="max-w-[26ch] text-sm leading-relaxed text-muted">
+              Remove Gemini watermarks from images and video. Free Instant in your
+              browser; Cloud for Library and the extension.
+            </p>
             <ProductHuntBadge />
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:gap-12">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-                Guides
-              </p>
-              <nav className="mt-3 flex flex-col gap-2 text-sm font-medium text-muted-strong">
-                {GUIDE_LINKS.map((guide) => (
-                  <Link
-                    key={guide.href}
-                    href={guide.href}
-                    className="transition hover:text-brand"
-                  >
-                    {guide.title}
-                  </Link>
-                ))}
-                <Link href="/guides" className="transition hover:text-brand">
-                  All guides
+          {/* Guides */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+              Guides
+            </p>
+            <nav className="mt-3 flex flex-col gap-2 text-sm text-muted-strong">
+              {GUIDE_LINKS.map((guide) => (
+                <Link
+                  key={guide.href}
+                  href={guide.href}
+                  className="transition hover:text-brand"
+                >
+                  {guide.title}
                 </Link>
-              </nav>
-            </div>
+              ))}
+              <Link href="/guides" className="transition hover:text-brand">
+                All guides
+              </Link>
+            </nav>
+          </div>
 
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted">
-                Product
-              </p>
-              <nav className="mt-3 flex flex-col gap-2 text-sm font-medium text-muted-strong">
-                <Link href="/about" className="transition hover:text-brand">
-                  About
+          {/* Product */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+              Product
+            </p>
+            <nav className="mt-3 flex flex-col gap-2 text-sm text-muted-strong">
+              {PRODUCT_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="transition hover:text-brand"
+                >
+                  {link.label}
                 </Link>
-                <Link href="/product" className="transition hover:text-brand">
-                  Product
+              ))}
+            </nav>
+          </div>
+
+          {/* Account */}
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted">
+              Account
+            </p>
+            <nav className="mt-3 flex flex-col gap-2 text-sm text-muted-strong">
+              {ACCOUNT_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="transition hover:text-brand"
+                >
+                  {link.label}
                 </Link>
-                <Link href="/#get-started" className="transition hover:text-brand">
-                  Get started
-                </Link>
-                <Link href="/#compare" className="transition hover:text-brand">
-                  Before / after
-                </Link>
-                <Link href="/#how" className="transition hover:text-brand">
-                  How it works
-                </Link>
-                <Link href="/#faq" className="transition hover:text-brand">
-                  FAQ
-                </Link>
-                <Link href="/extension" className="transition hover:text-brand">
-                  Chrome extension
-                </Link>
-                <Link href="/android" className="transition hover:text-brand">
-                  Android early access
-                </Link>
-                <Link href="/#apps" className="transition hover:text-brand">
-                  iOS & Android
-                </Link>
-                <Link href="/tools/background-removal" className="transition hover:text-brand">
-                  Background removal
-                </Link>
-                <Link href="/guides/mcp-server" className="transition hover:text-brand">
-                  MCP server
-                </Link>
-                <Link href="/skills" className="transition hover:text-brand">
-                  Agent skill
-                </Link>
-                <Link href="/tools" className="transition hover:text-brand">
-                  Tools
-                </Link>
-                <Link href="/library" className="transition hover:text-brand">
-                  Library
-                </Link>
-                <Link href="/account" className="transition hover:text-brand">
-                  Credits
-                </Link>
-                <Link href="/support" className="transition hover:text-brand">
-                  Contact support
-                </Link>
-                <Link href="/privacy" className="transition hover:text-brand">
-                  Privacy
-                </Link>
-                <Link href="/delete-account" className="transition hover:text-brand">
-                  Delete account
-                </Link>
-                <Link href="/terms" className="transition hover:text-brand">
-                  Terms
-                </Link>
-              </nav>
-            </div>
+              ))}
+            </nav>
           </div>
         </div>
 
-        <p className="mt-10 text-xs text-muted">© {year} Unmark</p>
+        <div className="mt-10 flex items-center justify-between border-t border-border/60 pt-6 text-xs text-muted">
+          <p>© {year} Unmark</p>
+          <Link href="/delete-account" className="transition hover:text-foreground">
+            Delete account
+          </Link>
+        </div>
       </div>
     </footer>
   );

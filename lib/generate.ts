@@ -1,4 +1,4 @@
-export const GENERATE_WEB_ENABLED = false;
+export const GENERATE_WEB_ENABLED = true;
 
 export const GENERATE_MODELS = [
   {

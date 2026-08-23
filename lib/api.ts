@@ -254,6 +254,42 @@ export async function removeWatermarkBulk(
   return response.json();
 }
 
+export interface GenerateResponse {
+  job_id: string;
+  status: JobStatusValue;
+}
+
+export async function generateImage(params: {
+  prompt: string;
+  model: string;
+  aspect: string;
+}): Promise<GenerateResponse> {
+  const response = await fetch(`${API_BASE_URL}/v1/generate`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify(params),
+  });
+
+  if (!response.ok) {
+    let message = "Failed to start generation.";
+    try {
+      const body = await response.json();
+      if (body.detail) {
+        message =
+          typeof body.detail === "string"
+            ? body.detail
+            : JSON.stringify(body.detail);
+      }
+    } catch {
+      // ignore
+    }
+    throw new Error(message);
+  }
+
+  return response.json();
+}
+
 export async function getJobStatus(jobId: string): Promise<JobStatus> {
   const response = await fetch(
     `${API_BASE_URL}/v1/jobs/${encodeURIComponent(jobId)}`,

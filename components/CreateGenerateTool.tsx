@@ -18,10 +18,8 @@ export default function CreateGenerateTool() {
             Create with Nano Banana
           </h1>
           <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted sm:text-base">
-            Send a prompt. Gemini draws the image with no app sparkle — no
-            Ultra required. Unmark is not run on Create. Uses Create credits
-            from a pack; daily free is for Clean.
-            Web is locked until the generate API finishes deploying.
+            Send a prompt. Gemini draws the image with no sparkle watermark.
+            Uses Create credits; daily free credits are for Clean.
           </p>
         </section>
 
