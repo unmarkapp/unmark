@@ -122,9 +122,8 @@ export const PRODUCT_TOOLS = [
     description:
       "Prompt Nano Banana in Unmark. Images without the Gemini sparkle.",
     href: "/tools/create",
-    cta: "Coming soon",
-    badge: "Coming soon",
-    comingSoon: true,
+    cta: "Open Create",
+    badge: "New",
   },
   {
     id: "extension",
