@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { generateImage, getJobStatus } from "@/lib/api";
+import FeedbackButtons from "@/components/FeedbackButtons";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
 import { useToast } from "@/components/Toast";
@@ -28,6 +29,7 @@ export default function CreateGenerateCard() {
   const [loading, setLoading] = useState(false);
   const [statusLabel, setStatusLabel] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [resultJobId, setResultJobId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleAttachChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +99,7 @@ export default function CreateGenerateCard() {
         if (status.status === "completed") {
           if (!status.result_url) throw new Error("No result URL returned.");
           setResultUrl(status.result_url);
+          setResultJobId(job.job_id);
           setStatusLabel(null);
           void refreshCredits();
           toast("Image ready.", "success");
@@ -124,6 +127,7 @@ export default function CreateGenerateCard() {
 
   const handleReset = () => {
     setResultUrl(null);
+    setResultJobId(null);
     setError(null);
     setPrompt("");
     clearAttachment();
@@ -155,14 +159,17 @@ export default function CreateGenerateCard() {
           alt="Generated image"
           className="w-full object-contain"
         />
-        <div className="flex items-center justify-between gap-3 border-t border-border px-4 py-3">
-          <button
-            type="button"
-            onClick={handleReset}
-            className="text-sm font-medium text-muted transition hover:text-foreground"
-          >
-            Generate another
-          </button>
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border px-4 py-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="text-sm font-medium text-muted transition hover:text-foreground"
+            >
+              Generate another
+            </button>
+            {resultJobId ? <FeedbackButtons jobId={resultJobId} /> : null}
+          </div>
           <a
             href={resultUrl}
             download="unmark-create.png"

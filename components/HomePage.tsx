@@ -1013,6 +1013,7 @@ export default function Home() {
         }
         error={error}
         resultUrl={resultUrl}
+        jobId={jobId}
         onSelectionChange={setSelection}
         onRemove={handleRemoveWatermark}
         onReset={resetImage}

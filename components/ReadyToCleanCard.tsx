@@ -1,5 +1,6 @@
 "use client";
 
+import FeedbackButtons from "@/components/FeedbackButtons";
 import ImageEditor from "@/components/ImageEditor";
 import { useCredits } from "@/lib/credits";
 
@@ -30,6 +31,7 @@ interface ReadyToCleanCardProps {
   statusLabel?: string | null;
   error?: string | null;
   resultUrl?: string | null;
+  jobId?: string | null;
   onSelectionChange: (selection: Selection | null) => void;
   onRemove: () => void;
   onReset: () => void;
@@ -104,6 +106,7 @@ export default function ReadyToCleanCard({
   statusLabel,
   error,
   resultUrl,
+  jobId,
   onSelectionChange,
   onRemove,
   onReset,
@@ -355,18 +358,21 @@ export default function ReadyToCleanCard({
             <span aria-hidden>→</span>
           </button>
         ) : (
-          <button
-            type="button"
-            onClick={() => {
-              void downloadImage(resultUrl, `cleaned-${fileName}`).then(() => {
-                onDownloadComplete?.();
-              });
-            }}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover sm:w-auto"
-          >
-            Download cleaned image
-            <span aria-hidden>↓</span>
-          </button>
+          <div className="flex flex-wrap items-center gap-4">
+            <button
+              type="button"
+              onClick={() => {
+                void downloadImage(resultUrl, `cleaned-${fileName}`).then(() => {
+                  onDownloadComplete?.();
+                });
+              }}
+              className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover"
+            >
+              Download cleaned image
+              <span aria-hidden>↓</span>
+            </button>
+            {jobId ? <FeedbackButtons jobId={jobId} /> : null}
+          </div>
         )}
 
         {resultUrl && isSample ? (

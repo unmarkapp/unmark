@@ -462,6 +462,32 @@ export async function downloadLibraryJob(
   URL.revokeObjectURL(objectUrl);
 }
 
+export async function submitFeedback(
+  jobId: string,
+  rating: "like" | "dislike",
+): Promise<void> {
+  const response = await fetch(
+    `${API_BASE_URL}/v1/jobs/${encodeURIComponent(jobId)}/feedback`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ rating }),
+    },
+  );
+
+  if (!response.ok) {
+    let message = "Failed to submit feedback.";
+    try {
+      const body = await response.json();
+      if (body.detail) message = body.detail;
+    } catch {
+      // ignore
+    }
+    throw new Error(message);
+  }
+}
+
 export async function downloadProcessedImage(
   url: string,
   fileName: string,
