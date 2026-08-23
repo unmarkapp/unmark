@@ -15,6 +15,8 @@ import { getBalance, type BillingAccount } from "@/lib/billing";
 interface CreditsContextValue {
   account: BillingAccount | null;
   fastCredits: number | null;
+  /** Purchased-only credits for Create. Separate from daily free fastCredits. */
+  createCredits: number | null;
   dailyFreeCredits: number | null;
   paymentsEnabled: boolean;
   libraryLimit: number | null;
@@ -61,6 +63,9 @@ export function CreditsProvider({ children }: { children: ReactNode }) {
     () => ({
       account,
       fastCredits: account ? account.fast_credits : null,
+      createCredits: account
+        ? (account.create_credits ?? account.paid_fast_credits ?? 0)
+        : null,
       dailyFreeCredits: account?.daily_free_credits ?? null,
       paymentsEnabled: account?.payments_enabled === true,
       libraryLimit: account ? (account.library_limit ?? 50) : null,

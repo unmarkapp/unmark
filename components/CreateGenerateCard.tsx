@@ -17,7 +17,7 @@ const MAX_POLL = 120;
 
 export default function CreateGenerateCard() {
   const { user, loginWithGoogle } = useAuth();
-  const { fastCredits, refreshCredits } = useCredits();
+  const { createCredits, refreshCredits } = useCredits();
   const { toast } = useToast();
   const attachInputRef = useRef<HTMLInputElement>(null);
 
@@ -66,9 +66,9 @@ export default function CreateGenerateCard() {
       return;
     }
 
-    if ((fastCredits ?? 0) < activeModel.credits) {
+    if ((createCredits ?? 0) < activeModel.credits) {
       setError(
-        `You need ${activeModel.credits} credit${creditPluralSuffix(activeModel.credits)}. Buy more from Account.`,
+        `You need ${activeModel.credits} Create credit${creditPluralSuffix(activeModel.credits)} (purchased). Daily free credits are for Clean only.`,
       );
       return;
     }
