@@ -166,14 +166,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="preconnect" href="https://script.supademo.com" />
         <link rel="dns-prefetch" href="https://app.supademo.com" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-      </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Script
+        {/* AdSense — must be in <head> as a static tag so the AdSense crawler can verify it */}
+        <script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3904291439301971"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
         />
+      </head>
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         {GA_MEASUREMENT_ID ? (
           <>
             <Script
