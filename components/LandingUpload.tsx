@@ -44,6 +44,7 @@ export default function LandingUpload({
   const inputRef = useRef<HTMLInputElement>(null);
   const { isDragging } = useDropToClean();
   const [mode, setMode] = useState<HomeMode>("clean");
+  const [pendingCreateFile, setPendingCreateFile] = useState<File | null>(null);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -52,6 +53,18 @@ export default function LandingUpload({
     };
     window.addEventListener("unmark:set-mode", handler);
     return () => window.removeEventListener("unmark:set-mode", handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const file = (e as CustomEvent<File>).detail;
+      if (file instanceof File) {
+        setPendingCreateFile(file);
+        setMode("create");
+      }
+    };
+    window.addEventListener("unmark:use-in-create", handler);
+    return () => window.removeEventListener("unmark:use-in-create", handler);
   }, []);
 
   return (
@@ -87,7 +100,10 @@ export default function LandingUpload({
           <p className="mb-4 text-center text-sm text-muted">
             Prompt Nano Banana: images without the Gemini sparkle
           </p>
-          <CreateGenerateCard />
+          <CreateGenerateCard
+            initialAttachment={pendingCreateFile}
+            onAttachmentConsumed={() => setPendingCreateFile(null)}
+          />
         </>
       ) : (
         <>

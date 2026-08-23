@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { generateImage, getJobStatus } from "@/lib/api";
 import FeedbackButtons from "@/components/FeedbackButtons";
 import { useAuth } from "@/lib/auth";
@@ -15,7 +15,15 @@ import {
 
 const MAX_POLL = 120;
 
-export default function CreateGenerateCard() {
+interface CreateGenerateCardProps {
+  initialAttachment?: File | null;
+  onAttachmentConsumed?: () => void;
+}
+
+export default function CreateGenerateCard({
+  initialAttachment,
+  onAttachmentConsumed,
+}: CreateGenerateCardProps = {}) {
   const { user, loginWithGoogle } = useAuth();
   const { createCredits, refreshCredits } = useCredits();
   const { toast } = useToast();
@@ -51,6 +59,17 @@ export default function CreateGenerateCard() {
       return null;
     });
   };
+
+  useEffect(() => {
+    if (!initialAttachment) return;
+    setAttachment(initialAttachment);
+    const url = URL.createObjectURL(initialAttachment);
+    setAttachmentPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return url;
+    });
+    onAttachmentConsumed?.();
+  }, [initialAttachment, onAttachmentConsumed]);
 
   const activeModel =
     GENERATE_MODELS.find((m) => m.id === selectedModel) ?? GENERATE_MODELS[0];

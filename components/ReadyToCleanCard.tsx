@@ -36,6 +36,7 @@ interface ReadyToCleanCardProps {
   onRemove: () => void;
   onReset: () => void;
   onDownloadComplete?: () => void;
+  onUseInCreate?: () => void;
 }
 
 function formatBytes(bytes: number): string {
@@ -111,6 +112,7 @@ export default function ReadyToCleanCard({
   onRemove,
   onReset,
   onDownloadComplete,
+  onUseInCreate,
 }: ReadyToCleanCardProps) {
   const { dailyFreeCredits, paymentsEnabled } = useCredits();
   const canSubmit = detectMode === "auto" || hasSelection;
@@ -371,6 +373,15 @@ export default function ReadyToCleanCard({
               Download cleaned image
               <span aria-hidden>↓</span>
             </button>
+            {onUseInCreate ? (
+              <button
+                type="button"
+                onClick={onUseInCreate}
+                className="inline-flex items-center justify-center gap-2 rounded-[var(--radius-md)] border border-border bg-surface px-5 py-3.5 text-sm font-semibold text-foreground transition hover:bg-sand"
+              >
+                Edit in Create
+              </button>
+            ) : null}
             {jobId ? <FeedbackButtons jobId={jobId} /> : null}
           </div>
         )}

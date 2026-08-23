@@ -890,6 +890,26 @@ export default function Home() {
     }
   };
 
+  const handleUseInCreate = async () => {
+    if (!resultUrl) return;
+    try {
+      let blob: Blob;
+      if (resultUrl.startsWith("blob:")) {
+        const res = await fetch(resultUrl);
+        blob = await res.blob();
+      } else {
+        const proxy = `/api/download-result?url=${encodeURIComponent(resultUrl)}&filename=cleaned.png`;
+        const res = await fetch(proxy);
+        blob = await res.blob();
+      }
+      const file = new File([blob], "cleaned.png", { type: "image/png" });
+      window.dispatchEvent(new CustomEvent("unmark:use-in-create", { detail: file }));
+      resetImage();
+    } catch {
+      // silently fail
+    }
+  };
+
   const resetImage = () => {
     pollingCancelled.current = true;
     revokeMedia();
@@ -1017,6 +1037,7 @@ export default function Home() {
         onSelectionChange={setSelection}
         onRemove={handleRemoveWatermark}
         onReset={resetImage}
+        onUseInCreate={() => void handleUseInCreate()}
       />
 
       {resultUrl && (

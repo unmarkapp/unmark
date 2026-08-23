@@ -502,7 +502,7 @@ export default function LibraryView() {
                 !driveSyncing;
 
               return (
-                <li key={job.job_id} className="library-masonry-item relative">
+                <li key={job.job_id} className="library-masonry-item group relative">
                   <div className="absolute right-2 top-2 z-10">
                     <SelectionCheck
                       checked={selectedIds.has(job.job_id)}
@@ -515,10 +515,11 @@ export default function LibraryView() {
                     />
                   </div>
                   {canOpen && (thumb || isVideo) ? (
+                    <>
                     <button
                       type="button"
                       onClick={() => openOrToggle(job, canOpen)}
-                      className={`group relative block w-full overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand ${
+                      className={`relative block w-full overflow-hidden rounded-[var(--radius-md)] border border-border bg-surface outline-none transition duration-300 hover:brightness-[0.97] focus-visible:ring-2 focus-visible:ring-brand ${
                         selectedIds.has(job.job_id) ? "ring-2 ring-brand" : ""
                       }`}
                       aria-label={
@@ -588,8 +589,39 @@ export default function LibraryView() {
                           Video
                         </span>
                       )}
-                      <span className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/10" />
+                      <span className="pointer-events-none absolute inset-0 bg-black/0 transition group-hover:bg-black/20" />
                     </button>
+                    {!selecting && job.status === "completed" && (
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-1 rounded-b-[var(--radius-md)] bg-gradient-to-t from-black/70 to-transparent px-2 pb-2 pt-6 opacity-0 transition duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+                        <div className="pointer-events-auto flex items-center justify-end gap-1">
+                          <button
+                            type="button"
+                            title="Download"
+                            aria-label="Download"
+                            disabled={downloadingId === job.job_id}
+                            onClick={(e) => { e.stopPropagation(); void handleDownload(job); }}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white backdrop-blur-sm transition hover:bg-white/25 disabled:opacity-50"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+                              <path d="M12 4v10M8 10l4 4 4-4M6 18h12" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </button>
+                          <button
+                            type="button"
+                            title="Delete"
+                            aria-label="Delete"
+                            disabled={deletingId === job.job_id}
+                            onClick={(e) => { e.stopPropagation(); void handleDelete(job); }}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 text-white backdrop-blur-sm transition hover:bg-danger/80 disabled:opacity-50"
+                          >
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden>
+                              <path d="M5 7h14M9.5 7V5.5A1.5 1.5 0 0111 4h2a1.5 1.5 0 011.5 1.5V7M8 7l.8 11.5A1.5 1.5 0 0010.3 20h3.4a1.5 1.5 0 001.5-1.5L16 7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                    </>
                   ) : (
                     <div
                       role={selecting ? "button" : undefined}
