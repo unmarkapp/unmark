@@ -2,6 +2,7 @@
 
 import FeedbackButtons from "@/components/FeedbackButtons";
 import ImageEditor from "@/components/ImageEditor";
+import WatchAdForCredit from "@/components/WatchAdModal";
 import { useCredits } from "@/lib/credits";
 
 interface Selection {
@@ -114,7 +115,7 @@ export default function ReadyToCleanCard({
   onDownloadComplete,
   onUseInCreate,
 }: ReadyToCleanCardProps) {
-  const { dailyFreeCredits, paymentsEnabled } = useCredits();
+  const { dailyFreeCredits, paymentsEnabled, refreshCredits } = useCredits();
   const canSubmit = detectMode === "auto" || hasSelection;
   const needsAuth = engine === "cloud";
   const blockedByAuth = needsAuth && !isAuthenticated;
@@ -406,25 +407,23 @@ export default function ReadyToCleanCard({
         )}
 
         {!resultUrl && canSubmit && blockedByCredits && (
-          <p className="mt-2 text-xs text-muted">
+          <div className="mt-2 space-y-2 text-xs text-muted">
             {paymentsEnabled ? (
-              <>
+              <p>
                 No credits left.{" "}
-                <a
-                  href="/account"
-                  className="font-medium text-brand hover:underline"
-                >
+                <a href="/account" className="font-medium text-brand hover:underline">
                   Buy more credits
                 </a>{" "}
                 or use Instant for a quick local cleanup.
-              </>
+              </p>
             ) : (
-              <>
+              <p>
                 Out of credits for today. You get {dailyFreeCredits ?? 5} free
                 Cloud credits each day, or use Instant now.
-              </>
+              </p>
             )}
-          </p>
+            <WatchAdForCredit onGranted={() => void refreshCredits()} />
+          </div>
         )}
 
         {!resultUrl && canSubmit && blockedByAuth && (

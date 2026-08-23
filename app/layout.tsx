@@ -168,6 +168,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3904291439301971"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         {GA_MEASUREMENT_ID ? (
           <>
             <Script
