@@ -261,14 +261,35 @@ export interface GenerateResponse {
 
 export async function generateImage(params: {
   prompt: string;
-  model: string;
-  aspect: string;
+  model_id: string;
+  aspect_ratio: string;
+  attachment?: File | null;
 }): Promise<GenerateResponse> {
-  const response = await fetch(`${API_BASE_URL}/v1/generate`, {
+  let body: BodyInit;
+  const headers: HeadersInit = {};
+
+  if (params.attachment) {
+    const form = new FormData();
+    form.append("image", params.attachment, params.attachment.name);
+    form.append("prompt", params.prompt);
+    form.append("aspect_ratio", params.aspect_ratio);
+    form.append("model_id", params.model_id);
+    body = form;
+    // Let browser set Content-Type with boundary automatically for multipart
+  } else {
+    body = JSON.stringify({
+      prompt: params.prompt,
+      aspect_ratio: params.aspect_ratio,
+      model_id: params.model_id,
+    });
+    headers["Content-Type"] = "application/json";
+  }
+
+  const response = await fetch(`${API_BASE_URL}/v1/generate-image`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     credentials: "include",
-    body: JSON.stringify(params),
+    body,
   });
 
   if (!response.ok) {

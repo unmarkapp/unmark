@@ -2,6 +2,7 @@
 
 export default function ClosingCta() {
   const scrollToUpload = () => {
+    window.dispatchEvent(new CustomEvent("unmark:set-mode", { detail: "clean" }));
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 

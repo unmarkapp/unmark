@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { generateImage, getJobStatus } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { useCredits } from "@/lib/credits";
@@ -18,14 +18,37 @@ export default function CreateGenerateCard() {
   const { user, loginWithGoogle } = useAuth();
   const { fastCredits, refreshCredits } = useCredits();
   const { toast } = useToast();
+  const attachInputRef = useRef<HTMLInputElement>(null);
 
   const [prompt, setPrompt] = useState("");
   const [selectedModel, setSelectedModel] = useState<string>(GENERATE_MODELS[0].id);
   const [selectedAspect, setSelectedAspect] = useState<string>(GENERATE_ASPECTS[0]);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [statusLabel, setStatusLabel] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  const handleAttachChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] ?? null;
+    e.target.value = "";
+    if (!file) return;
+    setAttachment(file);
+    const url = URL.createObjectURL(file);
+    setAttachmentPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return url;
+    });
+  };
+
+  const clearAttachment = () => {
+    setAttachment(null);
+    setAttachmentPreview((prev) => {
+      if (prev) URL.revokeObjectURL(prev);
+      return null;
+    });
+  };
 
   const activeModel =
     GENERATE_MODELS.find((m) => m.id === selectedModel) ?? GENERATE_MODELS[0];
@@ -56,12 +79,17 @@ export default function CreateGenerateCard() {
     try {
       const job = await generateImage({
         prompt: prompt.trim(),
-        model: selectedModel,
-        aspect: selectedAspect,
+        model_id: selectedModel,
+        aspect_ratio: selectedAspect,
+        attachment,
       });
 
       void refreshCredits();
-      setStatusLabel("Generating…");
+      setStatusLabel(
+        attachment
+          ? `Generating from your photo with ${activeModel.label}…`
+          : `Generating with ${activeModel.label}…`,
+      );
 
       for (let attempt = 0; attempt < MAX_POLL; attempt++) {
         const status = await getJobStatus(job.job_id);
@@ -98,6 +126,7 @@ export default function CreateGenerateCard() {
     setResultUrl(null);
     setError(null);
     setPrompt("");
+    clearAttachment();
   };
 
   if (!GENERATE_WEB_ENABLED) {
@@ -163,6 +192,50 @@ export default function CreateGenerateCard() {
         disabled={loading}
         className="w-full resize-none rounded-[var(--radius-md)] border border-border bg-surface px-3.5 py-3 text-[15px] leading-relaxed text-foreground placeholder:text-muted focus:border-brand focus:outline-none focus:ring-1 focus:ring-brand disabled:opacity-50"
       />
+
+      {/* Attachment */}
+      <input
+        ref={attachInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleAttachChange}
+      />
+      {attachmentPreview && attachment ? (
+        <div className="mt-3 flex items-center gap-3 rounded-[var(--radius-md)] border border-border bg-surface p-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={attachmentPreview}
+            alt="Reference photo"
+            className="h-14 w-14 shrink-0 rounded-[var(--radius-sm)] border border-border object-cover"
+          />
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground">Reference photo</p>
+            <p className="text-xs text-muted">Sent with your prompt</p>
+            <button
+              type="button"
+              disabled={loading}
+              onClick={clearAttachment}
+              className="mt-1 text-xs font-medium text-brand transition hover:text-brand-hover disabled:opacity-50"
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          type="button"
+          disabled={loading}
+          onClick={() => attachInputRef.current?.click()}
+          className="mt-3 flex w-full items-center gap-2.5 rounded-[var(--radius-md)] border border-border bg-surface px-3.5 py-3 transition hover:bg-cream disabled:opacity-50"
+        >
+          <PlusIcon />
+          <span className="text-[13px] font-semibold uppercase tracking-wide text-foreground">
+            Attach photo
+          </span>
+          <span className="ml-auto text-xs text-muted">Optional</span>
+        </button>
+      )}
 
       {/* Model */}
       <p className="mt-4 text-[13px] font-semibold text-muted-strong">
@@ -261,6 +334,14 @@ export default function CreateGenerateCard() {
         images without the Gemini sparkle.
       </p>
     </div>
+  );
+}
+
+function PlusIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden className="shrink-0">
+      <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+    </svg>
   );
 }
 

@@ -50,10 +50,13 @@ function CheckIcon() {
 export default function LandingShell({
   children,
   showHow = true,
+  mode = "clean",
 }: {
   children: ReactNode;
   showHow?: boolean;
+  mode?: "clean" | "create";
 }) {
+  const isCreate = mode === "create";
   return (
     <div className="surface-grain min-h-screen text-foreground">
       <SiteHeader />
@@ -68,27 +71,49 @@ export default function LandingShell({
               {/* Left column: hero copy */}
               <div className="flex flex-col justify-center">
                 <h1 className="animate-rise font-display text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl lg:text-[3.5rem] lg:leading-[1.06]">
-                  Remove Gemini watermarks
+                  {isCreate
+                    ? "Generate without the sparkle"
+                    : "Remove Gemini watermarks"}
                 </h1>
 
                 <p className="animate-rise-delay mt-5 max-w-[46ch] text-base leading-relaxed text-muted sm:text-lg">
-                  Unmark cleans the Gemini sparkle from images and video, or cuts
-                  out subjects. Free Instant in your browser, no account needed.
+                  {isCreate
+                    ? "Prompt Nano Banana directly and get clean images with no Gemini watermark. Attach a reference photo to guide the style."
+                    : "Unmark cleans the Gemini sparkle from images and video, or cuts out subjects. Free Instant in your browser, no account needed."}
                 </p>
 
                 <ul className="animate-rise-delay-2 mt-7 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-2">
-                  <li className="flex items-center gap-1.5">
-                    <CheckIcon />
-                    Free Instant for images
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckIcon />
-                    No account required
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <CheckIcon />
-                    Original quality download
-                  </li>
+                  {isCreate ? (
+                    <>
+                      <li className="flex items-center gap-1.5">
+                        <CheckIcon />
+                        No Gemini sparkle
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckIcon />
+                        Attach a reference photo
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckIcon />
+                        Multiple models
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li className="flex items-center gap-1.5">
+                        <CheckIcon />
+                        Free Instant for images
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckIcon />
+                        No account required
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckIcon />
+                        Original quality download
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
 

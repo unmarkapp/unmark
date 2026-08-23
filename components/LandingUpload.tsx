@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import CreateGenerateCard from "@/components/CreateGenerateCard";
 import LandingShell from "@/components/LandingShell";
@@ -45,8 +45,17 @@ export default function LandingUpload({
   const { isDragging } = useDropToClean();
   const [mode, setMode] = useState<HomeMode>("clean");
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<HomeMode>).detail;
+      if (detail === "clean" || detail === "create") setMode(detail);
+    };
+    window.addEventListener("unmark:set-mode", handler);
+    return () => window.removeEventListener("unmark:set-mode", handler);
+  }, []);
+
   return (
-    <LandingShell>
+    <LandingShell mode={mode}>
       {/* Mode toggle */}
       <div className="unmark-glass mb-3 grid grid-cols-2 gap-1 p-1">
         <button
