@@ -172,6 +172,26 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3904291439301971"
           crossOrigin="anonymous"
         />
+        {/* Hilltop Ads site verification */}
+        <meta
+          name="1a5d081f3d9623cf7fe462492a389b60fdca946e"
+          content="1a5d081f3d9623cf7fe462492a389b60fdca946e"
+        />
+        {/* Hilltop Ads */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(igek){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = igek || {};
+s.src = "//fond-appointment.com/bLXiVfs.dyGNlE0/YsWOc_/PeomY9rukZ/UflukPP-TFcczFNETTUKxwNmDgU/t/NbzQMc1BN/T/Er0dOAQQ";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})`,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {GA_MEASUREMENT_ID ? (
