@@ -1,6 +1,7 @@
 "use client";
 
 import { useCredits } from "@/lib/credits";
+import WatchAdForCredit from "@/components/WatchAdModal";
 
 export type BulkItemStatus =
   | "ready"
@@ -97,7 +98,7 @@ export default function BulkQueueCard({
   onDownloadZip,
   onReset,
 }: BulkQueueCardProps) {
-  const { dailyFreeCredits, paymentsEnabled } = useCredits();
+  const { dailyFreeCredits, paymentsEnabled, refreshCredits } = useCredits();
   const count = items.length;
   const completed = items.filter((item) => item.status === "completed").length;
   const failed = items.filter((item) => item.status === "failed").length;
@@ -269,23 +270,26 @@ export default function BulkQueueCard({
           account. Instant browser mode is for one image at a time.
         </p>
       ) : !started && !hasCredits ? (
-        <p className="mt-3 text-sm text-brand-hover">
-          {paymentsEnabled ? (
-            <>
-              You’re out of credits.{" "}
-              <a href="/account" className="font-semibold underline">
-                Buy more
-              </a>{" "}
-              to continue.
-            </>
-          ) : (
-            <>
-              You’re out of credits for today. You get{" "}
-              {dailyFreeCredits ?? 5} free Cloud credits each day, or use
-              Instant for one image.
-            </>
-          )}
-        </p>
+        <div className="mt-3 space-y-2">
+          <p className="text-sm text-brand-hover">
+            {paymentsEnabled ? (
+              <>
+                You’re out of credits.{" "}
+                <a href="/account" className="font-semibold underline">
+                  Buy more
+                </a>{" "}
+                to continue.
+              </>
+            ) : (
+              <>
+                You’re out of credits for today. You get{" "}
+                {dailyFreeCredits ?? 5} free Cloud credits each day, or use
+                Instant for one image.
+              </>
+            )}
+          </p>
+          <WatchAdForCredit onGranted={() => void refreshCredits()} />
+        </div>
       ) : null}
     </div>
   );

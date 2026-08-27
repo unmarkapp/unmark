@@ -8,24 +8,24 @@ const ContentSecurityPolicy = [
   "default-src 'self'",
   "base-uri 'self'",
   "object-src 'none'",
-  "frame-ancestors 'none'",
+  "frame-ancestors 'self'",
   "form-action 'self'",
   "img-src 'self' data: blob: https:",
   "media-src 'self' blob: https:",
   "font-src 'self' data: https://fonts.gstatic.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  // Next.js + analytics / Razorpay checkout need limited script hosts.
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https://script.supademo.com",
+  // Next.js, analytics, Razorpay, Hilltop watch-ad + popunder
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https://script.supademo.com https://fond-appointment.com https://crookedagreement.com https://www.thunderous-cause.com https:",
   "connect-src 'self' https://api.unmark.ink https://auth.unmark.ink https://billing.unmark.ink https://*.amazonaws.com https://checkout.razorpay.com https://api.razorpay.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com wss: https:",
-  "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://app.supademo.com https://script.supademo.com",
+  "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://app.supademo.com https://script.supademo.com https://fond-appointment.com https://crookedagreement.com https://www.thunderous-cause.com https:",
   "worker-src 'self' blob:",
   "upgrade-insecure-requests",
 ].join("; ");
 
 const securityHeaders = [
-  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Frame-Options", value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options", value: "nosniff" },
-  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Referrer-Policy", value: "no-referrer-when-downgrade" },
   {
     key: "Permissions-Policy",
     value: "camera=(), microphone=(), geolocation=()",

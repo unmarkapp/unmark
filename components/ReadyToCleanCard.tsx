@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import FeedbackButtons from "@/components/FeedbackButtons";
 import ImageEditor from "@/components/ImageEditor";
 import WatchAdForCredit from "@/components/WatchAdModal";
@@ -116,10 +117,21 @@ export default function ReadyToCleanCard({
   onUseInCreate,
 }: ReadyToCleanCardProps) {
   const { dailyFreeCredits, paymentsEnabled, refreshCredits } = useCredits();
+  const [instantAdOpen, setInstantAdOpen] = useState(false);
+  const [skipInstantAd, setSkipInstantAd] = useState(false);
   const canSubmit = detectMode === "auto" || hasSelection;
   const needsAuth = engine === "cloud";
   const blockedByAuth = needsAuth && !isAuthenticated;
   const blockedByCredits = needsAuth && isAuthenticated && !hasCredits;
+  const instantNeedsAd = engine === "instant" && !isSample && !skipInstantAd;
+
+  const requestRemove = () => {
+    if (instantNeedsAd) {
+      setInstantAdOpen(true);
+      return;
+    }
+    onRemove();
+  };
 
   if (processing && !resultUrl) {
     return (
@@ -304,7 +316,7 @@ export default function ReadyToCleanCard({
 
               <p className="text-sm text-muted">
                 {engine === "instant"
-                  ? "Free and private — download from this device"
+                  ? "Watch a short ad, then download from this device"
                   : "Saves to Library · uses credits"}
               </p>
             </div>
@@ -348,7 +360,7 @@ export default function ReadyToCleanCard({
             disabled={
               processing || !canSubmit || blockedByAuth || blockedByCredits
             }
-            onClick={onRemove}
+            onClick={requestRemove}
             className="btn-play inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-md)] bg-cobalt px-5 py-3.5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
             {blockedByAuth
@@ -402,9 +414,23 @@ export default function ReadyToCleanCard({
 
         {!resultUrl && canSubmit && engine === "instant" && (
           <p className="mt-2 text-xs text-muted">
-            Instant stays on this device. Switch to Cloud to save to Library.
+            {isSample
+              ? "Instant stays on this device. Switch to Cloud to save to Library."
+              : "Watch a short ad, then Instant runs on this device. Switch to Cloud to save to Library."}
           </p>
         )}
+
+        <WatchAdForCredit
+          reward="instant"
+          open={instantAdOpen}
+          showTrigger={false}
+          onClose={() => setInstantAdOpen(false)}
+          onAdsUnavailable={() => setSkipInstantAd(true)}
+          onGranted={() => {
+            setInstantAdOpen(false);
+            onRemove();
+          }}
+        />
 
         {!resultUrl && canSubmit && blockedByCredits && (
           <div className="mt-2 space-y-2 text-xs text-muted">

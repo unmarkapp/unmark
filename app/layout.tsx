@@ -20,6 +20,8 @@ import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
+import { HILLTOP_POPUNDER_SCRIPT } from "@/lib/hilltopAds";
+import HilltopPopunder from "@/components/HilltopPopunder";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -51,6 +53,7 @@ export const metadata: Metadata = {
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: "technology",
+  referrer: "no-referrer-when-downgrade",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -166,32 +169,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="preconnect" href="https://script.supademo.com" />
         <link rel="dns-prefetch" href="https://app.supademo.com" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {/* AdSense — must be in <head> as a static tag so the AdSense crawler can verify it */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3904291439301971"
-          crossOrigin="anonymous"
-        />
         {/* Hilltop Ads site verification */}
         <meta
           name="1a5d081f3d9623cf7fe462492a389b60fdca946e"
           content="1a5d081f3d9623cf7fe462492a389b60fdca946e"
         />
-        {/* Hilltop Ads */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(igek){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = igek || {};
-s.src = "//fond-appointment.com/bLXiVfs.dyGNlE0/YsWOc_/PeomY9rukZ/UflukPP-TFcczFNETTUKxwNmDgU/t/NbzQMc1BN/T/Er0dOAQQ";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})`,
-          }}
+        <meta
+          name="profiton-domain-verification"
+          content="0eea141a630510018f91f9b12dfe2ed0adce471bee86af974fa8400bf95087f0"
         />
+        <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {GA_MEASUREMENT_ID ? (
@@ -217,11 +204,13 @@ gtag('config', '${GA_MEASUREMENT_ID}');
               <ReferralCapture />
               <ToastProvider>
                 <PwaRegister />
+                <HilltopPopunder />
                 <DropToCleanProvider>{children}</DropToCleanProvider>
               </ToastProvider>
             </CreditsProvider>
           </AuthProvider>
         </ThemeProvider>
+        <script dangerouslySetInnerHTML={{ __html: HILLTOP_POPUNDER_SCRIPT }} />
       </body>
     </html>
   );

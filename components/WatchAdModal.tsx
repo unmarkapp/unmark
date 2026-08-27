@@ -3,55 +3,121 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCredits } from "@/lib/credits";
-
-// Replace with your AdSense Display ad unit slot ID from adsense.google.com
-const AD_CLIENT = "ca-pub-3904291439301971";
-const AD_SLOT = "2108255139"; // TODO: paste your display ad slot ID here
+import { loadHilltopWatchAd } from "@/lib/hilltopAds";
 
 const COUNTDOWN_SECONDS = 10;
 const DAILY_LIMIT = 3;
+const AD_ENGAGED_MESSAGE = "unmark-ad-engaged";
+const AD_FILLED_MESSAGE = "unmark-ad-filled";
+const AD_EMPTY_MESSAGE = "unmark-ad-empty";
+const AD_FILL_TIMEOUT_MS = 5000;
 
-declare global {
-  interface Window {
-    adsbygoogle: unknown[];
-  }
-}
+export type WatchAdReward = "credit" | "instant";
 
 interface WatchAdModalProps {
   usedToday: number;
+  reward: WatchAdReward;
   onGranted: () => void;
   onClose: () => void;
+  onAdsUnavailable?: () => void;
 }
 
-function Modal({ usedToday, onGranted, onClose }: WatchAdModalProps) {
-  const adRef = useRef<HTMLModElement>(null);
+function Modal({
+  usedToday,
+  reward,
+  onGranted,
+  onClose,
+  onAdsUnavailable,
+}: WatchAdModalProps) {
   const [seconds, setSeconds] = useState(COUNTDOWN_SECONDS);
   const [claimed, setClaimed] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [adClicked, setAdClicked] = useState(false);
+  const [adUnavailable, setAdUnavailable] = useState(false);
+  const [frameSrc] = useState(() => `/watch-ad-frame?t=${Date.now()}`);
+  const ignoreIframeBlurRef = useRef(false);
+  const adFilledRef = useRef(false);
   const { refreshCredits } = useCredits();
 
-  // Push AdSense ad after mount
   useEffect(() => {
-    if (!AD_SLOT) return;
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch {
-      // adsbygoogle not loaded yet — ignore
-    }
+    loadHilltopWatchAd();
   }, []);
 
-  // Countdown timer
+  useEffect(() => {
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      const inModal = target.closest("[data-unmark-watch-ad]");
+      ignoreIframeBlurRef.current = Boolean(inModal && target.tagName !== "IFRAME");
+    };
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return;
+      const type = event.data?.type;
+      if (type === AD_FILLED_MESSAGE) {
+        adFilledRef.current = true;
+        return;
+      }
+      if (type === AD_EMPTY_MESSAGE) {
+        if (!adFilledRef.current && reward === "instant") setAdUnavailable(true);
+        return;
+      }
+      if (type !== AD_ENGAGED_MESSAGE) return;
+      if (event.data?.via === "blur" && ignoreIframeBlurRef.current) return;
+      setAdClicked(true);
+    };
+    const onClick = (event: MouseEvent) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest("[data-unmark-watch-ad]")) return;
+      setAdClicked(true);
+    };
+    window.addEventListener("message", onMessage);
+    document.addEventListener("pointerdown", onPointerDown, true);
+    document.addEventListener("click", onClick, true);
+    return () => {
+      window.removeEventListener("message", onMessage);
+      document.removeEventListener("pointerdown", onPointerDown, true);
+      document.removeEventListener("click", onClick, true);
+    };
+  }, [reward]);
+
   useEffect(() => {
     if (seconds <= 0) return;
     const t = setTimeout(() => setSeconds((s) => s - 1), 1000);
     return () => clearTimeout(t);
   }, [seconds]);
 
+  useEffect(() => {
+    if (reward !== "instant") return;
+    const t = window.setTimeout(() => {
+      if (!adFilledRef.current) setAdUnavailable(true);
+    }, AD_FILL_TIMEOUT_MS);
+    return () => window.clearTimeout(t);
+  }, [reward]);
+
+  useEffect(() => {
+    if (!adUnavailable) return;
+    onAdsUnavailable?.();
+  }, [adUnavailable, onAdsUnavailable]);
+
+  const instantUnlocked = reward === "instant" && adUnavailable;
+  const canClaim =
+    instantUnlocked || (adClicked && seconds <= 0);
+
   const handleClaim = async () => {
+    if (!canClaim) return;
     setClaiming(true);
     setError(null);
     try {
+      if (reward === "instant") {
+        setClaimed(true);
+        setTimeout(() => {
+          onGranted();
+          onClose();
+        }, 400);
+        return;
+      }
       const res = await fetch("/api/ad-reward", {
         method: "POST",
         credentials: "include",
@@ -78,15 +144,28 @@ function Modal({ usedToday, onGranted, onClose }: WatchAdModalProps) {
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/60 p-4 pt-[8vh] pb-28"
       onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
     >
-      <div className="relative w-full max-w-md rounded-[var(--radius-lg)] border border-border bg-background shadow-2xl overflow-hidden">
-        {/* Header */}
+      <div className="relative w-full max-w-md rounded-[var(--radius-lg)] border border-border bg-background shadow-2xl" data-unmark-watch-ad>
         <div className="flex items-center justify-between border-b border-border px-5 py-4">
           <div>
-            <p className="text-sm font-semibold text-foreground">Watch ad · get 1 free clean</p>
-            <p className="text-xs text-muted mt-0.5">{remaining} of {DAILY_LIMIT} remaining today</p>
+            <p className="text-sm font-semibold text-foreground">
+              {reward === "instant"
+                ? "Watch ad · Instant cleanup"
+                : "Watch ad · get 1 free clean"}
+            </p>
+            {reward === "credit" ? (
+              <p className="mt-0.5 text-xs text-muted">
+                {remaining} of {DAILY_LIMIT} remaining today
+              </p>
+            ) : (
+              <p className="mt-0.5 text-xs text-muted">
+                {instantUnlocked
+                  ? "No ad loaded — Instant still works"
+                  : "Runs in your browser after the ad"}
+              </p>
+            )}
           </div>
           <button
             type="button"
@@ -100,34 +179,23 @@ function Modal({ usedToday, onGranted, onClose }: WatchAdModalProps) {
           </button>
         </div>
 
-        {/* Ad slot */}
-        <div className="bg-sand px-5 py-4 min-h-[160px] flex items-center justify-center">
-          {AD_SLOT ? (
-            <ins
-              ref={adRef}
-              className="adsbygoogle block w-full"
-              style={{ display: "block", minHeight: "120px" }}
-              data-ad-client={AD_CLIENT}
-              data-ad-slot={AD_SLOT}
-              data-ad-format="auto"
-              data-full-width-responsive="true"
-            />
-          ) : (
-            <div className="flex flex-col items-center gap-2 text-center text-muted">
-              <div className="h-16 w-16 rounded-[var(--radius-md)] border-2 border-dashed border-border flex items-center justify-center text-2xl">
-                📢
-              </div>
-              <p className="text-xs font-medium">Ad slot not configured yet</p>
-              <p className="text-[11px]">Add your AdSense slot ID to WatchAdModal.tsx</p>
-            </div>
-          )}
+        <div className="bg-sand">
+          <iframe
+            src={frameSrc}
+            title="Advertisement"
+            className="block h-[280px] w-full border-0 bg-ink"
+            referrerPolicy="no-referrer-when-downgrade"
+            allow="autoplay; fullscreen"
+            onError={() => {
+              if (reward === "instant") setAdUnavailable(true);
+            }}
+          />
         </div>
 
-        {/* Footer */}
-        <div className="px-5 py-4 space-y-3">
+        <div className="space-y-3 px-5 py-4">
           {claimed ? (
             <p className="text-center text-sm font-semibold text-brand">
-              +1 credit added ✓
+              {reward === "instant" ? "Starting Instant…" : "+1 credit added ✓"}
             </p>
           ) : error ? (
             <p className="text-center text-sm text-danger">{error}</p>
@@ -137,19 +205,29 @@ function Modal({ usedToday, onGranted, onClose }: WatchAdModalProps) {
             <button
               type="button"
               onClick={() => void handleClaim()}
-              disabled={seconds > 0 || claiming || claimed}
+              disabled={!canClaim || claiming || claimed}
               className="w-full rounded-[var(--radius-md)] bg-brand px-4 py-3 text-sm font-semibold text-white transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {seconds > 0
-                ? `Wait ${seconds}s…`
-                : claiming
-                  ? "Claiming…"
-                  : "Claim 1 free credit"}
+              {claiming
+                ? "Claiming…"
+                : instantUnlocked
+                  ? "Start Instant cleanup"
+                  : seconds > 0
+                    ? `Wait ${seconds}s…`
+                    : !adClicked
+                      ? "Click an ad to continue"
+                      : reward === "instant"
+                        ? "Start Instant cleanup"
+                        : "Claim 1 free credit"}
             </button>
           )}
 
           <p className="text-center text-[11px] text-muted">
-            Watching the ad supports Unmark and keeps Instant free.
+            {instantUnlocked
+              ? "No ad was available. You can continue Instant now."
+              : reward === "instant"
+                ? "Click an ad, then Instant runs on this device."
+                : "Click an ad, then claim your free credit."}
           </p>
         </div>
       </div>
@@ -161,13 +239,32 @@ function Modal({ usedToday, onGranted, onClose }: WatchAdModalProps) {
 interface WatchAdForCreditProps {
   usedToday?: number;
   onGranted?: () => void;
+  onAdsUnavailable?: () => void;
+  reward?: WatchAdReward;
+  open?: boolean;
+  onClose?: () => void;
+  showTrigger?: boolean;
 }
 
-export default function WatchAdForCredit({ usedToday = 0, onGranted }: WatchAdForCreditProps) {
-  const [open, setOpen] = useState(false);
+export default function WatchAdForCredit({
+  usedToday = 0,
+  onGranted,
+  onAdsUnavailable,
+  reward = "credit",
+  open: openProp,
+  onClose,
+  showTrigger = true,
+}: WatchAdForCreditProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
   const { refreshCredits } = useCredits();
+  const open = openProp ?? internalOpen;
 
-  if (usedToday >= DAILY_LIMIT) {
+  const close = () => {
+    setInternalOpen(false);
+    onClose?.();
+  };
+
+  if (reward === "credit" && usedToday >= DAILY_LIMIT && showTrigger) {
     return (
       <p className="text-xs text-muted">
         Ad credits used for today ({DAILY_LIMIT}/{DAILY_LIMIT}). Resets at midnight UTC.
@@ -177,21 +274,28 @@ export default function WatchAdForCredit({ usedToday = 0, onGranted }: WatchAdFo
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="text-sm font-medium text-brand transition hover:underline"
-      >
-        Watch a short ad for 1 free clean
-      </button>
+      {showTrigger ? (
+        <button
+          type="button"
+          onClick={() => {
+            loadHilltopWatchAd();
+            setInternalOpen(true);
+          }}
+          className="text-sm font-medium text-brand transition hover:underline"
+        >
+          Watch a short ad for 1 free clean
+        </button>
+      ) : null}
       {open && (
         <Modal
           usedToday={usedToday}
+          reward={reward}
           onGranted={() => {
-            void refreshCredits();
+            if (reward === "credit") void refreshCredits();
             onGranted?.();
           }}
-          onClose={() => setOpen(false)}
+          onAdsUnavailable={onAdsUnavailable}
+          onClose={close}
         />
       )}
     </>

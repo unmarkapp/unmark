@@ -1,5 +1,8 @@
 "use client";
 
+import WatchAdForCredit from "@/components/WatchAdModal";
+import { useCredits } from "@/lib/credits";
+
 interface VideoCleanCardProps {
   videoUrl: string;
   fileName: string;
@@ -70,6 +73,7 @@ export default function VideoCleanCard({
   onRemove,
   onReset,
 }: VideoCleanCardProps) {
+  const { refreshCredits } = useCredits();
   const blockedByAuth = !isAuthenticated;
   const blockedByCredits = isAuthenticated && !hasCredits;
 
@@ -178,6 +182,11 @@ export default function VideoCleanCard({
                   : `Clean video · ${estimatedCredits} credit${estimatedCredits === 1 ? "" : "s"}`}
             </button>
           )}
+          {blockedByCredits && !resultUrl ? (
+            <div className="mt-3">
+              <WatchAdForCredit onGranted={() => void refreshCredits()} />
+            </div>
+          ) : null}
         </div>
       </div>
     </div>
