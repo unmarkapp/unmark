@@ -22,6 +22,8 @@ import PwaRegister from "@/components/PwaRegister";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { HILLTOP_POPUNDER_SCRIPT } from "@/lib/hilltopAds";
 import HilltopPopunder from "@/components/HilltopPopunder";
+import { ADCASH_BOOT_SCRIPT } from "@/lib/adcashAds";
+import AdcashPop from "@/components/AdcashPop";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -205,12 +207,14 @@ gtag('config', '${GA_MEASUREMENT_ID}');
               <ToastProvider>
                 <PwaRegister />
                 <HilltopPopunder />
+                <AdcashPop />
                 <DropToCleanProvider>{children}</DropToCleanProvider>
               </ToastProvider>
             </CreditsProvider>
           </AuthProvider>
         </ThemeProvider>
         <script dangerouslySetInnerHTML={{ __html: HILLTOP_POPUNDER_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: ADCASH_BOOT_SCRIPT }} />
       </body>
     </html>
   );
