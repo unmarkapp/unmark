@@ -7,20 +7,6 @@ export const HILLTOP_POPUNDER_ZONE_SRC =
 
 const POPUNDER_SRC_MARKER = "96f4765a538aba09caf48ff6e6fe8c6f";
 
-export function pathAllowsHilltopPopunder(pathname: string): boolean {
-  if (pathname === "/") return true;
-  return (
-    pathname === "/extension" ||
-    pathname === "/product" ||
-    pathname === "/android" ||
-    pathname === "/skills" ||
-    pathname === "/tools" ||
-    pathname.startsWith("/tools/") ||
-    pathname === "/guides" ||
-    pathname.startsWith("/guides/")
-  );
-}
-
 function injectHilltopScript(id: string, src: string) {
   if (typeof document === "undefined") return;
   if (document.getElementById(id)) return;
@@ -55,12 +41,8 @@ l.parentNode.insertBefore(s, l);
 
 export const HILLTOP_WATCH_AD_SCRIPT = hilltopInlineLoader(HILLTOP_WATCH_AD_ZONE);
 
-/**
- * Hilltop popunder snippet, gated to marketing pages only.
- */
+/** Hilltop popunder snippet — loads on every page. */
 export const HILLTOP_POPUNDER_SCRIPT = `(function(){
-var p = location.pathname || "/";
-if (p !== "/" && p.indexOf("/tools") !== 0 && p.indexOf("/guides") !== 0 && p !== "/extension" && p !== "/product" && p !== "/android" && p !== "/skills") return;
 if (document.querySelector('script[src*="${POPUNDER_SRC_MARKER}"]')) return;
 var s = document.createElement("script");
 s.src = ${JSON.stringify(HILLTOP_POPUNDER_ZONE_SRC)};
@@ -70,7 +52,6 @@ s.async = true;
 
 export function loadHilltopPopunder() {
   if (typeof document === "undefined") return;
-  if (!pathAllowsHilltopPopunder(location.pathname || "/")) return;
   if (document.querySelector(`script[src*="${POPUNDER_SRC_MARKER}"]`)) return;
   injectHilltopScript("hilltop-popunder-loader", HILLTOP_POPUNDER_ZONE_SRC);
 }

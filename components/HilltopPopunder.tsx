@@ -1,18 +1,14 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 
-import { loadHilltopPopunder, pathAllowsHilltopPopunder } from "@/lib/hilltopAds";
+import { loadHilltopPopunder } from "@/lib/hilltopAds";
 
-/** Loads the Hilltop popunder after client-side navigations onto marketing routes. */
+/** Loads the Hilltop popunder on every page (including client-side navigations). */
 export default function HilltopPopunder() {
-  const pathname = usePathname();
-
   useEffect(() => {
-    if (!pathAllowsHilltopPopunder(pathname)) return;
     loadHilltopPopunder();
-  }, [pathname]);
+  }, []);
 
   return null;
 }
