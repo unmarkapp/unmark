@@ -120,6 +120,19 @@ export default function SiteFooter() {
         </div>
       </div>
 
+      {/* Ad disclosure bar */}
+      <div
+        className="border-b px-4 py-2 sm:px-6 xl:px-8"
+        style={{ borderColor: 'var(--border)' }}
+      >
+        <p className="font-mono text-[8px] leading-relaxed text-muted">
+          This site uses third-party advertising (Hilltop Ads, AdCash) that may deliver popunder ads, including content intended for adult audiences (18+). Unmark does not control third-party ad content.{" "}
+          <Link href="/privacy#third-party-advertising" className="underline underline-offset-2 hover:text-foreground transition-colors">
+            Learn more
+          </Link>
+        </p>
+      </div>
+
       {/* Bottom bar */}
       <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 xl:px-8">
         <div className="flex items-center gap-4">

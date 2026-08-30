@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const updated = "August 13, 2026";
+const updated = "August 30, 2026";
 
 export default function TermsPage() {
   return (
@@ -116,6 +116,42 @@ export default function TermsPage() {
                 refund policy
               </Link>
               , except where required by law.
+            </p>
+          </section>
+
+          <section className="space-y-3">
+            <h2 className="font-display text-xl font-semibold text-foreground">
+              Third-party advertising
+            </h2>
+            <p>
+              This site is monetised in part through third-party advertising
+              networks (currently Hilltop Ads and AdCash). These networks may
+              serve ads via popunder windows. <strong>We do not control
+              the content of those ads</strong>, and they may include material
+              intended for adult audiences.
+            </p>
+            <p>
+              By using this Service you acknowledge that:
+            </p>
+            <ul className="list-disc space-y-2 pl-5">
+              <li>
+                You are at least 18 years of age, or you have the consent of a
+                parent or legal guardian who is aware of this site's advertising
+                practices.
+              </li>
+              <li>
+                Third-party ads are outside Unmark's control and Unmark is not
+                responsible for their content, accuracy, or compliance with any
+                law.
+              </li>
+              <li>
+                Third-party ad networks may set cookies and collect data in
+                accordance with their own privacy policies.
+              </li>
+            </ul>
+            <p>
+              You can reduce or block popunder ads using your browser's built-in
+              pop-up blocker settings.
             </p>
           </section>
 

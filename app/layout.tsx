@@ -19,6 +19,7 @@ import JsonLd from "@/components/JsonLd";
 import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
+import AdAdvisoryBanner from "@/components/AdAdvisoryBanner";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import { HILLTOP_POPUNDER_SCRIPT } from "@/lib/hilltopAds";
 import HilltopPopunder from "@/components/HilltopPopunder";
@@ -206,6 +207,7 @@ gtag('config', '${GA_MEASUREMENT_ID}');
               <ReferralCapture />
               <ToastProvider>
                 <PwaRegister />
+                <AdAdvisoryBanner />
                 <HilltopPopunder />
                 <AdcashPop />
                 <DropToCleanProvider>{children}</DropToCleanProvider>

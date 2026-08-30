@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const updated = "August 16, 2026";
+const updated = "August 30, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -179,13 +179,77 @@ export default function PrivacyPage() {
             </p>
           </section>
 
+          <section id="third-party-advertising" className="space-y-3">
+            <h2 className="font-display text-xl font-semibold text-foreground">
+              Third-party advertising
+            </h2>
+            <p>
+              Unmark uses third-party advertising networks, including{" "}
+              <strong>Hilltop Ads</strong> and <strong>AdCash</strong>, to
+              display ads on this site. These networks may deliver ads via
+              popunder windows — a new browser tab or window that opens in
+              the background when you interact with the site.
+            </p>
+            <p>
+              <strong>We do not control the content of these ads.</strong>{" "}
+              Third-party ads may include content intended for adult audiences
+              (18+). Unmark does not endorse, review, or take responsibility
+              for any third-party ad content. By continuing to use this site
+              you acknowledge that you may be exposed to such content.
+            </p>
+            <p>
+              These ad networks may set their own cookies and collect
+              information such as your IP address, browser type, and browsing
+              behaviour to serve targeted ads. Their data practices are
+              governed by their own privacy policies:
+            </p>
+            <ul className="list-disc space-y-1 pl-5">
+              <li>
+                <a
+                  href="https://hilltopads.com/privacy-policy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-hover underline-offset-2 hover:underline"
+                >
+                  Hilltop Ads Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://adcash.com/privacy-policy/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-brand-hover underline-offset-2 hover:underline"
+                >
+                  AdCash Privacy Policy
+                </a>
+              </li>
+            </ul>
+            <p>
+              If you wish to opt out of interest-based advertising you may use
+              the tools provided by the{" "}
+              <a
+                href="https://optout.networkadvertising.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-brand-hover underline-offset-2 hover:underline"
+              >
+                Network Advertising Initiative
+              </a>{" "}
+              or your browser's built-in pop-up and pop-under blocking
+              settings.
+            </p>
+          </section>
+
           <section className="space-y-3">
             <h2 className="font-display text-xl font-semibold text-foreground">
               Children
             </h2>
             <p>
               Unmark is not directed at children under 13. We do not knowingly
-              collect personal information from children.
+              collect personal information from children. Due to the nature of
+              third-party advertising on this site, we recommend that it is
+              accessed by users aged 18 and over only.
             </p>
           </section>
 
