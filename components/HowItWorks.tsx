@@ -1,18 +1,24 @@
 const steps = [
   {
-    verb: "Drop",
+    id: "MOD-01",
+    verb: "DROP",
+    indicator: "INPUT",
     body: "Drop a Gemini image, a Veo or Flow video, or open Tools for background cutout.",
-    color: "bg-foreground text-background",
+    accentTop: false,
   },
   {
-    verb: "Clean",
+    id: "MOD-02",
+    verb: "CLEAN",
+    indicator: "PROCESSING",
     body: "Unmark removes the Gemini sparkle from every frame, cuts out the subject, or clears the background.",
-    color: "bg-brand text-white",
+    accentTop: true,
   },
   {
-    verb: "Download",
+    id: "MOD-03",
+    verb: "DOWNLOAD",
+    indicator: "OUTPUT",
     body: "Get a clean export at full quality: still, MP4, or transparent PNG. Ready to share or post.",
-    color: "bg-peach text-ink",
+    accentTop: false,
   },
 ];
 
@@ -20,30 +26,95 @@ export default function HowItWorks() {
   return (
     <section
       id="how"
-      className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
+      className="mx-auto w-full max-w-7xl"
+      style={{ borderTop: '1px solid var(--border)' }}
     >
-      <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-        <h2 className="animate-section-reveal font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl lg:max-w-xs">
-          How Unmark works
+      {/* Section label row */}
+      <div
+        className="flex items-center justify-between px-4 py-3 sm:px-6 xl:px-8"
+        style={{ borderBottom: '1px solid var(--border)' }}
+      >
+        <span className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-brand">
+          // OPERATIONAL SEQUENCE
+        </span>
+        <p className="hidden font-mono text-[8px] uppercase tracking-wide text-muted lg:block">
+          GEMINI SPARKLE /// IMAGE + VIDEO
+        </p>
+      </div>
+
+      {/* Section title */}
+      <div
+        className="px-4 py-8 sm:px-6 sm:py-10 xl:px-8"
+        style={{ borderBottom: '1px solid var(--border)' }}
+      >
+        <h2 className="animate-section-reveal font-mono font-black uppercase text-foreground"
+          style={{
+            fontSize: 'clamp(2rem, 5vw, 4rem)',
+            lineHeight: '0.95',
+            letterSpacing: '-0.03em',
+          }}>
+          HOW UNMARK<br />
+          <span style={{ color: 'var(--brand)' }}>WORKS</span>
         </h2>
-        <p className="animate-section-reveal max-w-md text-base leading-relaxed text-muted">
+        <p className="animate-section-reveal mt-4 max-w-md font-mono text-[10px] uppercase tracking-wide text-muted">
           Built for Gemini sparkles on images and video, plus background removal
           when you need a clean cutout.
         </p>
       </div>
 
-      <div className="mt-12 grid gap-px overflow-hidden rounded-[var(--radius-lg)] border border-border bg-border sm:grid-cols-3">
-        {steps.map((step) => (
+      {/* Steps grid — 1px gap creates razor-thin dividers */}
+      <div
+        className="grid grid-cols-1 sm:grid-cols-3"
+        style={{ background: 'var(--border)', gap: '1px' }}
+      >
+        {steps.map((step, idx) => (
           <div
             key={step.verb}
-            className="animate-section-reveal flex flex-col gap-4 bg-surface px-6 py-7"
+            className="animate-section-reveal flex flex-col bg-background"
           >
+            {/* Module header */}
             <div
-              className={`inline-flex h-10 w-auto items-center rounded-[var(--radius-md)] px-3.5 font-display text-sm font-semibold ${step.color}`}
+              className="flex items-center justify-between px-5 py-3"
+              style={{ borderBottom: '1px solid var(--border)' }}
             >
-              {step.verb}
+              <span className="font-mono text-[7px] font-bold uppercase tracking-[0.35em] text-muted">
+                {step.id}
+              </span>
+              <span
+                className="font-mono text-[7px] font-bold uppercase tracking-[0.25em]"
+                style={{ color: step.accentTop ? 'var(--brand)' : 'var(--muted)' }}
+              >
+                {step.indicator}
+              </span>
             </div>
-            <p className="text-sm leading-relaxed text-muted">{step.body}</p>
+
+            {/* Module content */}
+            <div className="flex flex-1 flex-col gap-5 px-5 py-6">
+              <div className="flex items-baseline gap-2.5">
+                <span className="font-mono text-[9px] font-bold text-muted/40 uppercase">
+                  {String(idx + 1).padStart(2, "0")}
+                </span>
+                <h3
+                  className="font-mono font-black uppercase text-foreground"
+                  style={{
+                    fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+                    lineHeight: '1',
+                    letterSpacing: '-0.02em',
+                  }}
+                >
+                  {step.verb}
+                </h3>
+              </div>
+              <p className="font-mono text-[10px] leading-relaxed text-muted">
+                {step.body}
+              </p>
+            </div>
+
+            {/* Bottom accent line */}
+            <div
+              className="h-0.5"
+              style={{ background: step.accentTop ? 'var(--brand)' : 'var(--border-strong)' }}
+            />
           </div>
         ))}
       </div>

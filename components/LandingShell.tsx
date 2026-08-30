@@ -20,32 +20,12 @@ const ProductTour = dynamic(() => import("@/components/ProductTour"), {
   loading: () => (
     <section
       id="tour"
-      className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
+      className="mx-auto w-full max-w-7xl"
+      style={{ borderTop: '1px solid var(--border)', minHeight: '5rem' }}
       aria-hidden
     />
   ),
 });
-
-function CheckIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 14 14"
-      fill="none"
-      aria-hidden
-      className="shrink-0"
-    >
-      <path
-        d="M2.5 7.5 5.5 10.5l6-7"
-        stroke="currentColor"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
 
 export default function LandingShell({
   children,
@@ -57,59 +37,151 @@ export default function LandingShell({
   mode?: "clean" | "create";
 }) {
   const isCreate = mode === "create";
+
   return (
     <div className="surface-grain min-h-screen text-foreground">
       <SiteHeader />
       <main>
         {showHow ? (
-          /* HERO: asymmetric split - text left, tool right */
+          /* HERO: asymmetric grid — copy left, tool right */
           <section
             id="upload"
-            className="relative mx-auto w-full max-w-7xl px-4 pb-12 pt-14 sm:px-6 sm:pt-16 xl:px-8 lg:flex lg:min-h-[calc(100dvh-68px)] lg:items-center"
+            className="relative mx-auto w-full max-w-7xl"
+            style={{ borderBottom: '1px solid var(--border)' }}
           >
-            <div className="grid w-full gap-10 lg:grid-cols-[1fr_480px] lg:gap-14 xl:grid-cols-[1fr_520px] xl:gap-20">
+            <div
+              className="grid w-full grid-cols-1 lg:grid-cols-[1fr_480px] xl:grid-cols-[1fr_520px]"
+            >
               {/* Left column: hero copy */}
-              <div className="flex flex-col justify-center">
-                <h1 className="animate-rise font-display text-4xl font-semibold tracking-[-0.025em] text-foreground sm:text-5xl lg:text-[3.5rem] lg:leading-[1.06]">
-                  {isCreate
-                    ? "Generate without the sparkle"
-                    : "Remove Gemini watermarks"}
-                </h1>
+              <div
+                className="flex flex-col justify-between p-6 sm:p-8 xl:p-12"
+                style={{ borderRight: '1px solid var(--border)' }}
+              >
+                {/* Top: system identifier */}
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-brand">
+                    {isCreate ? "// GENERATE SYSTEM" : "// WATERMARK REMOVAL SYSTEM"}
+                  </span>
+                </div>
 
-                <p className="animate-rise-delay mt-5 max-w-[46ch] text-base leading-relaxed text-muted sm:text-lg">
-                  {isCreate
-                    ? "Prompt Nano Banana directly and get clean images with no Gemini watermark. Attach a reference photo to guide the style."
-                    : "Unmark cleans the Gemini sparkle from images and video, or cuts out subjects. Free Instant in your browser, no account needed."}
-                </p>
+                {/* Main headline */}
+                <div className="flex-1 flex flex-col justify-center py-6">
+                  <h1
+                    className="animate-rise font-mono font-black uppercase text-foreground"
+                    style={{
+                      fontSize: 'clamp(3rem, 7vw, 9rem)',
+                      lineHeight: '0.9',
+                      letterSpacing: '-0.04em',
+                    }}
+                  >
+                    {isCreate ? (
+                      <>
+                        GENERATE<br />
+                        <span style={{ color: 'var(--brand)' }}>WITHOUT</span><br />
+                        SPARKLE
+                      </>
+                    ) : (
+                      <>
+                        WATER<br />
+                        <span style={{ color: 'var(--brand)' }}>MARK</span><br />
+                        ELIM<br />
+                        INATION
+                      </>
+                    )}
+                  </h1>
 
-                <ul className="animate-rise-delay-2 mt-7 flex flex-col gap-2 text-sm text-muted sm:flex-row sm:flex-wrap sm:gap-x-5 sm:gap-y-2">
+                  {/* Divider */}
+                  <div
+                    className="mt-6 mb-5 h-px"
+                    style={{ background: 'var(--border-strong)' }}
+                  />
+
+                  {/* Telemetry readout */}
+                  <div className="animate-rise-delay flex flex-col gap-1.5 font-mono text-[9px] uppercase tracking-[0.15em] text-muted">
+                    {isCreate ? (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--brand)' }}>›</span>
+                          <span>MODEL: NANO BANANA</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--brand)' }}>›</span>
+                          <span>REFERENCE PHOTO: SUPPORTED</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--brand)' }}>›</span>
+                          <span>OUTPUT: CLEAN GENERATION</span>
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--brand)' }}>›</span>
+                          <span>ENGINE: INSTANT + CLOUD</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--brand)' }}>›</span>
+                          <span>MODEL: GEMINI SPARKLE DETECTOR</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span style={{ color: 'var(--brand)' }}>›</span>
+                          <span>ACCESS: FREE — NO ACCOUNT NEEDED</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Bottom: feature list */}
+                <ul
+                  className="animate-rise-delay-2 flex flex-col gap-1.5 pt-5"
+                  style={{ borderTop: '1px solid var(--border)' }}
+                >
                   {isCreate ? (
                     <>
-                      <li className="flex items-center gap-1.5">
-                        <CheckIcon />
+                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span
+                          className="h-px w-5 shrink-0"
+                          style={{ background: 'var(--border-strong)' }}
+                        />
                         No Gemini sparkle
                       </li>
-                      <li className="flex items-center gap-1.5">
-                        <CheckIcon />
+                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span
+                          className="h-px w-5 shrink-0"
+                          style={{ background: 'var(--border-strong)' }}
+                        />
                         Attach a reference photo
                       </li>
-                      <li className="flex items-center gap-1.5">
-                        <CheckIcon />
+                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span
+                          className="h-px w-5 shrink-0"
+                          style={{ background: 'var(--border-strong)' }}
+                        />
                         Multiple models
                       </li>
                     </>
                   ) : (
                     <>
-                      <li className="flex items-center gap-1.5">
-                        <CheckIcon />
+                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span
+                          className="h-px w-5 shrink-0"
+                          style={{ background: 'var(--brand)' }}
+                        />
                         Free Instant for images
                       </li>
-                      <li className="flex items-center gap-1.5">
-                        <CheckIcon />
+                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span
+                          className="h-px w-5 shrink-0"
+                          style={{ background: 'var(--border-strong)' }}
+                        />
                         No account required
                       </li>
-                      <li className="flex items-center gap-1.5">
-                        <CheckIcon />
+                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
+                        <span
+                          className="h-px w-5 shrink-0"
+                          style={{ background: 'var(--border-strong)' }}
+                        />
                         Original quality download
                       </li>
                     </>
@@ -117,8 +189,8 @@ export default function LandingShell({
                 </ul>
               </div>
 
-              {/* Right column: upload tool (injected by LandingUpload) */}
-              <div className="animate-rise-delay-2 w-full">
+              {/* Right column: upload tool (injected by caller) */}
+              <div className="animate-rise-delay-2 w-full p-4 sm:p-6">
                 {children}
               </div>
             </div>
