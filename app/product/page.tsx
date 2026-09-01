@@ -14,17 +14,19 @@ import {
   CHROME_WEB_STORE_URL,
   PRODUCT_TOOLS,
   SITE_ONE_LINER,
-  SITE_TAGLINE,
   SITE_URL,
 } from "@/lib/seo";
 
+const PRODUCT_PAGE_DESCRIPTION =
+  "Every Unmark tool in one place: free Instant image cleanup, Cloud video watermark removal, background cutouts, Nano Banana, and the Chrome extension.";
+
 export const metadata: Metadata = {
   title: "Unmark — Gemini Watermark Remover",
-  description: SITE_TAGLINE,
+  description: PRODUCT_PAGE_DESCRIPTION,
   alternates: { canonical: "/product" },
   openGraph: {
     title: "Unmark — AI media cleanup",
-    description: SITE_TAGLINE,
+    description: PRODUCT_PAGE_DESCRIPTION,
     url: `${SITE_URL}/product`,
   },
 };
