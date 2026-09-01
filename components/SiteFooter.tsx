@@ -126,7 +126,7 @@ export default function SiteFooter() {
         style={{ borderColor: 'var(--border)' }}
       >
         <p className="font-mono text-[8px] leading-relaxed text-muted">
-          This site uses third-party advertising (Hilltop Ads, AdCash) that may deliver popunder ads, including content intended for adult audiences (18+). Unmark does not control third-party ad content.{" "}
+          This site uses third-party advertising (Adsterra) that may deliver popunder ads, including content intended for adult audiences (18+). Unmark does not control third-party ad content.{" "}
           <Link href="/privacy#third-party-advertising" className="underline underline-offset-2 hover:text-foreground transition-colors">
             Learn more
           </Link>

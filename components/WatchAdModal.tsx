@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCredits } from "@/lib/credits";
-import { loadHilltopWatchAd } from "@/lib/hilltopAds";
+import { loadAdsterraWatchAd } from "@/lib/adsterraAds";
 
 const COUNTDOWN_SECONDS = 10;
 const DAILY_LIMIT = 3;
@@ -41,7 +41,7 @@ function Modal({
   const { refreshCredits } = useCredits();
 
   useEffect(() => {
-    loadHilltopWatchAd();
+    loadAdsterraWatchAd();
   }, []);
 
   useEffect(() => {
@@ -278,7 +278,7 @@ export default function WatchAdForCredit({
         <button
           type="button"
           onClick={() => {
-            loadHilltopWatchAd();
+            loadAdsterraWatchAd();
             setInternalOpen(true);
           }}
           className="text-sm font-medium text-brand transition hover:underline"

@@ -124,8 +124,8 @@ export default function TermsPage() {
               Third-party advertising
             </h2>
             <p>
-              This site is monetised in part through third-party advertising
-              networks (currently Hilltop Ads and AdCash). These networks may
+              This site is monetised in part through a third-party advertising
+              network (currently Adsterra). This network may
               serve ads via popunder windows. <strong>We do not control
               the content of those ads</strong>, and they may include material
               intended for adult audiences.

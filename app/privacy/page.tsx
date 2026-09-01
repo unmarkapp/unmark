@@ -184,9 +184,9 @@ export default function PrivacyPage() {
               Third-party advertising
             </h2>
             <p>
-              Unmark uses third-party advertising networks, including{" "}
-              <strong>Hilltop Ads</strong> and <strong>AdCash</strong>, to
-              display ads on this site. These networks may deliver ads via
+              Unmark uses a third-party advertising network,{" "}
+              <strong>Adsterra</strong>, to
+              display ads on this site. This network may deliver ads via
               popunder windows — a new browser tab or window that opens in
               the background when you interact with the site.
             </p>
@@ -198,30 +198,20 @@ export default function PrivacyPage() {
               you acknowledge that you may be exposed to such content.
             </p>
             <p>
-              These ad networks may set their own cookies and collect
+              This ad network may set its own cookies and collect
               information such as your IP address, browser type, and browsing
-              behaviour to serve targeted ads. Their data practices are
-              governed by their own privacy policies:
+              behaviour to serve targeted ads. Its data practices are
+              governed by its own privacy policy:
             </p>
             <ul className="list-disc space-y-1 pl-5">
               <li>
                 <a
-                  href="https://hilltopads.com/privacy-policy/"
+                  href="https://adsterra.com/privacy-policy-managed/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-brand-hover underline-offset-2 hover:underline"
                 >
-                  Hilltop Ads Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a
-                  href="https://adcash.com/privacy-policy/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-hover underline-offset-2 hover:underline"
-                >
-                  AdCash Privacy Policy
+                  Adsterra Privacy Policy
                 </a>
               </li>
             </ul>

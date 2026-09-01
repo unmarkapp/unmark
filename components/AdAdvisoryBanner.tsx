@@ -47,7 +47,7 @@ export default function AdAdvisoryBanner() {
             [!]
           </span>
           <p className="font-mono text-[10px] leading-relaxed text-muted max-w-2xl">
-            This site shows <strong className="text-foreground font-bold">third-party popunder ads</strong> (Hilltop Ads, AdCash) that may include adult content (18+). Ads are not controlled by Unmark.{" "}
+            This site shows <strong className="text-foreground font-bold">third-party popunder ads</strong> (Adsterra) that may include adult content (18+). Ads are not controlled by Unmark.{" "}
             <Link
               href="/privacy"
               className="underline underline-offset-2 transition-colors hover:text-foreground"

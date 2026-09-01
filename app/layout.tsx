@@ -21,10 +21,8 @@ import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
 import AdAdvisoryBanner from "@/components/AdAdvisoryBanner";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
-import { HILLTOP_POPUNDER_SCRIPT } from "@/lib/hilltopAds";
-import HilltopPopunder from "@/components/HilltopPopunder";
-import { ADCASH_BOOT_SCRIPT } from "@/lib/adcashAds";
-import AdcashPop from "@/components/AdcashPop";
+import { ADSTERRA_POPUNDER_SCRIPT } from "@/lib/adsterraAds";
+import AdsterraPopunder from "@/components/AdsterraPopunder";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -146,7 +144,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="preconnect" href="https://script.supademo.com" />
         <link rel="dns-prefetch" href="https://app.supademo.com" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {/* Hilltop Ads site verification */}
+        {/* Adsterra site verification */}
         <meta
           name="1a5d081f3d9623cf7fe462492a389b60fdca946e"
           content="1a5d081f3d9623cf7fe462492a389b60fdca946e"
@@ -182,15 +180,13 @@ gtag('config', '${GA_MEASUREMENT_ID}');
               <ToastProvider>
                 <PwaRegister />
                 <AdAdvisoryBanner />
-                <HilltopPopunder />
-                <AdcashPop />
+                <AdsterraPopunder />
                 <DropToCleanProvider>{children}</DropToCleanProvider>
               </ToastProvider>
             </CreditsProvider>
           </AuthProvider>
         </ThemeProvider>
-        <script dangerouslySetInnerHTML={{ __html: HILLTOP_POPUNDER_SCRIPT }} />
-        <script dangerouslySetInnerHTML={{ __html: ADCASH_BOOT_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: ADSTERRA_POPUNDER_SCRIPT }} />
       </body>
     </html>
   );

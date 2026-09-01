@@ -1,4 +1,4 @@
-import { HILLTOP_WATCH_AD_SCRIPT } from "@/lib/hilltopAds";
+import { ADSTERRA_WATCH_AD_SCRIPT } from "@/lib/adsterraAds";
 
 export function GET() {
   const html = `<!DOCTYPE html>
@@ -19,7 +19,7 @@ export function GET() {
     }
   </style>
   <script>
-    ${HILLTOP_WATCH_AD_SCRIPT}
+    ${ADSTERRA_WATCH_AD_SCRIPT}
   </script>
   <script>
     (function () {
