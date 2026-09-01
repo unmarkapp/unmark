@@ -5,12 +5,12 @@ import GuideArticle from "@/components/GuideArticle";
 export const metadata: Metadata = {
   title: "Remove Veo Watermark from Video",
   description:
-    "Remove the Veo sparkle watermark from AI video online. Drop an MP4 on this page — Unmark strips the visible logo from every frame.",
+    "Remove the Veo sparkle watermark from AI video online, including Veo 3 exports. Drop an MP4 on this page — Unmark strips the visible logo from every frame.",
   alternates: { canonical: "/guides/remove-veo-watermark" },
   openGraph: {
     title: "Remove Veo Watermark · Unmark",
     description:
-      "Strip the Veo sparkle logo from video exports with Unmark Cloud.",
+      "Strip the Veo sparkle logo from Veo 3 and Veo 2 video exports with Unmark Cloud.",
     url: "/guides/remove-veo-watermark",
     type: "article",
   },
@@ -50,6 +50,11 @@ const faqs = [
     question: "Does Unmark remove every Google mark on a Veo file?",
     answer:
       "Unmark removes the visible sparkle logo you see in the corner of Veo and Gemini frames. That is the mark this page is for. Platform rules about disclosing AI-generated video are separate — follow them even after the sparkle is gone. Unmark is not a generic watermark eraser for channel logos or burned-in captions. If you only needed a poster frame, export a still and use Instant instead of spending video credits.",
+  },
+  {
+    question: "Does this work on Veo 3 clips?",
+    answer:
+      "Yes. Veo 3 and Veo 2 exports carry the same visible four-point sparkle in the corner, so Unmark's Auto-detect handles both the same way. Drop the original Veo 3 MP4 here rather than a re-encoded copy from a social app — recompression can shift or blur the mark and make detection harder.",
   },
 ] as const;
 

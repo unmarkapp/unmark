@@ -70,13 +70,19 @@ export const SITE_KEYWORDS = [
   "remove gemini watermark from video",
   "google flow watermark remover",
   "veo watermark remover",
+  "veo 3 watermark remover",
   "remove veo watermark",
   "remove gemini sparkle",
   "gemini stamp remover",
+  "gemini watermark cleaner",
+  "gemini watermark removal",
   "how to remove gemini watermark",
+  "how to remove gemini watermark from image",
   "google gemini watermark remover",
   "free gemini watermark remover",
+  "remove gemini watermark free",
   "gemini watermark remover online",
+  "gemini watermark remover extension",
   "nano banana watermark remover",
   "ai watermark remover gemini",
   "clean gemini images",
@@ -160,7 +166,12 @@ export const FAQ_ITEMS = [
   {
     question: "What is the Gemini sparkle / stamp on images?",
     answer:
-      "Google Gemini adds a small four-point sparkle, usually in a corner of AI-generated images and video frames. It is burned into the export — there is no Gemini setting that turns it off. Unmark is built for that visible mark, not for channel logos, captions, or stamps from other generators. The same sparkle family appears on Imagen, Nano Banana, Veo, and Google Flow exports. Cropping the corner is a poor substitute: you lose composition, and a tiled or inset sparkle can remain. Instant targets stills; Cloud targets video and saved jobs.",
+      "Google Gemini adds a small four-point sparkle icon, usually in a corner of AI-generated images and video frames. It is burned into the export — there is no Gemini setting that turns it off. Unmark is built for that visible mark, not for channel logos, captions, or stamps from other generators. The same sparkle family appears on Imagen, Nano Banana, Veo, and Google Flow exports. Cropping the corner is a poor substitute: you lose composition, and a tiled or inset sparkle can remain. Instant targets stills; Cloud targets video and saved jobs.",
+  },
+  {
+    question: "Is the Gemini sparkle the same thing as SynthID?",
+    answer:
+      "No — they solve different problems. SynthID is Google DeepMind's invisible watermark: it is embedded in the pixel or audio data itself, is not visible to the eye, and exists so tools can later detect that a file was AI-generated. The four-point sparkle is a separate, visible logo Gemini draws on top of the image or video frame. Unmark removes that visible sparkle. It does not target, detect, or strip SynthID's invisible signal — that watermark is designed to survive normal edits and is meant to stay in place for content-provenance and safety purposes.",
   },
   {
     question: "Can I remove a Gemini watermark for free?",
