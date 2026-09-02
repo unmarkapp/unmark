@@ -138,8 +138,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="preconnect" href="https://auth.unmark.ink" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
-        <link rel="preconnect" href="https://script.supademo.com" />
-        <link rel="dns-prefetch" href="https://app.supademo.com" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>

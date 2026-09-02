@@ -1,29 +1,23 @@
 "use client";
 
-import Script from "next/script";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
-import {
-  SUPADEMO_DEMO_ID,
-  SUPADEMO_EMBED_URL,
-  SUPADEMO_SCRIPT_SRC,
-} from "@/lib/supademo";
 import { resetWalkthrough } from "@/lib/walkthrough";
-
-declare global {
-  interface Window {
-    Supademo?: { open: (id: string) => void };
-  }
-}
 
 export default function ProductTour() {
   const [playing, setPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  const startEmbed = () => setPlaying(true);
+  const startVideo = () => {
+    setPlaying(true);
+    void videoRef.current?.play();
+  };
 
   const openFullscreen = () => {
     setPlaying(true);
-    window.Supademo?.open(SUPADEMO_DEMO_ID);
+    const video = videoRef.current;
+    void video?.play();
+    void video?.requestFullscreen?.();
   };
 
   return (
@@ -31,8 +25,6 @@ export default function ProductTour() {
       id="tour"
       className="mx-auto w-full max-w-5xl border-t border-border/80 px-4 py-20 sm:px-6"
     >
-      {playing ? <Script src={SUPADEMO_SCRIPT_SRC} strategy="afterInteractive" /> : null}
-
       <div className="mx-auto max-w-2xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.16em] text-brand">
           Product tour
@@ -41,38 +33,37 @@ export default function ProductTour() {
           See Unmark in action
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted">
-          Click through a short walkthrough — upload a Gemini still, remove the
-          sparkle, and download a clean file.
+          Watch a short demo — upload a Gemini still, remove the sparkle, and
+          download a clean file.
         </p>
       </div>
 
       <div className="mx-auto mt-10 max-w-3xl overflow-hidden rounded-[var(--radius-lg)] bg-ink shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_24px_48px_-20px_rgb(var(--shadow-color)/0.5)]">
         <div className="relative aspect-video w-full bg-ink">
-          {playing ? (
-            <iframe
-              src={SUPADEMO_EMBED_URL}
-              title="Unmark product tour — Gemini watermark remover"
-              allow="clipboard-write; fullscreen"
-              allowFullScreen
-              className="absolute inset-0 h-full w-full border-0"
-            />
-          ) : (
+          <video
+            ref={videoRef}
+            src="/demo/demo_unmark.mp4"
+            poster="/demo/demo-poster.jpg"
+            controls={playing}
+            playsInline
+            preload="none"
+            className="absolute inset-0 h-full w-full"
+          />
+          {!playing ? (
             <button
               type="button"
-              onClick={startEmbed}
-              className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-ink text-white transition hover:bg-ink/90"
-              aria-label="Play product tour"
+              onClick={startVideo}
+              className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/10 text-white transition hover:bg-black/20"
+              aria-label="Play product demo"
             >
               <span className="flex h-16 w-16 items-center justify-center rounded-full bg-brand shadow-[0_4px_16px_-2px_rgb(var(--shadow-color)/0.5)]">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
                   <path d="M8 5v14l11-7z" />
                 </svg>
               </span>
-              <span className="text-sm font-semibold">
-                Play tour
-              </span>
+              <span className="text-sm font-semibold">Play demo</span>
             </button>
-          )}
+          ) : null}
         </div>
       </div>
 
