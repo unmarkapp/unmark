@@ -1,7 +1,6 @@
 "use client";
 
 import { useCredits } from "@/lib/credits";
-import WatchAdForCredit from "@/components/WatchAdModal";
 
 export type BulkItemStatus =
   | "ready"
@@ -98,7 +97,7 @@ export default function BulkQueueCard({
   onDownloadZip,
   onReset,
 }: BulkQueueCardProps) {
-  const { dailyFreeCredits, paymentsEnabled, refreshCredits } = useCredits();
+  const { dailyFreeCredits, paymentsEnabled } = useCredits();
   const count = items.length;
   const completed = items.filter((item) => item.status === "completed").length;
   const failed = items.filter((item) => item.status === "failed").length;
@@ -288,7 +287,6 @@ export default function BulkQueueCard({
               </>
             )}
           </p>
-          <WatchAdForCredit onGranted={() => void refreshCredits()} />
         </div>
       ) : null}
     </div>

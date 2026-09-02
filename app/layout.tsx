@@ -19,10 +19,7 @@ import JsonLd from "@/components/JsonLd";
 import ReferralCapture from "@/components/ReferralCapture";
 import { DropToCleanProvider } from "@/lib/dropToClean";
 import PwaRegister from "@/components/PwaRegister";
-import AdAdvisoryBanner from "@/components/AdAdvisoryBanner";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
-import { ADSTERRA_POPUNDER_SCRIPT } from "@/lib/adsterraAds";
-import AdsterraPopunder from "@/components/AdsterraPopunder";
 import "./globals.css";
 
 const figtree = Figtree({
@@ -144,15 +141,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="preconnect" href="https://script.supademo.com" />
         <link rel="dns-prefetch" href="https://app.supademo.com" />
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        {/* Adsterra site verification */}
-        <meta
-          name="1a5d081f3d9623cf7fe462492a389b60fdca946e"
-          content="1a5d081f3d9623cf7fe462492a389b60fdca946e"
-        />
-        <meta
-          name="profiton-domain-verification"
-          content="0eea141a630510018f91f9b12dfe2ed0adce471bee86af974fa8400bf95087f0"
-        />
         <meta name="referrer" content="no-referrer-when-downgrade" />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
@@ -179,14 +167,11 @@ gtag('config', '${GA_MEASUREMENT_ID}');
               <ReferralCapture />
               <ToastProvider>
                 <PwaRegister />
-                <AdAdvisoryBanner />
-                <AdsterraPopunder />
                 <DropToCleanProvider>{children}</DropToCleanProvider>
               </ToastProvider>
             </CreditsProvider>
           </AuthProvider>
         </ThemeProvider>
-        <script dangerouslySetInnerHTML={{ __html: ADSTERRA_POPUNDER_SCRIPT }} />
       </body>
     </html>
   );

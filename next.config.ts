@@ -14,10 +14,10 @@ const ContentSecurityPolicy = [
   "media-src 'self' blob: https:",
   "font-src 'self' data: https://fonts.gstatic.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-  // Next.js, analytics, Razorpay, Adsterra pop
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https://script.supademo.com https://fond-appointment.com https://stretchadjoiningperspective.com https://www.thunderous-cause.com https:",
+  // Next.js, analytics, Razorpay
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https://script.supademo.com https:",
   "connect-src 'self' https://api.unmark.ink https://auth.unmark.ink https://billing.unmark.ink https://*.amazonaws.com https://checkout.razorpay.com https://api.razorpay.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com wss: https:",
-  "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://app.supademo.com https://script.supademo.com https://fond-appointment.com https://stretchadjoiningperspective.com https://www.thunderous-cause.com https:",
+  "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https://app.supademo.com https://script.supademo.com https:",
   "worker-src 'self' blob:",
   "upgrade-insecure-requests",
 ].join("; ");

@@ -2,7 +2,6 @@
 
 import { useRef, useState } from "react";
 
-import WatchAdForCredit from "@/components/WatchAdModal";
 import { useDropToClean } from "@/lib/dropToClean";
 
 /**
@@ -17,9 +16,6 @@ export default function InstantCleanEmbed() {
   const [originalUrl, setOriginalUrl] = useState<string | null>(null);
   const [resultUrl, setResultUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("cleaned.png");
-  const [watchOpen, setWatchOpen] = useState(false);
-  const [skipWatchAd, setSkipWatchAd] = useState(false);
-  const pendingFile = useRef<File | null>(null);
 
   const reset = () => {
     if (originalUrl) URL.revokeObjectURL(originalUrl);
@@ -67,12 +63,7 @@ export default function InstantCleanEmbed() {
       setError("Choose a PNG, JPG, or WebP.");
       return;
     }
-    pendingFile.current = file;
-    if (skipWatchAd) {
-      void process(file);
-      return;
-    }
-    setWatchOpen(true);
+    void process(file);
   };
 
   return (
@@ -87,8 +78,8 @@ export default function InstantCleanEmbed() {
         Remove the sparkle on this page
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-muted">
-        Drop a Gemini still. Watch a short ad, then cleanup runs in your
-        browser — Instant stills never leave your device.
+        Drop a Gemini still and cleanup runs in your browser — Instant
+        stills never leave your device.
       </p>
 
       {!resultUrl ? (
@@ -151,23 +142,6 @@ export default function InstantCleanEmbed() {
           {error}
         </p>
       ) : null}
-
-      <WatchAdForCredit
-        reward="instant"
-        open={watchOpen}
-        showTrigger={false}
-        onClose={() => {
-          setWatchOpen(false);
-          pendingFile.current = null;
-        }}
-        onAdsUnavailable={() => setSkipWatchAd(true)}
-        onGranted={() => {
-          const file = pendingFile.current;
-          setWatchOpen(false);
-          pendingFile.current = null;
-          if (file) void process(file);
-        }}
-      />
 
       {resultUrl ? (
         <div className="mt-4 flex flex-wrap gap-3">

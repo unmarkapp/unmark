@@ -179,58 +179,6 @@ export default function PrivacyPage() {
             </p>
           </section>
 
-          <section id="third-party-advertising" className="space-y-3">
-            <h2 className="font-display text-xl font-semibold text-foreground">
-              Third-party advertising
-            </h2>
-            <p>
-              Unmark uses a third-party advertising network,{" "}
-              <strong>Adsterra</strong>, to
-              display ads on this site. This network may deliver ads via
-              popunder windows — a new browser tab or window that opens in
-              the background when you interact with the site.
-            </p>
-            <p>
-              <strong>We do not control the content of these ads.</strong>{" "}
-              Third-party ads may include content intended for adult audiences
-              (18+). Unmark does not endorse, review, or take responsibility
-              for any third-party ad content. By continuing to use this site
-              you acknowledge that you may be exposed to such content.
-            </p>
-            <p>
-              This ad network may set its own cookies and collect
-              information such as your IP address, browser type, and browsing
-              behaviour to serve targeted ads. Its data practices are
-              governed by its own privacy policy:
-            </p>
-            <ul className="list-disc space-y-1 pl-5">
-              <li>
-                <a
-                  href="https://adsterra.com/privacy-policy-managed/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-brand-hover underline-offset-2 hover:underline"
-                >
-                  Adsterra Privacy Policy
-                </a>
-              </li>
-            </ul>
-            <p>
-              If you wish to opt out of interest-based advertising you may use
-              the tools provided by the{" "}
-              <a
-                href="https://optout.networkadvertising.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-brand-hover underline-offset-2 hover:underline"
-              >
-                Network Advertising Initiative
-              </a>{" "}
-              or your browser's built-in pop-up and pop-under blocking
-              settings.
-            </p>
-          </section>
-
           <section className="space-y-3">
             <h2 className="font-display text-xl font-semibold text-foreground">
               Children

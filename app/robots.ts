@@ -20,7 +20,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/watch-ad-frame"],
+        disallow: ["/api/"],
       },
       ...AI_CRAWLERS.map((userAgent) => ({
         userAgent,
