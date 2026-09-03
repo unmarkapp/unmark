@@ -381,8 +381,15 @@ export function rabResidualScore(
   // clipping to black — "fullReverse" only says clipping is *tolerable*,
   // not that overshoot doesn't happen. Penalize that directly, even when
   // fullReverse, so a gentler gain can win when it fits better.
-  const overshoot = Math.max(0, loMean - hiAfterMean) / 255;
-  return corr - (fullReverse ? 0 : clip * 2) - overshoot * 1.5;
+  //
+  // This must be symmetric. A one-sided max(0, lo-hi) only punishes
+  // going darker than the surround — a gain that undershoots and leaves
+  // the mark half-visible (hiAfterMean well ABOVE loMean) pays no penalty
+  // at all, so a weak gain with high shape-correlation can outscore a
+  // slightly-negative gain that actually finishes the job. Penalize
+  // distance from zero in either direction.
+  const imbalance = Math.abs(loMean - hiAfterMean) / 255;
+  return corr - (fullReverse ? 0 : clip * 2) - imbalance * 1.5;
 }
 
 export function rabCost(after: {
