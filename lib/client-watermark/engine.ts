@@ -16,10 +16,13 @@ import {
   MIN_DETECT_SCORE,
   rabResidualScore,
   refinePlacementNcc,
+  regionStats,
   scanPlacementNcc,
 } from "./quality";
 
 const APPLY_GAINS = [0.55, 0.62, 0.7, 0.78, 0.85, 0.92, 1] as const;
+/** Below this, the "winner" spot doesn't look like a real overlay at all. */
+const WATERMARK_SIGNATURE_SCORE = 0.35;
 
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -158,11 +161,29 @@ export class ClientWatermarkEngine {
     }
 
     // Erasio `method=scan`: 48px "old" logo is often off the official corner.
+    // This is a blind slide across the whole bottom-right quadrant using the
+    // raw, unscaled template — it can find a coincidental match on background
+    // texture (bokeh, fabric) that outscores a real, correctly-calibrated
+    // official candidate (e.g. the v2 small logo interpolated from the 96px
+    // source per the aspect-aware formula in geometry.ts). Only let a scan
+    // hit win when the calibrated pipeline found nothing plausible at this
+    // size, or the scan is decisively stronger — mirroring the same
+    // near-certain-override rule pickSparkleWinner uses for v1-96 vs. small.
+    const officialSmallBest = ranked
+      .filter((c) => c.size <= 52)
+      .reduce((best, c) => Math.max(best, c.score), -Infinity);
+
     for (const key of ["v1-48", "v2-36"] as const) {
       const native = this.getAlphaMap(key);
       const side = nativeSize(key);
       const scanned = scanPlacementNcc(original, native, side, key);
       if (!scanned || scanned.score < MIN_DETECT_SCORE) continue;
+      if (
+        officialSmallBest >= WATERMARK_SIGNATURE_SCORE &&
+        scanned.score < officialSmallBest + 0.15
+      ) {
+        continue;
+      }
       ranked.push({
         ...scanned,
         alphaMap: native,
@@ -180,8 +201,24 @@ export class ClientWatermarkEngine {
 
     let method: "rab" | "inpaint" = "inpaint";
     let usedRect: WatermarkRect | null = null;
+    let winnerSignature: ReturnType<typeof regionStats> | null = null;
+    let winnerLooksLikeWatermark = false;
 
     if (winner) {
+      const native = this.getAlphaMap(winner.mapKey);
+      const side = nativeSize(winner.mapKey);
+      const map = mapForRect(native, side, winner.size);
+      winnerSignature = regionStats(original, map, winner);
+      // A real sparkle is brighter where alpha is high. If the spot is
+      // flat or inverted (fabric fold, skin, hair) and the raw detection
+      // score wasn't strongly confident either, it's a false positive —
+      // don't blend a phantom mark onto real content.
+      winnerLooksLikeWatermark =
+        winnerSignature.bright >= -2 ||
+        winnerSignature.score >= WATERMARK_SIGNATURE_SCORE;
+    }
+
+    if (winner && winnerLooksLikeWatermark) {
       const native = this.getAlphaMap(winner.mapKey);
       const side = nativeSize(winner.mapKey);
       const map = mapForRect(native, side, winner.size);
@@ -195,7 +232,11 @@ export class ClientWatermarkEngine {
         : winner.mapKey === "v1-48" && !officialCorner
           ? 0.62
           : 1;
-      const gains = fullReverse ? ([1] as const) : APPLY_GAINS;
+      // Always search the full gain ladder, even when the surround reads as
+      // "flat enough to fully reverse" — that only means gain=1 is safe to
+      // *try*, not that it's correct. rabResidualScore's overshoot penalty
+      // now lets a gentler gain win when the true mark is low-opacity.
+      const gains = APPLY_GAINS;
       const seeds: WatermarkRect[] = [winner];
       for (const dy of [-1, 0, 1]) {
         for (const dx of [-1, 0, 1]) {
@@ -222,10 +263,16 @@ export class ClientWatermarkEngine {
         alphaGain: preferredGain,
         logoRgb,
       });
-      let best: { rect: WatermarkRect; probe: ImageData; score: number } = {
+      let best: {
+        rect: WatermarkRect;
+        probe: ImageData;
+        score: number;
+        gain: number;
+      } = {
         rect: winner,
         probe: preferred,
         score: rabResidualScore(original, preferred, map, winner),
+        gain: preferredGain,
       };
       for (const seed of seeds) {
         for (const gain of gains) {
@@ -240,7 +287,7 @@ export class ClientWatermarkEngine {
           removeWatermark(probe, map, seed, { alphaGain: gain, logoRgb });
           const score = rabResidualScore(original, probe, map, seed);
           if (score > best.score + 0.04) {
-            best = { rect: seed, probe, score };
+            best = { rect: seed, probe, score, gain };
           }
         }
       }
@@ -248,7 +295,17 @@ export class ClientWatermarkEngine {
       imageData.data.set(best.probe.data);
       flattenLeftoverSparkle(imageData, map, best.rect);
       method = "rab";
-      usedRect = best.rect;
+      // `best.rect` may be `winner` or a shifted copy of it, both of which
+      // carry extra runtime-only fields (score, alphaMap) beyond
+      // WatermarkRect — strip them so the returned rect stays plain.
+      usedRect = {
+        size: best.rect.size,
+        x: best.rect.x,
+        y: best.rect.y,
+        width: best.rect.width,
+        height: best.rect.height,
+        mapKey: best.rect.mapKey,
+      };
     }
 
     if (method === "inpaint") {

@@ -342,6 +342,7 @@ export function rabResidualScore(
   const alphaVals: number[] = [];
   let hiN = 0;
   let clipN = 0;
+  let hiAfterSum = 0;
   let loSum = 0;
   let loN = 0;
   const loLuma: number[] = [];
@@ -363,16 +364,25 @@ export function rabResidualScore(
         const g = after.data[idx + 1]!;
         const b = after.data[idx + 2]!;
         if (r <= 2 && g <= 2 && b <= 2) clipN++;
+        hiAfterSum += lumaAt(after.data, idx);
       }
     }
   }
   const corr = ncc(delta, alphaVals);
   const clip = hiN > 0 ? clipN / hiN : 0;
   const loMean = loN > 0 ? loSum / loN : 0;
+  const hiAfterMean = hiN > 0 ? hiAfterSum / hiN : 0;
   const fullReverse = surroundAllowsFullReverse(loMean, stdev(loLuma));
   // On black / navy / flat studio color, restored logo pixels may clip.
   // Penalizing that picked a weak gain and left a glassy star.
-  return corr - (fullReverse ? 0 : clip * 2);
+  //
+  // Separately: a genuine but low-opacity mark forced through gain=1 can
+  // crush well below the natural background luma without technically
+  // clipping to black — "fullReverse" only says clipping is *tolerable*,
+  // not that overshoot doesn't happen. Penalize that directly, even when
+  // fullReverse, so a gentler gain can win when it fits better.
+  const overshoot = Math.max(0, loMean - hiAfterMean) / 255;
+  return corr - (fullReverse ? 0 : clip * 2) - overshoot * 1.5;
 }
 
 export function rabCost(after: {

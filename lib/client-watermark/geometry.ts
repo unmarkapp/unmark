@@ -317,10 +317,14 @@ export function pickSparkleWinner<T extends WatermarkRect & { score: number }>(
     const smalls = pool.filter((c) => c.size <= 52);
     const large = pool.find((c) => c.size >= 90);
     const bestSmall = smalls[0];
+    // Knit/fabric false positives on the 96px box commonly score ~0.5+, so a
+    // relative margin alone isn't a safe filter — require near-certainty
+    // before letting the classic 96px mark override a real small-mark hit.
+    const largeIsNearCertain = large ? large.score >= 0.65 : false;
     if (
       bestSmall &&
       bestSmall.score >= minScore &&
-      (!large || large.score < bestSmall.score + 0.18)
+      (!large || !largeIsNearCertain || large.score < bestSmall.score + 0.18)
     ) {
       const v2 = v2SmallConfig(width, height);
       const ex = width - v2.margin - v2.logo_size;
