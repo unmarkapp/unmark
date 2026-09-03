@@ -42,6 +42,14 @@ export const ANDROID_PACKAGE_ID = "ink.unmark.app";
  */
 export const ANDROID_EARLY_ACCESS_URL = `https://play.google.com/apps/testing/${ANDROID_PACKAGE_ID}`;
 
+/**
+ * Google Group used as the closed-testing tester list. Joining this group is
+ * what makes an account eligible on the Play opt-in page above — set this
+ * group as the tester list in Play Console → Testing → Closed testing → Testers.
+ */
+export const ANDROID_TESTER_GROUP_EMAIL = "unmark-early-access@googlegroups.com";
+export const ANDROID_TESTER_GROUP_URL = "https://groups.google.com/g/unmark-early-access";
+
 /** Install / join URL: production listing when live, otherwise closed testing. */
 export const ANDROID_INSTALL_URL = ANDROID_APP_URL || ANDROID_EARLY_ACCESS_URL;
 

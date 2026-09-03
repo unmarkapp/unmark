@@ -3,23 +3,27 @@ import Link from "next/link";
 import BrandLogo from "@/components/BrandLogo";
 import SiteFooter from "@/components/SiteFooter";
 import SiteHeader from "@/components/SiteHeader";
-import { ANDROID_EARLY_ACCESS_URL } from "@/lib/seo";
+import {
+  ANDROID_EARLY_ACCESS_URL,
+  ANDROID_TESTER_GROUP_EMAIL,
+  ANDROID_TESTER_GROUP_URL,
+} from "@/lib/seo";
 
 const steps = [
   {
     n: "1",
-    title: "Open the Play opt-in page",
-    body: "Use the button below on your Android phone. Adding your email in Play Console is not enough.",
+    title: "Join the tester group",
+    body: `Join ${ANDROID_TESTER_GROUP_EMAIL} with the Google account you'll use for Unmark. Play only recognizes accounts in this group.`,
   },
   {
     n: "2",
-    title: "Tap Become a tester",
-    body: "Play only counts people who opt in on that page. Stay opted in for 14 days so we can ship to production.",
+    title: "Open the Play opt-in page, tap Become a tester",
+    body: "Use the button below on your Android phone, signed in with the same account. Adding your email in Play Console alone is not enough.",
   },
   {
     n: "3",
     title: "Install Unmark",
-    body: "After you join, install from the testing listing. Sign in with the same Google account you use on unmark.ink.",
+    body: "After you're opted in, install from the testing listing. Stay opted in for 14 days so we can ship to production.",
   },
 ];
 
@@ -50,10 +54,18 @@ export default function AndroidEarlyAccess() {
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={ANDROID_EARLY_ACCESS_URL}
+              href={ANDROID_TESTER_GROUP_URL}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-[var(--radius-md)] bg-brand px-5 py-3 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover"
+            >
+              Join tester group
+            </a>
+            <a
+              href={ANDROID_EARLY_ACCESS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-[var(--radius-md)] border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition hover:bg-sand"
             >
               Become a tester on Play
             </a>
@@ -64,6 +76,10 @@ export default function AndroidEarlyAccess() {
               iOS & Android
             </Link>
           </div>
+          <p className="animate-rise-delay mx-auto mt-3 max-w-md text-xs text-muted">
+            Joining the group takes a minute to approve. Once you're in, the
+            Play button above will recognize your account.
+          </p>
         </section>
 
         <ol className="mx-auto mt-16 grid max-w-3xl gap-3 sm:grid-cols-3">
