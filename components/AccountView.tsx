@@ -13,7 +13,9 @@ import {
   grantSignupCredits,
   listPacks,
   listTransactions,
+  openRazorpayCheckout,
   startCheckout,
+  verifyPayment,
   type BillingAccount,
   type CreditPack,
   type CreditTransaction,
@@ -168,10 +170,49 @@ export default function AccountView() {
     setBillingError(null);
     try {
       const result = await startCheckout(code);
-      if (!result.checkout_url) {
-        throw new Error("No checkout URL returned");
+      if (!result.order_id || !result.key_id) {
+        throw new Error("Checkout order was not created");
       }
-      window.location.href = result.checkout_url;
+
+      await openRazorpayCheckout({
+        keyId: result.key_id,
+        orderId: result.order_id,
+        amount: result.amount,
+        currency: result.currency,
+        description: "Unmark credit pack",
+        onSuccess: async (payment) => {
+          try {
+            const verified = await verifyPayment({
+              razorpay_order_id: payment.razorpay_order_id,
+              razorpay_payment_id: payment.razorpay_payment_id,
+              razorpay_signature: payment.razorpay_signature,
+            });
+            if (verified.account) {
+              setAccount(verified.account);
+            }
+            setPurchaseMessage(
+              "Payment successful. Credits were added to your balance.",
+            );
+            await refreshBilling();
+          } catch (err) {
+            setBillingError(
+              err instanceof Error
+                ? err.message
+                : "Payment received but verification failed. Refresh in a moment.",
+            );
+          } finally {
+            setBuyingCode(null);
+          }
+        },
+        onDismiss: () => {
+          setBuyingCode(null);
+          setPurchaseMessage("Checkout cancelled. No charge was made.");
+        },
+        onFailure: (message) => {
+          setBuyingCode(null);
+          setBillingError(message);
+        },
+      });
     } catch (err) {
       setBillingError(
         err instanceof Error ? err.message : "Could not start checkout",
@@ -717,7 +758,7 @@ function PackOption({
           disabled={disabled}
           className="rounded-[var(--radius-md)] bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {busy ? "Redirecting…" : "Buy"}
+          {busy ? "Opening…" : "Buy"}
         </button>
       </div>
     </div>
