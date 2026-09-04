@@ -8,59 +8,41 @@ export default function GetStartedTools() {
     <section
       id="get-started"
       data-walkthrough="tools"
-      className="mx-auto w-full max-w-7xl"
-      style={{ borderTop: '1px solid var(--border)' }}
+      className="mx-auto w-full max-w-7xl border-t border-border"
     >
-      {/* Section label */}
-      <div
-        className="flex items-center justify-between px-4 py-3 sm:px-6 xl:px-8"
-        style={{ borderBottom: '1px solid var(--border)' }}
-      >
-        <span className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-brand">
-          // TOOLS
-        </span>
-        <span className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-muted sm:block">
-          SELECT MODULE
-        </span>
-      </div>
-
       {/* Section title */}
-      <div
-        className="px-4 py-8 sm:px-6 sm:py-10 xl:px-8"
-        style={{ borderBottom: '1px solid var(--border)' }}
-      >
+      <div className="px-4 py-16 sm:px-6 sm:py-24 xl:px-8">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
-          <h2
-            className="animate-section-reveal font-mono font-black uppercase text-foreground"
-            style={{
-              fontSize: 'clamp(1.75rem, 4vw, 3rem)',
-              lineHeight: '0.95',
-              letterSpacing: '-0.03em',
-            }}
-          >
-            TOOLS READY<br />TO USE
-          </h2>
-          <p className="animate-section-reveal max-w-md font-mono text-[10px] leading-relaxed uppercase tracking-wide text-muted">
-            Pick the tool you need. Instant images are free, Cloud handles video and
-            cutouts, and the Chrome extension works directly inside Gemini.
+          <div>
+            <p className="animate-section-reveal mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+              Tools
+            </p>
+            <h2 className="animate-section-reveal font-display font-medium text-foreground text-4xl sm:text-5xl">
+              Ready to use
+            </h2>
+          </div>
+          <p className="animate-section-reveal max-w-md text-sm leading-relaxed text-muted">
+            Pick the tool you need. Instant images are free, Cloud handles
+            video and cutouts, and the Chrome extension works directly
+            inside Gemini.
           </p>
         </div>
 
-        <ul className="mt-8 grid gap-px sm:grid-cols-2" style={{ background: 'var(--border)' }}>
+        <ul className="mt-10 grid gap-4 sm:grid-cols-2">
           {PRODUCT_TOOLS.map((tool) => (
-            <li key={tool.id} className="animate-section-reveal bg-background">
+            <li key={tool.id} className="animate-section-reveal">
               <ProductToolCard tool={tool} layout="grid" />
             </li>
           ))}
         </ul>
 
-        <p className="mt-6 font-mono text-[9px] uppercase tracking-wide text-muted">
+        <p className="mt-8 text-sm text-muted">
           Prefer mobile?{" "}
-          <a href="/android" className="font-bold text-brand transition-colors hover:text-brand-hover">
+          <a href="/android" className="font-medium text-foreground transition hover:text-muted">
             Android early access
           </a>
-          <span className="mx-2 text-border">///</span>
-          <a href="/#apps" className="font-bold text-brand transition-colors hover:text-brand-hover">
+          <span className="mx-2 text-border">·</span>
+          <a href="/#apps" className="font-medium text-foreground transition hover:text-muted">
             iOS soon
           </a>
         </p>

@@ -2,6 +2,7 @@
 
 import { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import { Check } from "@phosphor-icons/react/dist/ssr";
 
 import AppsSection from "@/components/AppsSection";
 import ClosingCta from "@/components/ClosingCta";
@@ -44,148 +45,59 @@ export default function LandingShell({
       <main>
         {showHow ? (
           /* HERO: asymmetric grid — copy left, tool right */
-          <section
-            id="upload"
-            className="relative mx-auto w-full max-w-7xl"
-            style={{ borderBottom: '1px solid var(--border)' }}
-          >
-            <div
-              className="grid w-full grid-cols-1 lg:grid-cols-[1fr_480px] xl:grid-cols-[1fr_520px]"
-            >
+          <section id="upload" className="relative mx-auto w-full max-w-7xl border-b border-border">
+            <div className="grid w-full grid-cols-1 lg:grid-cols-[1fr_480px] xl:grid-cols-[1fr_520px]">
               {/* Left column: hero copy */}
-              <div
-                className="flex flex-col justify-between p-6 sm:p-8 xl:p-12"
-                style={{ borderRight: '1px solid var(--border)' }}
-              >
-                {/* Top: system identifier */}
-                <div className="mb-6 flex items-center gap-3">
-                  <span className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-brand">
-                    {isCreate ? "// GENERATE SYSTEM" : "// WATERMARK REMOVAL SYSTEM"}
-                  </span>
-                </div>
+              <div className="flex flex-col justify-center gap-7 p-6 sm:p-8 xl:p-16">
+                <p className="animate-rise text-xs font-semibold uppercase tracking-[0.14em] text-muted">
+                  {isCreate ? "AI image generation" : "Gemini watermark removal"}
+                </p>
 
-                {/* Main headline */}
-                <div className="flex-1 flex flex-col justify-center py-6">
-                  <h1
-                    className="animate-rise font-mono font-black uppercase text-foreground"
-                    style={{
-                      fontSize: 'clamp(3rem, 7vw, 9rem)',
-                      lineHeight: '0.9',
-                      letterSpacing: '-0.04em',
-                    }}
-                  >
-                    {isCreate ? (
-                      <>
-                        GENERATE<br />
-                        <span style={{ color: 'var(--brand)' }}>WITHOUT</span><br />
-                        SPARKLE
-                      </>
-                    ) : (
-                      <>
-                        WATER<br />
-                        <span style={{ color: 'var(--brand)' }}>MARK</span><br />
-                        ELIM<br />
-                        INATION
-                      </>
-                    )}
-                  </h1>
-
-                  {/* Divider */}
-                  <div
-                    className="mt-6 mb-5 h-px"
-                    style={{ background: 'var(--border-strong)' }}
-                  />
-
-                  {/* Telemetry readout */}
-                  <div className="animate-rise-delay flex flex-col gap-1.5 font-mono text-[9px] uppercase tracking-[0.15em] text-muted">
-                    {isCreate ? (
-                      <>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: 'var(--brand)' }}>›</span>
-                          <span>MODEL: NANO BANANA</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: 'var(--brand)' }}>›</span>
-                          <span>REFERENCE PHOTO: SUPPORTED</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: 'var(--brand)' }}>›</span>
-                          <span>OUTPUT: CLEAN GENERATION</span>
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: 'var(--brand)' }}>›</span>
-                          <span>ENGINE: INSTANT + CLOUD</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: 'var(--brand)' }}>›</span>
-                          <span>MODEL: GEMINI SPARKLE DETECTOR</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span style={{ color: 'var(--brand)' }}>›</span>
-                          <span>ACCESS: FREE — NO ACCOUNT NEEDED</span>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </div>
-
-                {/* Bottom: feature list */}
-                <ul
-                  className="animate-rise-delay-2 flex flex-col gap-1.5 pt-5"
-                  style={{ borderTop: '1px solid var(--border)' }}
+                <h1
+                  className="animate-rise font-display font-medium text-foreground"
+                  style={{ fontSize: "clamp(2.5rem, 5vw, 4.25rem)" }}
                 >
                   {isCreate ? (
                     <>
-                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span
-                          className="h-px w-5 shrink-0"
-                          style={{ background: 'var(--border-strong)' }}
-                        />
-                        No Gemini sparkle
-                      </li>
-                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span
-                          className="h-px w-5 shrink-0"
-                          style={{ background: 'var(--border-strong)' }}
-                        />
-                        Attach a reference photo
-                      </li>
-                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span
-                          className="h-px w-5 shrink-0"
-                          style={{ background: 'var(--border-strong)' }}
-                        />
-                        Multiple models
-                      </li>
+                      Generate images{" "}
+                      <em className="not-italic text-muted">without</em> the
+                      sparkle
                     </>
                   ) : (
                     <>
-                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span
-                          className="h-px w-5 shrink-0"
-                          style={{ background: 'var(--brand)' }}
-                        />
-                        Free Instant for images
-                      </li>
-                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span
-                          className="h-px w-5 shrink-0"
-                          style={{ background: 'var(--border-strong)' }}
-                        />
-                        No account required
-                      </li>
-                      <li className="flex items-center gap-3 font-mono text-[9px] uppercase tracking-[0.12em] text-muted">
-                        <span
-                          className="h-px w-5 shrink-0"
-                          style={{ background: 'var(--border-strong)' }}
-                        />
-                        Original quality download
-                      </li>
+                      Remove the Gemini watermark,{" "}
+                      <em className="not-italic text-muted">in seconds</em>
                     </>
                   )}
+                </h1>
+
+                <p className="animate-rise-delay max-w-md text-base leading-relaxed text-muted">
+                  {isCreate
+                    ? "Prompt Nano Banana and get a clean generation — attach a reference photo, choose a model, no sparkle to remove afterward."
+                    : "Instant runs free in your browser — the file never leaves your device. Cloud handles video, Library, and the extension."}
+                </p>
+
+                <ul className="animate-rise-delay-2 flex flex-col gap-3">
+                  {(isCreate
+                    ? [
+                        "No Gemini sparkle",
+                        "Attach a reference photo",
+                        "Multiple models",
+                      ]
+                    : [
+                        "Free Instant for images",
+                        "No account required",
+                        "Original quality download",
+                      ]
+                  ).map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-center gap-2.5 text-sm text-foreground"
+                    >
+                      <Check size={16} weight="bold" className="shrink-0 text-muted" />
+                      {item}
+                    </li>
+                  ))}
                 </ul>
               </div>
 
