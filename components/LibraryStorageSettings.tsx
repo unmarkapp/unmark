@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import {
   connectGoogleDrive,
   disconnectGoogleDrive,
@@ -11,7 +12,19 @@ import {
   type StorageStatus,
 } from "@/lib/storage";
 
-export default function LibraryStorageSettings() {
+type Props = {
+  unlocked?: boolean;
+  paymentsEnabled?: boolean;
+  onUnlock?: () => void;
+  unlocking?: boolean;
+};
+
+export default function LibraryStorageSettings({
+  unlocked = false,
+  paymentsEnabled = false,
+  onUnlock,
+  unlocking = false,
+}: Props) {
   const [status, setStatus] = useState<StorageStatus | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
@@ -36,7 +49,14 @@ export default function LibraryStorageSettings() {
     void refresh();
   }, [refresh]);
 
+  const cloudUnlocked =
+    unlocked || status?.cloud_storage_unlocked === true;
+
   const handleProviderChange = async (provider: StorageProvider) => {
+    if (provider === "google_drive" && !cloudUnlocked) {
+      setError("Unlock Cloud Storage to use Google Drive.");
+      return;
+    }
     setBusy("provider");
     setError(null);
     setMessage(null);
@@ -60,6 +80,10 @@ export default function LibraryStorageSettings() {
   };
 
   const handleConnect = async () => {
+    if (!cloudUnlocked) {
+      setError("Unlock Cloud Storage to connect Google Drive.");
+      return;
+    }
     setBusy("connect");
     setError(null);
     try {
@@ -98,11 +122,39 @@ export default function LibraryStorageSettings() {
         Library storage
       </h2>
       <p className="mt-2 text-sm text-muted">
-        Your 50 Library slots can save cleanups to Unmark Cloud or your own
-        Google Drive folder. Choosing Drive syncs existing Cloud cleanups and
-        sends new ones to{" "}
+        Your Library slots save to Unmark Cloud by default. Unlock Cloud Storage
+        to connect Google Drive and sync cleanups to{" "}
         <span className="font-medium text-foreground">Unmark/Cleanups</span>.
       </p>
+
+      {!cloudUnlocked && (
+        <div className="mt-4 rounded-[var(--radius-md)] border border-border bg-cream px-4 py-4">
+          <p className="text-sm font-medium text-foreground">
+            Cloud Storage is locked
+          </p>
+          <p className="mt-1 text-sm text-muted">
+            One-time unlock to connect Google Drive and choose where new Library
+            saves go.
+          </p>
+          {paymentsEnabled && onUnlock ? (
+            <button
+              type="button"
+              disabled={unlocking || busy !== null}
+              onClick={onUnlock}
+              className="mt-3 rounded-[var(--radius-md)] bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover disabled:opacity-60"
+            >
+              {unlocking ? "Opening…" : "Unlock Cloud Storage"}
+            </button>
+          ) : (
+            <p className="mt-3 text-sm text-muted">
+              <Link href="/account" className="font-medium text-brand hover:underline">
+                Buy Unlock Cloud Storage
+              </Link>{" "}
+              when payments are available.
+            </p>
+          )}
+        </div>
+      )}
 
       {loading ? (
         <p className="mt-4 text-sm text-muted">Loading storage settings…</p>
@@ -118,18 +170,26 @@ export default function LibraryStorageSettings() {
           <StorageOption
             name="Google Drive"
             hint={
-              google?.connected
-                ? `Folder: ${google.folder_name || "Unmark/Cleanups"}`
-                : google?.available
-                  ? "Connect to save cleanups in your Drive"
-                  : "Not configured on this server"
+              !cloudUnlocked
+                ? "Unlock Cloud Storage to enable"
+                : google?.connected
+                  ? `Folder: ${google.folder_name || "Unmark/Cleanups"}`
+                  : google?.available
+                    ? "Connect to save cleanups in your Drive"
+                    : "Not configured on this server"
             }
             selected={current === "google_drive"}
-            disabled={busy !== null || !google?.available || !google.connected}
+            disabled={
+              busy !== null ||
+              !cloudUnlocked ||
+              !google?.available ||
+              !google.connected
+            }
+            locked={!cloudUnlocked}
             onSelect={() => void handleProviderChange("google_drive")}
           />
 
-          {google?.available && (
+          {cloudUnlocked && google?.available && (
             <div className="flex flex-wrap gap-3 pt-2">
               {google.connected ? (
                 <button
@@ -166,16 +226,22 @@ function StorageOption({
   hint,
   selected,
   disabled,
+  locked,
   onSelect,
 }: {
   name: string;
   hint: string;
   selected: boolean;
   disabled: boolean;
+  locked?: boolean;
   onSelect: () => void;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-4 has-[:checked]:border-brand">
+    <label
+      className={`flex items-start gap-3 rounded-[var(--radius-md)] border border-border bg-surface px-4 py-4 has-[:checked]:border-brand ${
+        disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer"
+      } ${locked ? "opacity-60" : ""}`}
+    >
       <input
         type="radio"
         name="library-storage"
@@ -185,7 +251,10 @@ function StorageOption({
         className="mt-1"
       />
       <span>
-        <span className="block text-sm font-medium text-foreground">{name}</span>
+        <span className="block text-sm font-medium text-foreground">
+          {name}
+          {locked ? " · Locked" : ""}
+        </span>
         <span className="mt-1 block text-xs text-muted">{hint}</span>
       </span>
     </label>

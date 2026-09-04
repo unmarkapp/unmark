@@ -242,8 +242,13 @@ export default function AccountView() {
   const dailyFreeCredits = account?.daily_free_credits ?? 5;
   const libraryLimit = account?.library_limit ?? 50;
   const extraLibrarySlots = account?.extra_library_slots ?? 0;
-  const creditPacks = packs.filter((pack) => (pack.library_slots || 0) === 0);
+  const creditPacks = packs.filter(
+    (pack) =>
+      (pack.library_slots || 0) === 0 && !pack.unlock_cloud_storage,
+  );
   const libraryPacks = packs.filter((pack) => (pack.library_slots || 0) > 0);
+  const cloudStoragePack = packs.find((pack) => pack.unlock_cloud_storage);
+  const cloudStorageUnlocked = account?.cloud_storage_unlocked === true;
   const emailNotifications = user.email_notifications !== false;
 
   const handleNotificationPreference = async (enabled: boolean) => {
@@ -572,7 +577,16 @@ export default function AccountView() {
 
             <EarnCreditsCard account={account} onRefresh={refreshBilling} />
 
-            <LibraryStorageSettings />
+            <LibraryStorageSettings
+              unlocked={cloudStorageUnlocked}
+              paymentsEnabled={paymentsEnabled}
+              unlocking={buyingCode === "cloud_storage"}
+              onUnlock={
+                cloudStoragePack
+                  ? () => void handleBuy(cloudStoragePack.code)
+                  : undefined
+              }
+            />
 
             {!paymentsEnabled && (
               <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">
@@ -632,9 +646,24 @@ export default function AccountView() {
               </p>
 
               <div className="mt-5 space-y-3">
+                {cloudStoragePack && !cloudStorageUnlocked && (
+                  <PackOption
+                    pack={cloudStoragePack}
+                    busy={buyingCode === cloudStoragePack.code}
+                    disabled={buyingCode !== null}
+                    onBuy={() => void handleBuy(cloudStoragePack.code)}
+                    subtitle="One-time · unlock Google Drive for Library saves"
+                  />
+                )}
+                {cloudStorageUnlocked && (
+                  <p className="text-sm text-success">
+                    Cloud Storage unlocked — Google Drive is available above.
+                  </p>
+                )}
                 {billingLoading && libraryPacks.length === 0 ? (
                   <p className="text-sm text-muted">Loading packs…</p>
-                ) : libraryPacks.length === 0 ? (
+                ) : libraryPacks.length === 0 &&
+                  (cloudStorageUnlocked || !cloudStoragePack) ? (
                   <p className="text-sm text-muted">
                     No storage packs available yet.
                   </p>
@@ -725,13 +754,18 @@ function PackOption({
   onBuy,
   busy,
   disabled,
+  subtitle,
 }: {
   pack: CreditPack;
   onBuy: () => void;
   busy: boolean;
   disabled: boolean;
+  subtitle?: string;
 }) {
   const parts: string[] = [];
+  if (pack.unlock_cloud_storage) {
+    parts.push("Google Drive destination");
+  }
   if ((pack.library_slots || 0) > 0) {
     parts.push(`+${pack.library_slots} Library slots`);
   }
@@ -745,7 +779,7 @@ function PackOption({
       <div>
         <div className="font-semibold text-foreground">{pack.name}</div>
         <div className="mt-0.5 text-sm text-muted">
-          {parts.join(" · ") || "Pack"}
+          {subtitle || parts.join(" · ") || "Pack"}
         </div>
       </div>
       <div className="flex items-center gap-3">
@@ -758,7 +792,7 @@ function PackOption({
           disabled={disabled}
           className="rounded-[var(--radius-md)] bg-brand px-4 py-2 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {busy ? "Opening…" : "Buy"}
+          {busy ? "Opening…" : pack.unlock_cloud_storage ? "Unlock" : "Buy"}
         </button>
       </div>
     </div>

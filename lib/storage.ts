@@ -7,10 +7,12 @@ export interface StorageProviderInfo {
   available: boolean;
   connected: boolean;
   folder_name?: string;
+  locked?: boolean;
 }
 
 export interface StorageStatus {
   configured: boolean;
+  cloud_storage_unlocked?: boolean;
   default_provider: StorageProvider;
   providers: {
     unmark: StorageProviderInfo;
@@ -39,7 +41,12 @@ export async function connectGoogleDrive(): Promise<void> {
     },
   );
   if (!response.ok) {
-    throw new Error("Could not start Google Drive connect");
+    const body = await response.json().catch(() => ({}));
+    const message =
+      typeof body.detail === "string"
+        ? body.detail
+        : "Could not start Google Drive connect";
+    throw new Error(message);
   }
   const data = (await response.json()) as { authorize_url?: string };
   if (!data.authorize_url) {
@@ -78,7 +85,7 @@ export async function setDefaultStorageProvider(
     const message =
       typeof body.detail === "string"
         ? body.detail
-        : "Could not update storage preference";
+        : "Could not update storage";
     throw new Error(message);
   }
 }
@@ -87,6 +94,7 @@ export function storageProviderLabel(provider: StorageProvider): string {
   switch (provider) {
     case "google_drive":
       return "Google Drive";
+    case "unmark":
     default:
       return "Unmark Cloud";
   }

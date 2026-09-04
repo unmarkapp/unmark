@@ -22,6 +22,7 @@ export interface BillingAccount {
   extra_library_slots?: number;
   paid_fast_credits?: number;
   create_credits?: number;
+  cloud_storage_unlocked?: boolean;
 }
 
 export interface CreditPack {
@@ -30,6 +31,7 @@ export interface CreditPack {
   fast_credits: number;
   high_credits: number;
   library_slots?: number;
+  unlock_cloud_storage?: boolean;
   amount_cents: number;
   currency: string;
 }
