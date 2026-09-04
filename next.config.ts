@@ -16,7 +16,7 @@ const ContentSecurityPolicy = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
   // Next.js, analytics, Razorpay
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://www.googletagmanager.com https://www.google-analytics.com https:",
-  "connect-src 'self' https://api.unmark.ink https://auth.unmark.ink https://billing.unmark.ink https://*.amazonaws.com https://checkout.razorpay.com https://api.razorpay.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com wss: https:",
+  "connect-src 'self' blob: https://api.unmark.ink https://auth.unmark.ink https://billing.unmark.ink https://*.amazonaws.com https://checkout.razorpay.com https://api.razorpay.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://*.googletagmanager.com wss: https:",
   "frame-src 'self' https://api.razorpay.com https://checkout.razorpay.com https:",
   "worker-src 'self' blob:",
   "upgrade-insecure-requests",
