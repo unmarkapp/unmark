@@ -27,32 +27,20 @@ export default function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-background" style={{ borderTop: '2px solid var(--border-strong)' }}>
-      {/* Footer identifier bar */}
-      <div className="border-b" style={{ borderColor: 'var(--border)' }}>
-        <div className="mx-auto flex w-full max-w-7xl items-center gap-3 px-4 py-2 sm:px-6 xl:px-8">
-          <span className="font-mono text-[8px] font-bold uppercase tracking-[0.3em] text-brand">// UNMARK SYSTEM</span>
-          <span className="font-mono text-[8px]" style={{ color: 'var(--border-strong)' }}>///</span>
-          <span className="font-mono text-[8px] uppercase tracking-[0.2em] text-muted">WATERMARK REMOVAL ENGINE</span>
-        </div>
-      </div>
-
+    <footer className="border-t border-border bg-background">
       {/* Main grid */}
-      <div
-        className="mx-auto grid w-full max-w-7xl grid-cols-1 sm:grid-cols-[1fr_auto_auto_auto]"
-        style={{ borderBottom: '1px solid var(--border)' }}
-      >
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 px-4 py-16 sm:grid-cols-[1.2fr_1fr_1fr_1fr] sm:px-6 sm:py-20 xl:px-8">
         {/* Brand block */}
-        <div className="border-b p-6 sm:border-b-0 sm:border-r sm:p-8" style={{ borderColor: 'var(--border)' }}>
-          <Link href="/" className="flex items-center gap-2 mb-5">
-            <BrandLogo size={18} />
-            <span className="font-mono text-[9px] font-bold uppercase tracking-[0.3em] text-foreground">
-              UNMARK<sup className="text-brand" style={{ fontSize: '0.65em', verticalAlign: 'super' }}>®</sup>
+        <div>
+          <Link href="/" className="mb-4 flex items-center gap-2">
+            <BrandLogo size={20} />
+            <span className="text-[15px] font-semibold tracking-tight text-foreground">
+              Unmark
             </span>
           </Link>
-          <p className="font-mono text-[9px] leading-relaxed uppercase tracking-wide text-muted max-w-[22ch]">
-            Remove Gemini watermarks from images and video. Free Instant in your
-            browser; Cloud for Library and the extension.
+          <p className="max-w-[30ch] text-sm leading-relaxed text-muted">
+            Remove Gemini watermarks from images and video. Free Instant in
+            your browser; Cloud for Library and the extension.
           </p>
           <div className="mt-5">
             <ProductHuntBadge />
@@ -60,23 +48,23 @@ export default function SiteFooter() {
         </div>
 
         {/* Guides */}
-        <div className="border-b p-6 sm:border-b-0 sm:border-r sm:p-8" style={{ borderColor: 'var(--border)' }}>
-          <p className="font-mono text-[7px] font-bold uppercase tracking-[0.35em] text-brand mb-4">
-            // GUIDES
+        <div>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted">
+            Guides
           </p>
-          <nav className="flex flex-col gap-2.5">
+          <nav className="flex flex-col gap-3">
             {GUIDE_LINKS.map((guide) => (
               <Link
                 key={guide.href}
                 href={guide.href}
-                className="font-mono text-[9px] uppercase tracking-wide text-muted transition-colors hover:text-foreground"
+                className="text-sm text-muted transition hover:text-foreground"
               >
                 {guide.title}
               </Link>
             ))}
             <Link
               href="/guides"
-              className="font-mono text-[9px] uppercase tracking-wide text-muted transition-colors hover:text-foreground"
+              className="text-sm text-muted transition hover:text-foreground"
             >
               All guides
             </Link>
@@ -84,16 +72,16 @@ export default function SiteFooter() {
         </div>
 
         {/* Product */}
-        <div className="border-b p-6 sm:border-b-0 sm:border-r sm:p-8" style={{ borderColor: 'var(--border)' }}>
-          <p className="font-mono text-[7px] font-bold uppercase tracking-[0.35em] text-brand mb-4">
-            // PRODUCT
+        <div>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted">
+            Product
           </p>
-          <nav className="flex flex-col gap-2.5">
+          <nav className="flex flex-col gap-3">
             {PRODUCT_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-mono text-[9px] uppercase tracking-wide text-muted transition-colors hover:text-foreground"
+                className="text-sm text-muted transition hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -102,16 +90,16 @@ export default function SiteFooter() {
         </div>
 
         {/* Account */}
-        <div className="p-6 sm:p-8">
-          <p className="font-mono text-[7px] font-bold uppercase tracking-[0.35em] text-brand mb-4">
-            // ACCOUNT
+        <div>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-wide text-muted">
+            Account
           </p>
-          <nav className="flex flex-col gap-2.5">
+          <nav className="flex flex-col gap-3">
             {ACCOUNT_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-mono text-[9px] uppercase tracking-wide text-muted transition-colors hover:text-foreground"
+                className="text-sm text-muted transition hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -121,22 +109,13 @@ export default function SiteFooter() {
       </div>
 
       {/* Bottom bar */}
-      <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-3 sm:px-6 xl:px-8">
-        <div className="flex items-center gap-4">
-          <p className="font-mono text-[8px] uppercase tracking-[0.2em] text-muted">
-            © {year} UNMARK
-          </p>
-          <span className="font-mono text-[8px]" style={{ color: 'var(--border-strong)' }}>///</span>
-          <p className="hidden font-mono text-[8px] uppercase tracking-[0.2em] text-muted sm:block">
-            UNIT/WEB-01
-          </p>
+      <div className="border-t border-border">
+        <div className="mx-auto flex w-full max-w-7xl items-center justify-between px-4 py-5 text-xs text-muted sm:px-6 xl:px-8">
+          <p>© {year} Unmark</p>
+          <Link href="/delete-account" className="transition hover:text-foreground">
+            Delete account
+          </Link>
         </div>
-        <Link
-          href="/delete-account"
-          className="font-mono text-[8px] uppercase tracking-[0.18em] text-muted transition-colors hover:text-brand"
-        >
-          [ DELETE ACCOUNT ]
-        </Link>
       </div>
     </footer>
   );

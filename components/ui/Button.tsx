@@ -13,10 +13,8 @@ const sizes: Record<ButtonSize, string> = {
 };
 
 const variants: Record<ButtonVariant, string> = {
-  primary:
-    "bg-brand text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.35)] hover:bg-brand-hover hover:-translate-y-px active:translate-y-0 active:scale-[0.98]",
-  secondary:
-    "bg-cobalt text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.08)] hover:brightness-110 active:scale-[0.98]",
+  primary: "bg-brand text-white hover:bg-brand-hover active:scale-[0.98]",
+  secondary: "bg-cobalt text-white hover:brightness-110 active:scale-[0.98]",
   ghost:
     "border border-border bg-transparent text-foreground hover:bg-sand active:scale-[0.98]",
 };

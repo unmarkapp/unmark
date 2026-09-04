@@ -21,7 +21,7 @@ export function panelClasses(
   raised = false,
   className = "",
 ) {
-  return `border border-border ${raised ? "bg-surface-raised" : "bg-surface"} ${radii[radius]} shadow-[0_1px_2px_rgb(var(--shadow-color)/0.04),0_8px_24px_-8px_rgb(var(--shadow-color)/0.12)] ${paddings[padding]} ${className}`.trim();
+  return `border border-border ${raised ? "bg-surface-raised" : "bg-surface"} ${radii[radius]} shadow-[0_1px_2px_rgb(var(--shadow-color)/0.03)] transition-shadow duration-200 hover:shadow-[0_2px_8px_rgb(var(--shadow-color)/0.04)] ${paddings[padding]} ${className}`.trim();
 }
 
 export interface PanelProps extends HTMLAttributes<HTMLDivElement> {

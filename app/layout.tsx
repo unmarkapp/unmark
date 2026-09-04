@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Figtree, Geist_Mono, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Newsreader } from "next/font/google";
 import Script from "next/script";
 import { AuthProvider } from "@/lib/auth";
 import { CreditsProvider } from "@/lib/credits";
@@ -22,8 +22,8 @@ import PwaRegister from "@/components/PwaRegister";
 import { GA_MEASUREMENT_ID } from "@/lib/analytics";
 import "./globals.css";
 
-const figtree = Figtree({
-  variable: "--font-figtree",
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
@@ -32,10 +32,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const newsreader = Newsreader({
+  variable: "--font-newsreader",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -132,7 +133,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${figtree.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${newsreader.variable} h-full antialiased`}
     >
       <head>
         <link rel="preconnect" href="https://auth.unmark.ink" />
