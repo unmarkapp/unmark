@@ -102,6 +102,12 @@ export default function Home() {
   const [bulkZipping, setBulkZipping] = useState(false);
   const [bulkError, setBulkError] = useState<string | null>(null);
 
+  // A cleaned image handed to Create via "Edit in Create". Passed as a prop
+  // (not a window event) because the click that produces it also unmounts
+  // ReadyToCleanCard and mounts LandingUpload in the same render — an event
+  // dispatched before that swap has no listener yet to catch it.
+  const [pendingCreateFile, setPendingCreateFile] = useState<File | null>(null);
+
   const [file, setFile] = useState<File | null>(null);
   const [mediaKind, setMediaKind] = useState<"image" | "video">("image");
   const [imageUrl, setImageUrl] = useState<string | null>(null);
@@ -903,7 +909,7 @@ export default function Home() {
         blob = await res.blob();
       }
       const file = new File([blob], "cleaned.png", { type: "image/png" });
-      window.dispatchEvent(new CustomEvent("unmark:use-in-create", { detail: file }));
+      setPendingCreateFile(file);
       resetImage();
     } catch {
       // silently fail
@@ -994,6 +1000,8 @@ export default function Home() {
         onFileChange={handleFileChange}
         onTrySample={() => void handleTrySample()}
         sampleBusy={sampleBusy}
+        pendingCreateFile={pendingCreateFile}
+        onPendingCreateFileConsumed={() => setPendingCreateFile(null)}
       />
     );
   }

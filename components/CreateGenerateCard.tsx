@@ -15,6 +15,39 @@ import {
 
 const MAX_POLL = 120;
 
+/** Closest GENERATE_ASPECTS preset to an image's actual pixel dimensions. */
+function closestAspect(width: number, height: number): (typeof GENERATE_ASPECTS)[number] {
+  const ratio = width / height;
+  let best: (typeof GENERATE_ASPECTS)[number] = GENERATE_ASPECTS[0];
+  let bestDiff = Infinity;
+  for (const preset of GENERATE_ASPECTS) {
+    const [w, h] = preset.split(":").map(Number);
+    const diff = Math.abs(ratio - w / h);
+    if (diff < bestDiff) {
+      bestDiff = diff;
+      best = preset;
+    }
+  }
+  return best;
+}
+
+/** Read an image File's natural pixel dimensions via a throwaway <img>. */
+function readImageDimensions(file: File): Promise<{ width: number; height: number }> {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve({ width: img.naturalWidth, height: img.naturalHeight });
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Failed to read image dimensions"));
+    };
+    img.src = url;
+  });
+}
+
 interface CreateGenerateCardProps {
   initialAttachment?: File | null;
   onAttachmentConsumed?: () => void;
@@ -50,6 +83,11 @@ export default function CreateGenerateCard({
       if (prev) URL.revokeObjectURL(prev);
       return url;
     });
+    void readImageDimensions(file)
+      .then(({ width, height }) => setSelectedAspect(closestAspect(width, height)))
+      .catch(() => {
+        // Keep the current aspect selection if dimensions can't be read.
+      });
   };
 
   const clearAttachment = () => {
@@ -68,6 +106,11 @@ export default function CreateGenerateCard({
       if (prev) URL.revokeObjectURL(prev);
       return url;
     });
+    void readImageDimensions(initialAttachment)
+      .then(({ width, height }) => setSelectedAspect(closestAspect(width, height)))
+      .catch(() => {
+        // Keep the default aspect selection if dimensions can't be read.
+      });
     onAttachmentConsumed?.();
   }, [initialAttachment, onAttachmentConsumed]);
 

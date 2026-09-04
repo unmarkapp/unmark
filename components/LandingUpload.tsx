@@ -12,6 +12,9 @@ interface LandingUploadProps {
   onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
   onTrySample: () => void;
   sampleBusy?: boolean;
+  /** A cleaned image handed over from "Edit in Create", if any. */
+  pendingCreateFile?: File | null;
+  onPendingCreateFileConsumed?: () => void;
 }
 
 type HomeMode = "clean" | "create";
@@ -40,11 +43,12 @@ export default function LandingUpload({
   onFileChange,
   onTrySample,
   sampleBusy = false,
+  pendingCreateFile = null,
+  onPendingCreateFileConsumed,
 }: LandingUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const { isDragging } = useDropToClean();
-  const [mode, setMode] = useState<HomeMode>("clean");
-  const [pendingCreateFile, setPendingCreateFile] = useState<File | null>(null);
+  const [mode, setMode] = useState<HomeMode>(pendingCreateFile ? "create" : "clean");
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -55,17 +59,10 @@ export default function LandingUpload({
     return () => window.removeEventListener("unmark:set-mode", handler);
   }, []);
 
+  // Defensive: keep mode in sync if a pending file arrives after mount.
   useEffect(() => {
-    const handler = (e: Event) => {
-      const file = (e as CustomEvent<File>).detail;
-      if (file instanceof File) {
-        setPendingCreateFile(file);
-        setMode("create");
-      }
-    };
-    window.addEventListener("unmark:use-in-create", handler);
-    return () => window.removeEventListener("unmark:use-in-create", handler);
-  }, []);
+    if (pendingCreateFile) setMode("create");
+  }, [pendingCreateFile]);
 
   return (
     <LandingShell mode={mode}>
@@ -102,7 +99,7 @@ export default function LandingUpload({
           </p>
           <CreateGenerateCard
             initialAttachment={pendingCreateFile}
-            onAttachmentConsumed={() => setPendingCreateFile(null)}
+            onAttachmentConsumed={onPendingCreateFileConsumed}
           />
         </>
       ) : (
