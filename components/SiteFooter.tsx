@@ -19,6 +19,7 @@ const ACCOUNT_LINKS = [
   { href: "/account", label: "Credits" },
   { href: "/about", label: "About" },
   { href: "/support", label: "Support" },
+  { href: "/status", label: "Status" },
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
 ];
