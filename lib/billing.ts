@@ -89,17 +89,20 @@ export async function getBalance(): Promise<BillingAccount> {
   return billingFetch<BillingAccount>("/v1/balance");
 }
 
-export async function listPacks(): Promise<{
+export async function listPacks(currency: "inr" | "usd" = "inr"): Promise<{
   packs: CreditPack[];
   paymentsEnabled: boolean;
+  paypalPaymentsEnabled: boolean;
 }> {
   const data = await billingFetch<{
     packs: CreditPack[];
     payments_enabled?: boolean;
-  }>("/v1/packs");
+    paypal_payments_enabled?: boolean;
+  }>(`/v1/packs?currency=${currency}`);
   return {
     packs: data.packs || [],
     paymentsEnabled: data.payments_enabled === true,
+    paypalPaymentsEnabled: data.paypal_payments_enabled === true,
   };
 }
 
@@ -175,6 +178,35 @@ export async function verifyPayment(payload: {
   return billingFetch("/v1/verify-payment", {
     method: "POST",
     body: JSON.stringify(payload),
+  });
+}
+
+/** Creates a PayPal order (USD) and returns the approval URL to redirect to. */
+export async function startPayPalCheckout(productCode: string): Promise<{
+  order_id: string;
+  approve_url: string;
+  amount: string;
+  currency: string;
+  client_id: string;
+  purchase: { id: string; status: string };
+}> {
+  return billingFetch("/v1/paypal/checkout", {
+    method: "POST",
+    body: JSON.stringify({
+      product_code: productCode,
+      idempotency_key: `web:paypal:${productCode}:${Date.now()}`,
+    }),
+  });
+}
+
+/** Captures a PayPal order the buyer approved, granting credits. */
+export async function capturePayPalOrder(paypalOrderId: string): Promise<{
+  purchase: { id: string; status: string; fast_credits: number };
+  account: BillingAccount;
+}> {
+  return billingFetch("/v1/paypal/capture", {
+    method: "POST",
+    body: JSON.stringify({ paypal_order_id: paypalOrderId }),
   });
 }
 
@@ -298,10 +330,13 @@ export async function openRazorpayCheckout(opts: {
 }
 
 export function formatCents(cents: number, currency = "inr"): string {
-  return new Intl.NumberFormat("en-IN", {
+  const isUSD = currency.toLowerCase() === "usd";
+  return new Intl.NumberFormat(isUSD ? "en-US" : "en-IN", {
     style: "currency",
     currency: currency.toUpperCase(),
-    maximumFractionDigits: 0,
+    // INR packs are always whole rupees; USD packs use real cents (e.g. $2.99).
+    minimumFractionDigits: isUSD ? 2 : 0,
+    maximumFractionDigits: isUSD ? 2 : 0,
   }).format(cents / 100);
 }
 

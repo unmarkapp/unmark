@@ -8,6 +8,7 @@ import { useCredits } from "@/lib/credits";
 import {
   formatCents,
   formatTransactionType,
+  capturePayPalOrder,
   confirmCheckout,
   getBalance,
   grantSignupCredits,
@@ -15,6 +16,7 @@ import {
   listTransactions,
   openRazorpayCheckout,
   startCheckout,
+  startPayPalCheckout,
   verifyPayment,
   type BillingAccount,
   type CreditPack,
@@ -35,6 +37,9 @@ export default function AccountView() {
   const [account, setAccount] = useState<BillingAccount | null>(null);
   const [packs, setPacks] = useState<CreditPack[]>([]);
   const [paymentsEnabled, setPaymentsEnabled] = useState(false);
+  const [paypalPaymentsEnabled, setPaypalPaymentsEnabled] = useState(false);
+  const [currency, setCurrency] = useState<"inr" | "usd">("inr");
+  const [geoResolved, setGeoResolved] = useState(false);
   const [transactions, setTransactions] = useState<CreditTransaction[]>([]);
   const [billingLoading, setBillingLoading] = useState(false);
   const [billingError, setBillingError] = useState<string | null>(null);
@@ -45,8 +50,11 @@ export default function AccountView() {
   const billingFetchInFlight = useRef(false);
   const signupCheckedForUser = useRef<string | null>(null);
   const billingDataLoaded = useRef(false);
+  const paypalCaptureAttempted = useRef(false);
   const refreshCreditsRef = useRef(refreshCredits);
   refreshCreditsRef.current = refreshCredits;
+  const currencyRef = useRef(currency);
+  currencyRef.current = currency;
 
   const refreshBilling = useCallback(async () => {
     if (billingFetchInFlight.current) {
@@ -69,12 +77,13 @@ export default function AccountView() {
       }
 
       const [packResult, txList] = await Promise.all([
-        listPacks(),
+        listPacks(currencyRef.current),
         listTransactions(),
       ]);
       setAccount(balance);
       setPacks(packResult.packs);
       setPaymentsEnabled(packResult.paymentsEnabled === true);
+      setPaypalPaymentsEnabled(packResult.paypalPaymentsEnabled === true);
       setTransactions(txList);
       void refreshCreditsRef.current();
     } catch (err) {
@@ -98,8 +107,28 @@ export default function AccountView() {
     signupCheckedForUser.current = null;
   }, [user?.id]);
 
+  // Soft default: India -> Razorpay/INR, elsewhere -> PayPal/USD. The buyer
+  // can always switch manually via the currency toggle below.
   useEffect(() => {
-    if (!user?.id) {
+    let cancelled = false;
+    fetch("/api/geo")
+      .then((res) => res.json())
+      .then((data: { currency?: "inr" | "usd" }) => {
+        if (!cancelled && data.currency) {
+          setCurrency(data.currency);
+        }
+      })
+      .catch(() => undefined)
+      .finally(() => {
+        if (!cancelled) setGeoResolved(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!user?.id || !geoResolved) {
       return;
     }
     if (tab !== "billing" && tab !== "history") {
@@ -110,7 +139,27 @@ export default function AccountView() {
     }
     billingDataLoaded.current = true;
     void refreshBilling();
-  }, [user?.id, tab, refreshBilling]);
+  }, [user?.id, tab, geoResolved, refreshBilling]);
+
+  // Re-fetch packs (in the newly selected currency) when the buyer manually
+  // toggles currency after the initial load.
+  useEffect(() => {
+    if (!billingDataLoaded.current) {
+      return;
+    }
+    void refreshBilling();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currency]);
+
+  // If geo-detection guessed a provider that isn't actually configured,
+  // fall back to whichever one is.
+  useEffect(() => {
+    if (currency === "inr" && !paymentsEnabled && paypalPaymentsEnabled) {
+      setCurrency("usd");
+    } else if (currency === "usd" && !paypalPaymentsEnabled && paymentsEnabled) {
+      setCurrency("inr");
+    }
+  }, [currency, paymentsEnabled, paypalPaymentsEnabled]);
 
   useEffect(() => {
     if (!user?.id || user.referral_code || referralRefreshAttempted.current) {
@@ -122,12 +171,42 @@ export default function AccountView() {
 
   useEffect(() => {
     const checkout = searchParams.get("checkout");
+    const provider = searchParams.get("provider");
     const sessionId =
       searchParams.get("session_id") ||
       searchParams.get("razorpay_payment_link_id");
+    // PayPal appends its own order id as `token` on return, regardless of
+    // what we put in return_url.
+    const paypalOrderId = searchParams.get("token");
     if (!checkout || !user) return;
 
-    if (checkout === "success") {
+    if (checkout === "success" && provider === "paypal") {
+      if (paypalCaptureAttempted.current) return;
+      paypalCaptureAttempted.current = true;
+      setTab("billing");
+      setPurchaseMessage("Payment approved. Adding credits to your balance…");
+      void (async () => {
+        try {
+          if (!paypalOrderId) throw new Error("Missing PayPal order id");
+          const result = await capturePayPalOrder(paypalOrderId);
+          if (result.account) {
+            setAccount(result.account);
+          }
+          setPurchaseMessage(
+            "Payment successful. Credits were added to your balance.",
+          );
+        } catch (err) {
+          setPurchaseMessage(null);
+          setBillingError(
+            err instanceof Error
+              ? err.message
+              : "Payment approved but capture failed. Refresh in a moment.",
+          );
+        }
+        await refreshBilling();
+        router.replace("/account");
+      })();
+    } else if (checkout === "success") {
       setTab("billing");
       setPurchaseMessage(
         "Payment received. Adding credits to your balance…",
@@ -164,7 +243,29 @@ export default function AccountView() {
     }
   }, [searchParams, user, refreshBilling, router]);
 
+  const handleBuyPayPal = async (code: string) => {
+    setBuyingCode(code);
+    setPurchaseMessage(null);
+    setBillingError(null);
+    try {
+      const result = await startPayPalCheckout(code);
+      if (!result.order_id || !result.approve_url) {
+        throw new Error("PayPal order was not created");
+      }
+      // Full-page redirect — PayPal returns the buyer to /account?checkout=…
+      window.location.href = result.approve_url;
+    } catch (err) {
+      setBillingError(
+        err instanceof Error ? err.message : "Could not start PayPal checkout",
+      );
+      setBuyingCode(null);
+    }
+  };
+
   const handleBuy = async (code: string) => {
+    if (currency === "usd") {
+      return handleBuyPayPal(code);
+    }
     setBuyingCode(code);
     setPurchaseMessage(null);
     setBillingError(null);
@@ -579,7 +680,7 @@ export default function AccountView() {
 
             <LibraryStorageSettings
               unlocked={cloudStorageUnlocked}
-              paymentsEnabled={paymentsEnabled}
+              paymentsEnabled={paymentsEnabled || paypalPaymentsEnabled}
               unlocking={buyingCode === "cloud_storage"}
               onUnlock={
                 cloudStoragePack
@@ -588,7 +689,7 @@ export default function AccountView() {
               }
             />
 
-            {!paymentsEnabled && (
+            {!paymentsEnabled && !paypalPaymentsEnabled && (
               <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface px-5 py-4 text-sm text-foreground sm:px-6">
                 <p className="font-medium">Unmark is free while we launch</p>
                 <p className="mt-1 text-muted">
@@ -600,17 +701,46 @@ export default function AccountView() {
               </div>
             )}
 
-            {paymentsEnabled && (
+            {(paymentsEnabled || paypalPaymentsEnabled) && (
               <>
             <div className="mt-6 rounded-[var(--radius-lg)] border border-border bg-surface p-5 sm:p-6">
-              <h2 className="text-base font-semibold text-foreground">
-                Buy more credits
-              </h2>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-base font-semibold text-foreground">
+                  Buy more credits
+                </h2>
+                {paymentsEnabled && paypalPaymentsEnabled && (
+                  <div className="inline-flex rounded-full border border-border bg-background p-0.5 text-xs font-semibold">
+                    <button
+                      type="button"
+                      onClick={() => setCurrency("inr")}
+                      className={`rounded-full px-3 py-1 transition ${
+                        currency === "inr"
+                          ? "bg-brand text-white"
+                          : "text-muted hover:text-foreground"
+                      }`}
+                    >
+                      ₹ India
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCurrency("usd")}
+                      className={`rounded-full px-3 py-1 transition ${
+                        currency === "usd"
+                          ? "bg-brand text-white"
+                          : "text-muted hover:text-foreground"
+                      }`}
+                    >
+                      $ International
+                    </button>
+                  </div>
+                )}
+              </div>
               <p className="mt-2 text-sm text-muted">
-                Secure checkout powered by Razorpay. Credits are added after
-                payment succeeds. One pack funds Clean and Create. Create is
-                pay-as-you-go — cheaper than Gemini Ultra, no app sparkle.
-                Daily free credits are for Clean only.{" "}
+                Secure checkout powered by{" "}
+                {currency === "usd" ? "PayPal" : "Razorpay"}. Credits are
+                added after payment succeeds. One pack funds Clean and
+                Create. Create is pay-as-you-go — cheaper than Gemini Ultra,
+                no app sparkle. Daily free credits are for Clean only.{" "}
                 <Link
                   href="/support"
                   className="font-medium text-brand hover:underline"
