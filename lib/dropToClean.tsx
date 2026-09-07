@@ -23,11 +23,8 @@ interface LaunchParams {
 interface DropToCleanContextValue {
   pendingId: number;
   consumePendingFiles: () => File[] | null;
-  pendingBgId: number;
-  consumePendingBgFile: () => File | null;
   incomingId: number;
   offerCleanFiles: (files: File[]) => void;
-  offerBgFile: (file: File) => void;
   isDragging: boolean;
 }
 
@@ -39,10 +36,8 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
   const [isDragging, setIsDragging] = useState(false);
   const [pendingId, setPendingId] = useState(0);
-  const [pendingBgId, setPendingBgId] = useState(0);
   const [incomingId, setIncomingId] = useState(0);
   const pendingFiles = useRef<File[] | null>(null);
-  const pendingBgFile = useRef<File | null>(null);
   const dragDepth = useRef(0);
   const pathnameRef = useRef(pathname);
   pathnameRef.current = pathname;
@@ -51,12 +46,6 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
     const files = pendingFiles.current;
     pendingFiles.current = null;
     return files && files.length > 0 ? files : null;
-  }, []);
-
-  const consumePendingBgFile = useCallback(() => {
-    const file = pendingBgFile.current;
-    pendingBgFile.current = null;
-    return file;
   }, []);
 
   const offerCleanFiles = useCallback(
@@ -70,17 +59,6 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
           behavior: "smooth",
           block: "start",
         });
-      }
-    },
-    [router],
-  );
-
-  const offerBgFile = useCallback(
-    (file: File) => {
-      pendingBgFile.current = file;
-      setPendingBgId((id) => id + 1);
-      if (pathnameRef.current !== "/tools/background-removal") {
-        router.push("/tools/background-removal");
       }
     },
     [router],
@@ -182,23 +160,11 @@ export function DropToCleanProvider({ children }: { children: ReactNode }) {
     () => ({
       pendingId,
       consumePendingFiles,
-      pendingBgId,
-      consumePendingBgFile,
       incomingId,
       offerCleanFiles,
-      offerBgFile,
       isDragging,
     }),
-    [
-      pendingId,
-      consumePendingFiles,
-      pendingBgId,
-      consumePendingBgFile,
-      incomingId,
-      offerCleanFiles,
-      offerBgFile,
-      isDragging,
-    ],
+    [pendingId, consumePendingFiles, incomingId, offerCleanFiles, isDragging],
   );
 
   return (

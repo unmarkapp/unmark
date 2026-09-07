@@ -24,7 +24,6 @@ export const SITEMAP_LASTMOD: Record<string, string> = {
   "/product": "2026-08-19",
   "/about": "2026-08-19",
   "/tools": "2026-08-19",
-  "/tools/background-removal": "2026-08-19",
   "/tools/create": "2026-08-11",
   "/guides": "2026-08-19",
   "/guides/remove-gemini-watermark": "2026-08-19",

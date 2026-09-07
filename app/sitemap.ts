@@ -33,7 +33,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry("/product", "weekly", 0.95),
     entry("/about", "monthly", 0.7),
     entry("/tools", "weekly", 0.9),
-    entry("/tools/background-removal", "weekly", 0.9),
     entry("/tools/create", "weekly", 0.7),
     entry("/guides", "monthly", 0.92),
     ...guideEntries,

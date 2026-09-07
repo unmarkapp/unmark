@@ -48,12 +48,8 @@ export default function ToolsLanding() {
             Which tool should I open?
           </h2>
           <p>
-            Use Instant above for a single Gemini sparkle still. Open{" "}
-            <Link href="/tools/background-removal" className="text-brand hover:underline">
-              background removal
-            </Link>{" "}
-            for a transparent PNG. Video lives on the homepage drop zone and the
-            Veo / Flow guides. The{" "}
+            Use Instant above for a single Gemini sparkle still. Video lives
+            on the homepage drop zone and the Veo / Flow guides. The{" "}
             <Link
               href="/guides/free-gemini-watermark-remover"
               className="text-brand hover:underline"

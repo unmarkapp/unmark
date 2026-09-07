@@ -24,7 +24,7 @@ export default function ShareTargetView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const needPwa = searchParams.get("need_pwa") === "1";
-  const { incomingId, offerCleanFiles, offerBgFile } = useDropToClean();
+  const { incomingId, offerCleanFiles } = useDropToClean();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [files, setFiles] = useState<File[]>([]);
@@ -95,14 +95,6 @@ export default function ShareTargetView() {
     router.push("/#upload");
   };
 
-  const chooseBgRemove = async () => {
-    const image = files.find(isImageFile);
-    if (!image) return;
-    await clearIncomingShare();
-    offerBgFile(image);
-    router.push("/tools/background-removal");
-  };
-
   const installApp = async () => {
     const prompt = deferredPrompt.current;
     if (!prompt) return;
@@ -118,7 +110,6 @@ export default function ShareTargetView() {
   };
 
   const hasVideo = files.some(isVideoFile);
-  const hasImage = files.some(isImageFile);
 
   return (
     <div className="surface-grain min-h-screen text-foreground">
@@ -130,10 +121,10 @@ export default function ShareTargetView() {
             Open with Unmark
           </p>
           <h1 className="font-display mt-3 text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
-            What should we do?
+            Ready to clean?
           </h1>
           <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-base">
-            Share a photo from any app, then pick Clean or background remove.
+            Share a photo or video from any app, then remove the sparkle.
           </p>
         </section>
 
@@ -199,31 +190,16 @@ export default function ShareTargetView() {
                   : `${files.length} files ready`}
               </p>
 
-              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              <div className="mt-6">
                 <button
                   type="button"
                   onClick={() => void chooseClean()}
-                  className="rounded-[var(--radius-lg)] border border-border bg-cobalt px-4 py-4 text-left text-white transition hover:brightness-110"
+                  className="w-full rounded-[var(--radius-lg)] border border-border bg-cobalt px-4 py-4 text-left text-white transition hover:brightness-110"
                 >
                   <span className="block text-sm font-semibold">Clean</span>
                   <span className="mt-1 block text-xs text-white/80">
                     Remove the Gemini sparkle
                     {hasVideo ? " from this video" : ""}
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => void chooseBgRemove()}
-                  disabled={!hasImage}
-                  className="rounded-[var(--radius-lg)] border border-border bg-surface px-4 py-4 text-left transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <span className="block text-sm font-semibold text-foreground">
-                    Remove background
-                  </span>
-                  <span className="mt-1 block text-xs text-muted">
-                    {hasImage
-                      ? "Transparent PNG cutout"
-                      : "Images only — not available for video"}
                   </span>
                 </button>
               </div>

@@ -8,7 +8,6 @@ const PRODUCT_LINKS = [
   { href: "/product", label: "Product" },
   { href: "/extension", label: "Chrome extension" },
   { href: "/tools", label: "Tools" },
-  { href: "/tools/background-removal", label: "Background removal" },
   { href: "/android", label: "Android early access" },
   { href: "/guides/mcp-server", label: "MCP server" },
   { href: "/skills", label: "Agent skill" },

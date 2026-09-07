@@ -87,7 +87,7 @@ const nextConfig: NextConfig = {
       ];
     }
 
-    // Local dev defaults (/bg-remove proxied via app/bg-remove route handler)
+    // Local dev defaults
     return [
       {
         source: "/backend/:path*",

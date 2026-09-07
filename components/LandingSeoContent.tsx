@@ -22,23 +22,15 @@ export default function LandingSeoContent() {
     >
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="font-display text-3xl font-semibold tracking-[-0.02em] text-foreground sm:text-4xl">
-          Image, video &amp; background tools
+          Image &amp; video tools
         </h2>
         <p className="mt-4 text-base leading-relaxed text-muted sm:text-lg">
           Unmark removes the visible four-point sparkle Google adds to AI images
-          and video, and can cut out subjects for transparent PNGs. Instant is a
-          free{" "}
+          and video. Instant is a free{" "}
           <strong className="font-semibold text-foreground">
             Gemini watermark remover online
           </strong>{" "}
-          for stills. Cloud handles Veo clips, Library, and{" "}
-          <Link
-            href="/tools/background-removal"
-            className="font-medium text-brand underline-offset-2 hover:underline"
-          >
-            background removal
-          </Link>
-          .
+          for stills. Cloud handles Veo clips and Library.
         </p>
       </div>
 

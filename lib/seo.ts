@@ -66,7 +66,7 @@ export const SITE_TITLE_DEFAULT =
   "Unmark — Gemini Watermark Remover, Video & Background Cutout";
 
 export const SITE_TAGLINE =
-  "Unmark cleans AI media: remove Gemini sparkles from images and videos, or cut out the subject. Free Instant image cleanup in your browser — Cloud for video, Library, bulk, background removal, and the Chrome extension.";
+  "Unmark cleans AI media: remove Gemini sparkles from images and videos. Free Instant image cleanup in your browser — Cloud for video, Library, bulk, and the Chrome extension.";
 
 export const SITE_ONE_LINER =
   "Unmark cleans AI media — remove Gemini sparkles from images and videos, or cut out the subject.";
@@ -94,10 +94,6 @@ export const SITE_KEYWORDS = [
   "nano banana watermark remover",
   "ai watermark remover gemini",
   "clean gemini images",
-  "ai background remover",
-  "background removal",
-  "remove background from image",
-  "transparent png cutout",
   "unmark",
 ];
 
@@ -119,15 +115,6 @@ export const PRODUCT_TOOLS = [
       "Clean Veo and Google Flow clips with Cloud. Short videos, saved to your Library.",
     href: "/#upload",
     cta: "Upload a video",
-    badge: "Cloud",
-  },
-  {
-    id: "background",
-    title: "Background remove",
-    description:
-      "Cut out the subject and download a transparent PNG — portraits, products, and AI stills.",
-    href: "/tools/background-removal",
-    cta: "Open cutout tool",
     badge: "Cloud",
   },
   {
@@ -162,11 +149,6 @@ export const FAQ_ITEMS = [
       "Export the original MP4, MOV, or WebM from Gemini, Veo, or Google Flow — not a screen recording or a chat-app recompress. Drop the clip on Unmark (the homepage or a video guide). Cloud finds the sparkle on every frame and saves the clean file to Library. Sign in only if Unmark asks so the job can be stored. You can close the tab; turn on email notify if you want a ping when it is ready. New accounts include credits to try a short clip. Limits are listed on the upload card (short videos, up to 1080p, within the file-size cap).",
   },
   {
-    question: "Can Unmark remove image backgrounds?",
-    answer:
-      "Yes. Open Background removal under Tools, drop a PNG, JPG, or WebP, and download a transparent cutout for portraits, products, and AI stills. Sign in when Unmark asks so the PNG can save to Library. If the still still shows a Gemini sparkle, clean it with Instant or Cloud first, then cut out the cleaned file so the logo is not left on the subject. Hair, glasses, and product edges are the usual stress tests — preview the checkerboard before you download. Unmark does not relight the subject or invent a new backdrop; pair the PNG with your own layout.",
-  },
-  {
     question: "Does this work with Google Flow and Veo videos?",
     answer:
       "Yes. Unmark removes the visible Gemini and Veo sparkle from video exports out of Google Flow, Veo, and Gemini. Drop the original clip; Cloud keeps it in Library until you download. Stills from the same Flow board can use free Instant. You do not need a separate product for Flow vs Gemini — the sparkle is the same family of mark. Screen-recording the Flow player captures UI chrome Unmark is not meant to erase. For a stack of Flow stills, use bulk Cloud or the Chrome extension instead of treating every asset as video.",
@@ -184,12 +166,12 @@ export const FAQ_ITEMS = [
   {
     question: "Can I remove a Gemini watermark for free?",
     answer:
-      "Yes. Instant mode cleans a single image in your browser with no sign-in, original resolution, and no Unmark logo. That is the free Gemini watermark remover. Cloud features — video, Library, bulk, background cutouts, and the Chrome extension — use credits. New accounts get free signup credits so you can try a short clip or a cutout before you buy a pack. If you only needed one portrait for a slide, Instant is the whole product. If you ship a Reels calendar or client ads, Cloud is the part that keeps files in one place.",
+      "Yes. Instant mode cleans a single image in your browser with no sign-in, original resolution, and no Unmark logo. That is the free Gemini watermark remover. Cloud features — video, Library, bulk, and the Chrome extension — use credits. New accounts get free signup credits so you can try a short clip. If you only needed one portrait for a slide, Instant is the whole product. If you ship a Reels calendar or client ads, Cloud is the part that keeps files in one place.",
   },
   {
     question: "What's the difference between Instant and Cloud?",
     answer:
-      "Instant is free in your browser for one still: drop a Gemini image, download the PNG, no account. Cloud saves to Library and unlocks video watermark removal, background cutouts, bulk stills, and the Chrome extension. Use Instant when you have a single PNG and a deadline. Use Cloud when the sparkle is on every frame of an MP4, when you need yesterday’s file again, or when you generate on Gemini or Flow all day. Both remove the same visible sparkle; they differ in where the file lives and which media types they cover.",
+      "Instant is free in your browser for one still: drop a Gemini image, download the PNG, no account. Cloud saves to Library and unlocks video watermark removal, bulk stills, and the Chrome extension. Use Instant when you have a single PNG and a deadline. Use Cloud when the sparkle is on every frame of an MP4, when you need yesterday’s file again, or when you generate on Gemini or Flow all day. Both remove the same visible sparkle; they differ in where the file lives and which media types they cover.",
   },
   {
     question: "Does Unmark work on Gemini 16:9 and 9:16 exports?",
@@ -199,7 +181,7 @@ export const FAQ_ITEMS = [
   {
     question: "Is there a Chrome extension for Gemini watermark removal?",
     answer:
-      "Yes. Unmark for Gemini works on Gemini and Google Flow in Chrome: queue prompts, remove the sparkle, and download cleaned images so you are not exporting one file at a time. Sign in on Unmark so results appear in Library. Video and background removal stay on the website. The extension is optional — Instant on the site is enough for a one-off still. Install from the Chrome Web Store listing linked on unmark.ink/extension.",
+      "Yes. Unmark for Gemini works on Gemini and Google Flow in Chrome: queue prompts, remove the sparkle, and download cleaned images so you are not exporting one file at a time. Sign in on Unmark so results appear in Library. Video stays on the website. The extension is optional — Instant on the site is enough for a one-off still. Install from the Chrome Web Store listing linked on unmark.ink/extension.",
   },
   {
     question: "Is removing the Gemini watermark legal?",
@@ -253,11 +235,6 @@ export const GUIDE_LINKS = [
     href: "/guides/free-gemini-watermark-remover",
     title: "Free Gemini watermark remover",
     description: "Instant browser cleanup with no sign-in required.",
-  },
-  {
-    href: "/tools/background-removal",
-    title: "Background removal",
-    description: "Cut out subjects and download transparent PNG cutouts.",
   },
   {
     href: "/guides/mcp-server",

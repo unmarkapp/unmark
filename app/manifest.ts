@@ -39,12 +39,6 @@ export default function manifest(): MetadataRoute.Manifest {
         description: "Remove the Gemini sparkle from an image or video",
         url: "/",
       },
-      {
-        name: "Remove background",
-        short_name: "Cutout",
-        description: "Cut out the subject as a transparent PNG",
-        url: "/tools/background-removal",
-      },
     ],
     share_target: {
       action: "/share-target",

@@ -9,7 +9,6 @@ import {
   downloadLibraryJob,
   isWatermarkRemovalJob,
   listJobs,
-  removeBackgroundFromJob,
   type LibraryJob,
 } from "@/lib/api";
 import { storageProviderLabel } from "@/lib/storage";
@@ -72,7 +71,6 @@ export default function LibraryView() {
   const [selected, setSelected] = useState<LibraryJob | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
-  const [bgRemovingId, setBgRemovingId] = useState<string | null>(null);
   const [bulkBusy, setBulkBusy] = useState<"delete" | "download" | null>(null);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
@@ -180,25 +178,19 @@ export default function LibraryView() {
   const pendingVideoCount = pendingJobs.filter(
     (job) => job.media_type === "video",
   ).length;
-  const pendingBgCount = pendingJobs.filter(
-    (job) => job.job_type === "bg_remove",
-  ).length;
   const pendingImageCount = pendingJobs.filter(
-    (job) => job.media_type !== "video" && job.job_type !== "bg_remove",
+    (job) => job.media_type !== "video",
   ).length;
 
   const emailNotifications = user?.email_notifications !== false;
 
   const pendingBannerMessage = () => {
-    if (pendingVideoCount > 0 && pendingBgCount === 0 && pendingImageCount === 0) {
+    if (pendingVideoCount > 0 && pendingImageCount === 0) {
       return emailNotifications
         ? "Cleaning in the background. We’ll email you when your video is ready — this page also updates automatically."
         : "Cleaning in the background. This page updates automatically when your video is ready.";
     }
-    if (pendingBgCount > 0 && pendingVideoCount === 0 && pendingImageCount === 0) {
-      return "Removing backgrounds in the background. This page updates automatically when each cutout is ready.";
-    }
-    if (pendingVideoCount > 0 && (pendingBgCount > 0 || pendingImageCount > 0)) {
+    if (pendingVideoCount > 0 && pendingImageCount > 0) {
       return emailNotifications
         ? "Jobs are processing in the background. We’ll email you when videos are ready — this page updates automatically for images."
         : "Jobs are processing in the background. This page updates automatically when they are ready.";
@@ -231,24 +223,6 @@ export default function LibraryView() {
       setError(err instanceof Error ? err.message : "Download failed");
     } finally {
       setDownloadingId(null);
-    }
-  };
-
-  const handleRemoveBackground = async (job: LibraryJob) => {
-    if (!isWatermarkRemovalJob(job)) return;
-    setBgRemovingId(job.job_id);
-    setError(null);
-    try {
-      await removeBackgroundFromJob(job.job_id);
-      setToast("Background removal queued");
-      setSelected(null);
-      await refresh({ quiet: true });
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Could not queue background removal";
-      setToast(message);
-    } finally {
-      setBgRemovingId(null);
     }
   };
 
@@ -857,25 +831,6 @@ export default function LibraryView() {
                   strokeLinejoin="round"
                 />
               </ToolbarButton>
-              {isWatermarkRemovalJob(selected) ? (
-                <ToolbarButton
-                  label={
-                    bgRemovingId === selected.job_id
-                      ? "Removing BG…"
-                      : "Remove background"
-                  }
-                  onClick={() => void handleRemoveBackground(selected)}
-                  disabled={bgRemovingId === selected.job_id || libraryFull}
-                >
-                  <path
-                    d="M4 7h16M7 7V5.5A1.5 1.5 0 018.5 4h7A1.5 1.5 0 0117 5.5V7M9 11h6M6 20h12a1.5 1.5 0 001.5-1.5V9H4.5v9.5A1.5 1.5 0 006 20z"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </ToolbarButton>
-              ) : null}
               <ToolbarButton
                 label={
                   deletingId === selected.job_id ? "Deleting…" : "Delete"
