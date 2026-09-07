@@ -43,7 +43,12 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  output: "standalone",
+  // "standalone" output is only for the self-hosted Docker/Azure build
+  // (see Dockerfile, which copies .next/standalone). On Vercel, the
+  // official adapter packages the build itself, and forcing standalone
+  // mode there makes `next build` write its trace file to a different
+  // location, so Vercel can't find .next/next-server.js.nft.json.
+  output: process.env.VERCEL ? undefined : "standalone",
   poweredByHeader: false,
   async headers() {
     return [
