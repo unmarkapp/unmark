@@ -138,7 +138,8 @@ export default function LandingUpload({
               Images free with Instant. Video up to 60s via Cloud.
             </p>
             <p className="mt-1 max-w-xs text-xs leading-relaxed text-muted/70">
-              Video support is limited to the Gemini/Veo sparkle watermark.
+              Video: Auto finds the Gemini/Veo sparkle, or draw a box for any
+              watermark.
             </p>
 
             <button

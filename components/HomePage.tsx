@@ -33,6 +33,7 @@ import { useCredits } from "@/lib/credits";
 import { useToast } from "@/components/Toast";
 import { useDropToClean } from "@/lib/dropToClean";
 import { isVideoFile } from "@/lib/mediaFiles";
+import { captureVideoFrame } from "@/lib/mediaFrame";
 import type { CleanEngine } from "@/components/ReadyToCleanCard";
 
 interface Selection {
@@ -113,6 +114,11 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const [videoDuration, setVideoDuration] = useState<number | null>(null);
+  const [videoFrameUrl, setVideoFrameUrl] = useState<string | null>(null);
+  const [videoFrameWidth, setVideoFrameWidth] = useState<number | null>(null);
+  const [videoFrameHeight, setVideoFrameHeight] = useState<number | null>(
+    null,
+  );
   const [resultUrl, setResultUrl] = useState<string | null>(null);
 
   const [processing, setProcessing] = useState(false);
@@ -165,6 +171,9 @@ export default function Home() {
     setImageUrl(null);
     setVideoUrl(null);
     setVideoDuration(null);
+    setVideoFrameUrl(null);
+    setVideoFrameWidth(null);
+    setVideoFrameHeight(null);
     setImageDimensions(null);
   };
 
@@ -244,6 +253,15 @@ export default function Home() {
         width: meta.width,
         height: meta.height,
       });
+
+      // Non-blocking: Manual mode just stays unavailable if this fails.
+      void captureVideoFrame(selectedFile)
+        .then((frame) => {
+          setVideoFrameUrl(frame.dataUrl);
+          setVideoFrameWidth(frame.width);
+          setVideoFrameHeight(frame.height);
+        })
+        .catch(() => {});
     } catch (err) {
       setFile(null);
       toast(
@@ -708,6 +726,13 @@ export default function Home() {
       return;
     }
 
+    if (
+      detectMode === "manual" &&
+      (!selection || selection.width <= 0 || selection.height <= 0)
+    ) {
+      return;
+    }
+
     if (authLoading) {
       return;
     }
@@ -733,7 +758,10 @@ export default function Home() {
       setJobId(null);
       setJobStatus("queued");
 
-      const job = await removeWatermarkVideo(file);
+      const job = await removeWatermarkVideo(
+        file,
+        detectMode === "manual" ? selection : null,
+      );
 
       setJobId(job.job_id);
       setJobStatus(job.status);
@@ -985,6 +1013,18 @@ export default function Home() {
           resultUrl={resultUrl}
           isAuthenticated={Boolean(user)}
           hasCredits={(fastCredits ?? 0) >= estimatedVideoCredits}
+          detectMode={detectMode}
+          onDetectModeChange={(mode) => {
+            setDetectMode(mode);
+            if (mode === "auto") {
+              setSelection(null);
+            }
+          }}
+          hasSelection={hasSelection}
+          onSelectionChange={setSelection}
+          frameUrl={videoFrameUrl}
+          frameWidth={videoFrameWidth}
+          frameHeight={videoFrameHeight}
           onRemove={() => {
             void handleRemoveVideo();
           }}

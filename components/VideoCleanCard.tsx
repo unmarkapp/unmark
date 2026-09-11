@@ -1,5 +1,14 @@
 "use client";
 
+import ImageEditor from "@/components/ImageEditor";
+
+interface Selection {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
 interface VideoCleanCardProps {
   videoUrl: string;
   fileName: string;
@@ -12,6 +21,13 @@ interface VideoCleanCardProps {
   resultUrl?: string | null;
   isAuthenticated: boolean;
   hasCredits: boolean;
+  detectMode: "auto" | "manual";
+  onDetectModeChange: (mode: "auto" | "manual") => void;
+  hasSelection: boolean;
+  onSelectionChange: (selection: Selection | null) => void;
+  frameUrl: string | null;
+  frameWidth: number | null;
+  frameHeight: number | null;
   onRemove: () => void;
   onReset: () => void;
 }
@@ -67,11 +83,20 @@ export default function VideoCleanCard({
   resultUrl,
   isAuthenticated,
   hasCredits,
+  detectMode,
+  onDetectModeChange,
+  hasSelection,
+  onSelectionChange,
+  frameUrl,
+  frameWidth,
+  frameHeight,
   onRemove,
   onReset,
 }: VideoCleanCardProps) {
   const blockedByAuth = !isAuthenticated;
   const blockedByCredits = isAuthenticated && !hasCredits;
+  const canSubmit = detectMode === "auto" || hasSelection;
+  const manualAvailable = Boolean(frameUrl && frameWidth && frameHeight);
 
   if (processing && !resultUrl) {
     return (
@@ -122,15 +147,70 @@ export default function VideoCleanCard({
         </button>
       </div>
 
+      {!resultUrl && (
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-6">
+          <div
+            className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface p-0.5"
+            role="group"
+            aria-label="Detection mode"
+          >
+            <button
+              type="button"
+              onClick={() => onDetectModeChange("auto")}
+              disabled={processing}
+              className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition ${
+                detectMode === "auto"
+                  ? "bg-brand text-white"
+                  : "text-foreground hover:bg-sand"
+              }`}
+            >
+              Auto (Gemini)
+            </button>
+            <button
+              type="button"
+              onClick={() => onDetectModeChange("manual")}
+              disabled={processing || !manualAvailable}
+              title={
+                manualAvailable
+                  ? undefined
+                  : "Couldn’t capture a frame from this video for manual selection."
+              }
+              className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
+                detectMode === "manual"
+                  ? "bg-ink text-white"
+                  : "text-foreground hover:bg-sand"
+              }`}
+            >
+              Manual
+            </button>
+          </div>
+
+          <p className="text-sm text-muted">
+            {detectMode === "auto"
+              ? "Auto finds the Gemini sparkle."
+              : "Drag over the watermark — the box applies to every frame."}
+          </p>
+        </div>
+      )}
+
       <div className="grid gap-0 lg:grid-cols-2">
         <div className="bg-ink p-3 sm:p-4">
-          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-          <video
-            src={resultUrl || videoUrl}
-            controls
-            playsInline
-            className="mx-auto max-h-[420px] w-full object-contain"
-          />
+          {!resultUrl && detectMode === "manual" && frameUrl && frameWidth && frameHeight ? (
+            <ImageEditor
+              imageUrl={frameUrl}
+              imageWidth={frameWidth}
+              imageHeight={frameHeight}
+              onSelectionChange={onSelectionChange}
+            />
+          ) : (
+            /* eslint-disable-next-line jsx-a11y/media-has-caption */
+            <video
+              src={resultUrl || videoUrl}
+              controls
+              playsInline
+              className="mx-auto max-h-[420px] w-full object-contain"
+            />
+          )}
         </div>
 
         <div className="flex flex-col justify-center gap-4 p-4 sm:p-6">
@@ -144,7 +224,7 @@ export default function VideoCleanCard({
             </p>
           </div>
 
-          {!resultUrl && (
+          {!resultUrl && detectMode === "auto" && (
             <div className="rounded-[var(--radius-md)] border border-warning/30 bg-warning-bg px-3.5 py-3 text-sm text-warning">
               <p className="font-semibold">
                 Only the Gemini/Veo sparkle watermark is supported
@@ -152,8 +232,22 @@ export default function VideoCleanCard({
               <p className="mt-1 leading-relaxed text-warning/90">
                 We detect and remove the small “sparkle” mark Gemini and Veo
                 add to generated video. Clips from other tools (e.g. other AI
-                video generators) won’t have that mark, so we won’t be able to
-                clean them — please double-check before submitting.
+                video generators) won’t have that mark — switch to Manual and
+                draw a box around it instead.
+              </p>
+            </div>
+          )}
+
+          {!resultUrl && detectMode === "manual" && (
+            <div className="rounded-[var(--radius-md)] border border-border bg-sand px-3.5 py-3 text-sm text-muted">
+              <p className="font-semibold text-foreground">
+                Works on any watermark
+              </p>
+              <p className="mt-1 leading-relaxed">
+                Draw a box around the watermark on the still frame — it’ll be
+                removed from every frame using generic inpainting, so results
+                can vary a bit more than the Gemini sparkle’s precision
+                removal.
               </p>
             </div>
           )}
@@ -178,18 +272,25 @@ export default function VideoCleanCard({
               Download MP4
             </button>
           ) : (
-            <button
-              type="button"
-              onClick={onRemove}
-              disabled={blockedByAuth || blockedByCredits}
-              className="inline-flex h-11 items-center justify-center rounded-[var(--radius-md)] bg-brand px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {blockedByAuth
-                ? "Sign in to clean video"
-                : blockedByCredits
-                  ? "Buy credits to continue"
-                  : `Clean video · ${estimatedCredits} credit${estimatedCredits === 1 ? "" : "s"}`}
-            </button>
+            <>
+              <button
+                type="button"
+                onClick={onRemove}
+                disabled={blockedByAuth || blockedByCredits || !canSubmit}
+                className="inline-flex h-11 items-center justify-center rounded-[var(--radius-md)] bg-brand px-5 text-sm font-semibold text-white shadow-[0_1px_2px_rgb(var(--shadow-color)/0.06),0_10px_20px_-8px_rgb(var(--shadow-color)/0.3)] transition hover:bg-brand-hover disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {blockedByAuth
+                  ? "Sign in to clean video"
+                  : blockedByCredits
+                    ? "Buy credits to continue"
+                    : `Clean video · ${estimatedCredits} credit${estimatedCredits === 1 ? "" : "s"}`}
+              </button>
+              {detectMode === "manual" && !hasSelection && (
+                <p className="text-xs text-muted">
+                  Draw a box around the watermark to continue.
+                </p>
+              )}
+            </>
           )}
         </div>
       </div>

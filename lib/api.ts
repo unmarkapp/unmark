@@ -76,6 +76,11 @@ export interface VideoJobResponse {
   output_key?: string;
   notice?: string;
   notify_email?: string | null;
+  auto_detect?: boolean;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
 }
 
 const API_BASE_URL =
@@ -158,9 +163,21 @@ export interface BulkRemoveResponse {
 
 export async function removeWatermarkVideo(
   file: File,
+  selection: Selection | null = null,
 ): Promise<VideoJobResponse> {
   const formData = new FormData();
   formData.append("video", file);
+
+  if (
+    selection &&
+    selection.width > 0 &&
+    selection.height > 0
+  ) {
+    formData.append("x", String(selection.x));
+    formData.append("y", String(selection.y));
+    formData.append("width", String(selection.width));
+    formData.append("height", String(selection.height));
+  }
 
   const response = await fetch(
     `${API_BASE_URL}/v1/remove-watermark/video`,
