@@ -139,11 +139,24 @@ export default function VideoCleanCard({
               {resultUrl ? "Video cleaned" : "Cloud video cleanup"}
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Removes the visible Gemini/Veo sparkle. Longer clips process in
-              the background — we’ll email you and show progress in Library.
-              Max 60s · 1080p · 100MB.
+              Longer clips process in the background — we’ll email you and
+              show progress in Library. Max 60s · 1080p · 100MB.
             </p>
           </div>
+
+          {!resultUrl && (
+            <div className="rounded-[var(--radius-md)] border border-warning/30 bg-warning-bg px-3.5 py-3 text-sm text-warning">
+              <p className="font-semibold">
+                Only the Gemini/Veo sparkle watermark is supported
+              </p>
+              <p className="mt-1 leading-relaxed text-warning/90">
+                We detect and remove the small “sparkle” mark Gemini and Veo
+                add to generated video. Clips from other tools (e.g. other AI
+                video generators) won’t have that mark, so we won’t be able to
+                clean them — please double-check before submitting.
+              </p>
+            </div>
+          )}
 
           {error && (
             <p className="text-sm text-danger" role="alert">

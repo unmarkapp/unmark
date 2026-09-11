@@ -137,6 +137,9 @@ export default function LandingUpload({
             <p className="mt-2.5 max-w-xs text-sm leading-relaxed text-muted">
               Images free with Instant. Video up to 60s via Cloud.
             </p>
+            <p className="mt-1 max-w-xs text-xs leading-relaxed text-muted/70">
+              Video support is limited to the Gemini/Veo sparkle watermark.
+            </p>
 
             <button
               type="button"
