@@ -58,6 +58,8 @@ function isDriveFailed(job: LibraryJob): boolean {
   );
 }
 
+const LIBRARY_PAGE_SIZE = 4;
+
 export default function LibraryView() {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -72,6 +74,7 @@ export default function LibraryView() {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   const [bulkBusy, setBulkBusy] = useState<"delete" | "download" | null>(null);
+  const [page, setPage] = useState(1);
   const knownStatus = useRef<Map<string, string>>(new Map());
 
   const refresh = useCallback(async (opts?: { quiet?: boolean }) => {
@@ -169,6 +172,20 @@ export default function LibraryView() {
     const id = window.setTimeout(() => setToast(null), 2200);
     return () => window.clearTimeout(id);
   }, [toast]);
+
+  const totalPages = Math.max(
+    1,
+    Math.ceil(jobs.length / LIBRARY_PAGE_SIZE),
+  );
+
+  useEffect(() => {
+    setPage((current) => Math.min(current, totalPages));
+  }, [totalPages]);
+
+  const pagedJobs = jobs.slice(
+    (page - 1) * LIBRARY_PAGE_SIZE,
+    page * LIBRARY_PAGE_SIZE,
+  );
 
   const libraryFull = libraryUsed >= libraryLimit;
   const pendingJobs = jobs.filter(
@@ -458,7 +475,7 @@ export default function LibraryView() {
           </div>
         ) : (
           <ul className="library-masonry mt-8">
-            {jobs.map((job) => {
+            {pagedJobs.map((job) => {
               const thumb = jobThumbnailUrl(job);
               const canOpen =
                 job.status === "completed" && Boolean(thumb || jobModalMediaUrl(job));
@@ -669,6 +686,32 @@ export default function LibraryView() {
               );
             })}
           </ul>
+        )}
+
+        {!libraryLoading && jobs.length > LIBRARY_PAGE_SIZE && (
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => setPage((current) => Math.max(1, current - 1))}
+              disabled={page <= 1}
+              className="rounded-[var(--radius-md)] border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Previous
+            </button>
+            <p className="text-sm text-muted">
+              Page {page} of {totalPages}
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                setPage((current) => Math.min(totalPages, current + 1))
+              }
+              disabled={page >= totalPages}
+              className="rounded-[var(--radius-md)] border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground transition hover:bg-sand disabled:cursor-not-allowed disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
         )}
       </div>
 
