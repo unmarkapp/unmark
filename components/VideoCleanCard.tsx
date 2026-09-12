@@ -21,8 +21,6 @@ interface VideoCleanCardProps {
   resultUrl?: string | null;
   isAuthenticated: boolean;
   hasCredits: boolean;
-  detectMode: "auto" | "manual";
-  onDetectModeChange: (mode: "auto" | "manual") => void;
   hasSelection: boolean;
   onSelectionChange: (selection: Selection | null) => void;
   frameUrl: string | null;
@@ -83,8 +81,6 @@ export default function VideoCleanCard({
   resultUrl,
   isAuthenticated,
   hasCredits,
-  detectMode,
-  onDetectModeChange,
   hasSelection,
   onSelectionChange,
   frameUrl,
@@ -95,8 +91,8 @@ export default function VideoCleanCard({
 }: VideoCleanCardProps) {
   const blockedByAuth = !isAuthenticated;
   const blockedByCredits = isAuthenticated && !hasCredits;
-  const canSubmit = detectMode === "auto" || hasSelection;
-  const manualAvailable = Boolean(frameUrl && frameWidth && frameHeight);
+  const frameReady = Boolean(frameUrl && frameWidth && frameHeight);
+  const canSubmit = hasSelection;
 
   if (processing && !resultUrl) {
     return (
@@ -148,58 +144,22 @@ export default function VideoCleanCard({
       </div>
 
       {!resultUrl && (
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3 sm:px-6">
-          <div
-            className="inline-flex rounded-[var(--radius-md)] border border-border bg-surface p-0.5"
-            role="group"
-            aria-label="Detection mode"
-          >
-            <button
-              type="button"
-              onClick={() => onDetectModeChange("auto")}
-              disabled={processing}
-              className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition ${
-                detectMode === "auto"
-                  ? "bg-brand text-white"
-                  : "text-foreground hover:bg-sand"
-              }`}
-            >
-              Auto (Gemini)
-            </button>
-            <button
-              type="button"
-              onClick={() => onDetectModeChange("manual")}
-              disabled={processing || !manualAvailable}
-              title={
-                manualAvailable
-                  ? undefined
-                  : "Couldn’t capture a frame from this video for manual selection."
-              }
-              className={`rounded-[var(--radius-sm)] px-3 py-2 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
-                detectMode === "manual"
-                  ? "bg-ink text-white"
-                  : "text-foreground hover:bg-sand"
-              }`}
-            >
-              Manual
-            </button>
-          </div>
-
+        <div className="border-b border-border px-4 py-3 sm:px-6">
           <p className="text-sm text-muted">
-            {detectMode === "auto"
-              ? "Auto finds the Gemini sparkle."
-              : "Drag over the watermark — the box applies to every frame."}
+            {frameReady
+              ? "Drag over the watermark on the frame below — the box applies to every frame."
+              : "Preparing the frame for selection…"}
           </p>
         </div>
       )}
 
       <div className="grid gap-0 lg:grid-cols-2">
         <div className="bg-ink p-3 sm:p-4">
-          {!resultUrl && detectMode === "manual" && frameUrl && frameWidth && frameHeight ? (
+          {!resultUrl && frameReady ? (
             <ImageEditor
-              imageUrl={frameUrl}
-              imageWidth={frameWidth}
-              imageHeight={frameHeight}
+              imageUrl={frameUrl!}
+              imageWidth={frameWidth!}
+              imageHeight={frameHeight!}
               onSelectionChange={onSelectionChange}
             />
           ) : (
@@ -224,30 +184,14 @@ export default function VideoCleanCard({
             </p>
           </div>
 
-          {!resultUrl && detectMode === "auto" && (
-            <div className="rounded-[var(--radius-md)] border border-warning/30 bg-warning-bg px-3.5 py-3 text-sm text-warning">
-              <p className="font-semibold">
-                Only the Gemini/Veo sparkle watermark is supported
-              </p>
-              <p className="mt-1 leading-relaxed text-warning/90">
-                We detect and remove the small “sparkle” mark Gemini and Veo
-                add to generated video. Clips from other tools (e.g. other AI
-                video generators) won’t have that mark — switch to Manual and
-                draw a box around it instead.
-              </p>
-            </div>
-          )}
-
-          {!resultUrl && detectMode === "manual" && (
+          {!resultUrl && (
             <div className="rounded-[var(--radius-md)] border border-border bg-sand px-3.5 py-3 text-sm text-muted">
               <p className="font-semibold text-foreground">
                 Works on any watermark
               </p>
               <p className="mt-1 leading-relaxed">
                 Draw a box around the watermark on the still frame — it’ll be
-                removed from every frame using generic inpainting, so results
-                can vary a bit more than the Gemini sparkle’s precision
-                removal.
+                removed from every frame using generic inpainting.
               </p>
             </div>
           )}
@@ -285,9 +229,11 @@ export default function VideoCleanCard({
                     ? "Buy credits to continue"
                     : `Clean video · ${estimatedCredits} credit${estimatedCredits === 1 ? "" : "s"}`}
               </button>
-              {detectMode === "manual" && !hasSelection && (
+              {!hasSelection && (
                 <p className="text-xs text-muted">
-                  Draw a box around the watermark to continue.
+                  {frameReady
+                    ? "Draw a box around the watermark to continue."
+                    : "Waiting for the video frame to load…"}
                 </p>
               )}
             </>

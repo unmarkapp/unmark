@@ -138,8 +138,7 @@ export default function LandingUpload({
               Images free with Instant. Video up to 60s via Cloud.
             </p>
             <p className="mt-1 max-w-xs text-xs leading-relaxed text-muted/70">
-              Video: Auto finds the Gemini/Veo sparkle, or draw a box for any
-              watermark.
+              Video: draw a box around the watermark — works for any AI tool.
             </p>
 
             <button

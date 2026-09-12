@@ -228,7 +228,6 @@ export default function Home() {
     setMediaKind("video");
     setFile(selectedFile);
     setEngine("cloud");
-    setDetectMode("auto");
     setJobId(null);
     setJobStatus(null);
     setError(null);
@@ -726,10 +725,7 @@ export default function Home() {
       return;
     }
 
-    if (
-      detectMode === "manual" &&
-      (!selection || selection.width <= 0 || selection.height <= 0)
-    ) {
+    if (!selection || selection.width <= 0 || selection.height <= 0) {
       return;
     }
 
@@ -758,10 +754,7 @@ export default function Home() {
       setJobId(null);
       setJobStatus("queued");
 
-      const job = await removeWatermarkVideo(
-        file,
-        detectMode === "manual" ? selection : null,
-      );
+      const job = await removeWatermarkVideo(file, selection);
 
       setJobId(job.job_id);
       setJobStatus(job.status);
@@ -1013,13 +1006,6 @@ export default function Home() {
           resultUrl={resultUrl}
           isAuthenticated={Boolean(user)}
           hasCredits={(fastCredits ?? 0) >= estimatedVideoCredits}
-          detectMode={detectMode}
-          onDetectModeChange={(mode) => {
-            setDetectMode(mode);
-            if (mode === "auto") {
-              setSelection(null);
-            }
-          }}
           hasSelection={hasSelection}
           onSelectionChange={setSelection}
           frameUrl={videoFrameUrl}
